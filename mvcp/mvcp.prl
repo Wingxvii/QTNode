@@ -1,0 +1,5 @@
+QMAKE_PRL_BUILD_DIR = /root/shotcut/src/shotcut/mvcp
+QMAKE_PRO_INPUT = mvcp.pro
+QMAKE_PRL_TARGET = libmvcp.a
+QMAKE_PRL_CONFIG = lex yacc debug exceptions depend_includepath testcase_targets import_plugins import_qpa_plugin rtti_off incremental_off windows file_copies qt warn_on link_prl qt warn_on link_prl copy_dir_files precompile_header win32 qpa no_mocdepend qt_no_framework win32 gcc c++11 link_pkgconfig debug staticlib create_prl have_target static staticlib debug_info thread opengl moc resources
+QMAKE_PRL_LIBS = -lglu32 -lopengl32 -lgdi32 -luser32 -L/root/qt-5.6.1-x64-mingw510r0-seh/lib -L/root/shotcut/shotcut/Shotcut/lib -lmlt++ -lmlt -L/root/Qt/5.6.1/gcc_64/lib /root/qt-5.6.1-x64-mingw510r0-seh/lib/libQt5Guid.a /root/qt-5.6.1-x64-mingw510r0-seh/lib/libQt5Cored.a
