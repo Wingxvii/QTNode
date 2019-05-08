@@ -410,6 +410,8 @@ INCLUDEPATH += "$$PWD/../nodeeditor"
 INCLUDEPATH += "$$PWD/../opencv"
 INCLUDEPATH += "$$PWD/../opencv/opencv2"
 
+#add any additional module libraries here
+
 LIBS += "$$PWD/../opencv/bin/libopencv_calib3d342d.dll"
 LIBS += "$$PWD/../opencv/bin/libopencv_core342d.dll"
 LIBS += "$$PWD/../opencv/bin/libopencv_dnn342d.dll"
@@ -426,8 +428,7 @@ LIBS += "$$PWD/../opencv/bin/libopencv_superres342d.dll"
 LIBS += "$$PWD/../opencv/bin/libopencv_video342d.dll"
 LIBS += "$$PWD/../opencv/bin/libopencv_videoio342d.dll"
 LIBS += "$$PWD/../opencv/bin/libopencv_videostab342d.dll"
-LIBS += "$$PWD/../opencv/bin/opencv_aruco400d.dll"
-
+LIBS += "$$PWD/../opencv/bin/libopencv_aruco342d.dll"
 
 LIBS += "$$PWD/../nodeeditor/NodeEditor.dll"
 

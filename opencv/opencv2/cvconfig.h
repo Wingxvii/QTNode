@@ -65,11 +65,11 @@
 /* #undef HAVE_DC1394_2 */
 
 /* DirectX */
-#define HAVE_DIRECTX
-#define HAVE_DIRECTX_NV12
-#define HAVE_D3D11
-#define HAVE_D3D10
-#define HAVE_D3D9
+/* #undef HAVE_DIRECTX */
+/* #undef HAVE_DIRECTX_NV12 */
+/* #undef HAVE_D3D11 */
+/* #undef HAVE_D3D10 */
+/* #undef HAVE_D3D9 */
 
 /* DirectShow Video Capture library */
 #define HAVE_DSHOW
@@ -102,9 +102,9 @@
 /* #undef HAVE_INTELPERC */
 
 /* Intel Integrated Performance Primitives */
-#define HAVE_IPP
-#define HAVE_IPP_ICV
-#define HAVE_IPP_IW
+/* #undef HAVE_IPP */
+/* #undef HAVE_IPP_ICV */
+/* #undef HAVE_IPP_IW */
 
 /* Intel IPP Async */
 /* #undef HAVE_IPP_A */
@@ -125,7 +125,7 @@
 /* #undef HAVE_LIBV4L */
 
 /* Microsoft Media Foundation Capture library */
-#define HAVE_MSMF
+/* #undef HAVE_MSMF */
 
 /* NVIDIA Video Decoding API*/
 /* #undef HAVE_NVCUVID */
@@ -160,7 +160,7 @@
 /* #undef HAVE_PTHREADS_PF */
 
 /* Qt support */
-/* #undef HAVE_QT */
+#define HAVE_QT
 
 /* Qt OpenGL support */
 /* #undef HAVE_QT_OPENGL */
