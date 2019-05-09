@@ -24,6 +24,8 @@ GetCorners::GetCorners(){
 
     cornersOut = std::make_shared<PointsData>();
 
+    window->setLayout(layout);
+
 }
 
 unsigned int GetCorners::nPorts(QtNodes::PortType portType)const
@@ -118,7 +120,7 @@ void GetCorners::findCorners(){
     if(imagesIn){
 
         cornersOut->data().clear();
-
+        //these also need to be multithreaded @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         for(int counter = 0; counter < imagesIn->data().size(); counter++){
             std::vector<cv::Point2f> pointBuffer;
             //finds actual corners in each image
@@ -134,6 +136,8 @@ void GetCorners::findCorners(){
                 ++failures;
             }
         }
+        successDisplay->setText(QString::number(successes));
+        failDisplay->setText(QString::number(failures));
     }
 }
 
