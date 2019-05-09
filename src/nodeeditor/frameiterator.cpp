@@ -77,7 +77,7 @@ void FrameIterator::setInData(std::shared_ptr<NodeData> data, int location){
        else{
           modelValidationState = NodeValidationState::Warning;
           modelValidationError = QStringLiteral("Missing or incorrect inputs");
-          LOG_CAMPBELL() << "Video data was not found";
+          LOG_JOHN() << "Video data was not found";
         }
     break;
     }

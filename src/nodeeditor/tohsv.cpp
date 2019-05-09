@@ -33,7 +33,7 @@ void ToHSV::setInData(std::shared_ptr<NodeData> data, int location){
         else{
             modelValidationState = NodeValidationState::Warning;
             modelValidationError = QStringLiteral("Missing or incorrect inputs");
-            LOG_CAMPBELL() << "Video data was not found";
+            LOG_JOHN() << "Video data was not found";
         }
 
 }
@@ -59,9 +59,9 @@ void ToHSV::convertToHsv(){
         for(int x = 0; x < videoIn->data().size(); x++){
             cv::cvtColor(videoIn->data().at(x), temp, cv::COLOR_BGR2HSV);
             videoOut->_video.push_back(temp.clone());
-            LOG_CAMPBELL() << "Converted " + QString::number(x);
+            LOG_JOHN() << "Converted " + QString::number(x);
         }
-        LOG_CAMPBELL() << "Converted Successfully";
+        LOG_JOHN() << "Converted Successfully";
 
     }
 

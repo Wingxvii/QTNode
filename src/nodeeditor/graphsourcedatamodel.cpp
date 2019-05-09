@@ -64,7 +64,6 @@ NodeDataType GraphSourceDataModel::dataType(PortType, PortIndex) const
 
 void GraphSourceDataModel::onSelectionChanged(QString name)
 {
-    LOG_CAMPBELL() << "testing";
     _data = std::make_shared<NodeGraphData>(info->getData(name));
     emit dataUpdated(0);
 }

@@ -40,7 +40,7 @@ void ImageDisplay::setInData(std::shared_ptr<QtNodes::NodeData> data, int)
     {
         modelValidationState = NodeValidationState::Warning;
         modelValidationError = QStringLiteral("Missing or incorrect inputs");
-        LOG_CAMPBELL() << "Data Not Found";
+        LOG_JOHN() << "Data Not Found";
         //data was not found
     }
 

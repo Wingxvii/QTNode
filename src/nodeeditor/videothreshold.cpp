@@ -89,7 +89,7 @@ void VideoThreshold::setInData(std::shared_ptr<NodeData> data, int location){
         else{
             modelValidationState = NodeValidationState::Warning;
             modelValidationError = QStringLiteral("Missing or incorrect inputs");
-            LOG_CAMPBELL() << "Video data was not found";
+            LOG_JOHN() << "Video data was not found";
         }
 
 }
@@ -114,27 +114,27 @@ void VideoThreshold::applyThreshold(){
         for(int x = 0; x < inVideo->data().size(); x++){
             cv::inRange(inVideo->data().at(x), cv::Scalar(HMin, SMin, VMin), cv::Scalar(HMax, SMax, VMax), temp);
             outVideo->_video.push_back(temp.clone());
-            LOG_CAMPBELL() << "Applied " + QString::number(x);
+            LOG_JOHN() << "Applied " + QString::number(x);
         }
-        LOG_CAMPBELL() << "Applied Successfully";
+        LOG_JOHN() << "Applied Successfully";
     }
 
 }
 
 void VideoThreshold::saveHData(){
-    LOG_CAMPBELL() << "Saved " + QString::number(HMin) + "," + QString::number(HMax);
+    LOG_JOHN() << "Saved " + QString::number(HMin) + "," + QString::number(HMax);
     HMin = HMinEdit->value();
     HMax = HMaxEdit->value();
 
 }
 void VideoThreshold::saveSData(){
-    LOG_CAMPBELL() << "Saved " + QString::number(SMin) + "," + QString::number(SMax);
+    LOG_JOHN() << "Saved " + QString::number(SMin) + "," + QString::number(SMax);
     SMin = SMinEdit->value();
     SMax = SMaxEdit->value();
 
 }
 void VideoThreshold::saveVData(){
-    LOG_CAMPBELL() << "Saved " + QString::number(VMin) + "," + QString::number(VMax);
+    LOG_JOHN() << "Saved " + QString::number(VMin) + "," + QString::number(VMax);
     VMin = VMinEdit->value();
     VMax = VMaxEdit->value();
 

@@ -63,7 +63,7 @@ void VideoDisplay::setInData(std::shared_ptr<QtNodes::NodeData> data, int)
     {
         modelValidationState = NodeValidationState::Warning;
         modelValidationError = QStringLiteral("Missing or incorrect inputs");
-        LOG_CAMPBELL() << "Data Not Found";
+        LOG_JOHN() << "Data Not Found";
         //data was not found
     }
 }
@@ -86,14 +86,14 @@ void VideoDisplay::playVideo()
         */
         if (frameRate == 0)
         {
-            LOG_CAMPBELL() << "error: framerate is zero, automaitcally setting framerate to 30";
+            LOG_JOHN() << "error: framerate is zero, automaitcally setting framerate to 30";
             frameRate = 30;
         }
 
-        LOG_CAMPBELL() << frameRate;
+        LOG_JOHN() << frameRate;
 
         cv::namedWindow("Display");
-        //LOG_CAMPBELL() << QString::number(frames.size());
+        //LOG_JOHN() << QString::number(frames.size());
 
         for (int it = 0; it < frames.size(); it++)
         {
@@ -119,7 +119,7 @@ QString VideoDisplay::validationMessage() const
 void VideoDisplay::saveFrameRate(){
     if(!framerateEdit->text().isEmpty()){
     frameRate = framerateEdit->text().toInt();
-    LOG_CAMPBELL() << "Framerate Recieved: " << framerateEdit->text().toInt();
+    LOG_JOHN() << "Framerate Recieved: " << framerateEdit->text().toInt();
     }
     else{
         frameRate = 0;

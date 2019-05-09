@@ -56,7 +56,7 @@ void UnDistort::setInData(std::shared_ptr<NodeData> data, int location){
        else{
           modelValidationState = NodeValidationState::Warning;
           modelValidationError = QStringLiteral("Missing or incorrect inputs");
-          LOG_CAMPBELL() << "Camera Matrix was not found";
+          LOG_JOHN() << "Camera Matrix was not found";
         }
     break;
     case 1:
@@ -70,7 +70,7 @@ void UnDistort::setInData(std::shared_ptr<NodeData> data, int location){
            else{
               modelValidationState = NodeValidationState::Warning;
               modelValidationError = QStringLiteral("Missing or incorrect inputs");
-              LOG_CAMPBELL() << "Distance Coefficient data was not found";
+              LOG_JOHN() << "Distance Coefficient data was not found";
             }
         break;
     case 2:
@@ -84,7 +84,7 @@ void UnDistort::setInData(std::shared_ptr<NodeData> data, int location){
            else{
               modelValidationState = NodeValidationState::Warning;
               modelValidationError = QStringLiteral("Missing or incorrect inputs");
-              LOG_CAMPBELL() << "Image data was not found";
+              LOG_JOHN() << "Image data was not found";
             }
         break;
 
@@ -114,7 +114,7 @@ void UnDistort::startUnDistort(){
 
         cv::undistort(imageIn->data(), temp, cameraMatIn->data(), distanceCoeffIn->data());
         imageOut->_image = temp;
-        LOG_CAMPBELL() << "Undistort Sucessful";
+        LOG_JOHN() << "Undistort Sucessful";
     }
 
 }

@@ -673,6 +673,9 @@ QString Logger::levelToString(Logger::LogLevel logLevel)
       return QLatin1String("Fatal");
   case Campbell:
       return QLatin1String("Campbell");
+  case John:
+      return QLatin1String("John");
+
   }
 
   return QString();

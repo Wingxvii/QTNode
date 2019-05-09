@@ -66,7 +66,7 @@ void VideoSourceDataModel::chooseVideo()
     }
 
     double fps = capture.get(cv::CAP_PROP_FPS);
-    LOG_CAMPBELL() << "Frames per second using video.get(CAP_PROP_FPS) : " + QString::number(fps);
+    LOG_JOHN() << "Frames per second using video.get(CAP_PROP_FPS) : " + QString::number(fps);
 
     _data = std::make_shared<VideoGraphData>(frames);
     _data->setFrameRate(fps);

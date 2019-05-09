@@ -79,7 +79,7 @@ NodeDataType CalibInfo::dataType(PortType portType, PortIndex portIndex) const
 void CalibInfo::saveXData(){
     if(!sizeX->text().isEmpty()){
     data->setSizeXData(sizeX->text().toInt());
-    LOG_CAMPBELL() << "X Data Recieved: " << sizeX->text().toInt();
+    LOG_JOHN() << "X Data Recieved: " << sizeX->text().toInt();
     }
     else{
         data->setSizeXData(0);
@@ -88,7 +88,7 @@ void CalibInfo::saveXData(){
 void CalibInfo::saveYData(){
     if(!sizeY->text().isEmpty()){
     data->setSizeYData(sizeY->text().toInt());
-    LOG_CAMPBELL() << "Y Data Recieved: " << sizeY->text().toInt();
+    LOG_JOHN() << "Y Data Recieved: " << sizeX->text().toInt();
     }
     else{
         data->setSizeYData(0);
@@ -97,7 +97,6 @@ void CalibInfo::saveYData(){
 void CalibInfo::saveLengthData(){
     if(!length->text().isEmpty()){
     data->setLengthData(length->text().toFloat());
-    LOG_CAMPBELL() << "Length Data Recieved: " << length->text().toFloat();
     }else{
         data->setLengthData(0.0f);
     }

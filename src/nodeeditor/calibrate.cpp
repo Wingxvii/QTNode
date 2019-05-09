@@ -61,7 +61,7 @@ void Calibrate::setInData(std::shared_ptr<NodeData> data, int location){
        else{
           modelValidationState = NodeValidationState::Warning;
           modelValidationError = QStringLiteral("Missing or incorrect inputs");
-          LOG_CAMPBELL() << "Points data was not found";
+          LOG_JOHN() << "Points data was not found";
         }
     break;
     case 1:
@@ -75,7 +75,7 @@ void Calibrate::setInData(std::shared_ptr<NodeData> data, int location){
            else{
               modelValidationState = NodeValidationState::Warning;
               modelValidationError = QStringLiteral("Missing or incorrect inputs");
-              LOG_CAMPBELL() << "Calibrate data was not found";
+              LOG_JOHN() << "Calibrate data was not found";
             }
         break;
 
@@ -131,7 +131,7 @@ void Calibrate::startCalibration(){
 
         cameraMat->_image = cameraMatData;
         distanceCoeff->_image = distanceCoeffData;
-        LOG_CAMPBELL() << "Calibrate Sucessful";
+        LOG_JOHN() << "Calibrate Sucessful";
     }
 
 }

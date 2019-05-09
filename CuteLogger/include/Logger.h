@@ -36,6 +36,7 @@ CUTELOGGERSHARED_EXPORT Logger* cuteLoggerInstance();
 #define LOG_ERROR            CuteMessageLogger(cuteLoggerInstance(), Logger::Error,   __FILE__, __LINE__, Q_FUNC_INFO).write
 #define LOG_FATAL            CuteMessageLogger(cuteLoggerInstance(), Logger::Fatal,   __FILE__, __LINE__, Q_FUNC_INFO).write
 #define LOG_CAMPBELL         CuteMessageLogger(cuteLoggerInstance(), Logger::Campbell,__FILE__, __LINE__, Q_FUNC_INFO).write
+#define LOG_JOHN             CuteMessageLogger(cuteLoggerInstance(), Logger::John,__FILE__, __LINE__, Q_FUNC_INFO).write
 
 #define LOG_CTRACE(category)   CuteMessageLogger(cuteLoggerInstance(), Logger::Trace,   __FILE__, __LINE__, Q_FUNC_INFO, category).write()
 #define LOG_CDEBUG(category)   CuteMessageLogger(cuteLoggerInstance(), Logger::Debug,   __FILE__, __LINE__, Q_FUNC_INFO, category).write()
@@ -44,6 +45,7 @@ CUTELOGGERSHARED_EXPORT Logger* cuteLoggerInstance();
 #define LOG_CERROR(category)   CuteMessageLogger(cuteLoggerInstance(), Logger::Error,   __FILE__, __LINE__, Q_FUNC_INFO, category).write()
 #define LOG_CFATAL(category)   CuteMessageLogger(cuteLoggerInstance(), Logger::Fatal,   __FILE__, __LINE__, Q_FUNC_INFO, category).write()
 #define LOG_CCampbell(category)   CuteMessageLogger(cuteLoggerInstance(), Logger::Campbell,   __FILE__, __LINE__, Q_FUNC_INFO, category).write()
+#define LOG_CJohn(category)   CuteMessageLogger(cuteLoggerInstance(), Logger::John,   __FILE__, __LINE__, Q_FUNC_INFO, category).write()
 
 #define LOG_TRACE_TIME  LoggerTimingHelper loggerTimingHelper(cuteLoggerInstance(), Logger::Trace, __FILE__, __LINE__, Q_FUNC_INFO); loggerTimingHelper.start
 #define LOG_DEBUG_TIME  LoggerTimingHelper loggerTimingHelper(cuteLoggerInstance(), Logger::Debug, __FILE__, __LINE__, Q_FUNC_INFO); loggerTimingHelper.start
@@ -89,7 +91,8 @@ class CUTELOGGERSHARED_EXPORT Logger
       Warning, //!< Warning. May be used to log some non-fatal warnings detected by your application.
       Error,   //!< Error. May be used for a big problems making your application work wrong but not crashing.
       Fatal,    //!< Fatal. Used for unrecoverable errors, crashes the application right after the log record is written.
-      Campbell //!< Campbell. Used by Campbell while he is figuring out how this program works
+      Campbell, //!< Campbell. Used by Campbell while he is figuring out how this program works
+      John //!< John. Used by John for debugging.
     };
 
     //! Sets the timing display mode for the LOG_TRACE_TIME, LOG_DEBUG_TIME and LOG_INFO_TIME macros

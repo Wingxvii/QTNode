@@ -55,7 +55,7 @@ public:
 
     NodeDataType type() const override
     {
-        return NodeDataType {"video", "video"};
+        return NodeDataType {"Video", "Video"};
     }
 
     std::vector<cv::Mat> data() const {

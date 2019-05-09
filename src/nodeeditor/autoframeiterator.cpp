@@ -18,27 +18,24 @@ AutoFrameIterator::AutoFrameIterator()
     endFrameInput = new QLineEdit();
     byPassLabel = new QLabel("Bypass: ");
     byPassInput = new QLineEdit();
-    maxSampleLabel = new QLabel("Max Samples: ");
-    maxSamplesInput = new QLineEdit();
     progressBar = new QProgressBar();
     projectedSamplesLabel = new QLabel("Estimated number of samples: ");
     projectedSamplesDisplay = new QLabel(QString::number(projectedSamples));
     startButton = new QPushButton("Start Iteration");
 
-    intPos = new QRegExpValidator(QRegExp("\\d*"), this);
+    //signed int
+    intPos = new QRegExpValidator(QRegExp("-?\\d*"), this);
 
     //add input regulation
     startFrameInput->setValidator(intPos);
     endFrameInput->setValidator(intPos);
     byPassInput->setValidator(intPos);
-    maxSamplesInput->setValidator(intPos);
 
     //connect functions to slots
     connect(startButton, SIGNAL(clicked(bool)), this, SLOT(startIteration()));
-    connect(startFrameInput, SIGNAL(textChanged(Qstring)), this, SLOT(calcValues()));
-    connect(endFrameInput, SIGNAL(textChanged(Qstring)), this, SLOT(calcValues()));
-    connect(byPassInput, SIGNAL(textChanged(Qstring)), this, SLOT(calcValues()));
-    connect(maxSamplesInput, SIGNAL(textChanged(Qstring)), this, SLOT(calcValues()));
+    connect(startFrameInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
+    connect(endFrameInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
+    connect(byPassInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
 
     //build layout
     layout->addWidget(totalFramesLabel, 1,1);
@@ -49,12 +46,10 @@ AutoFrameIterator::AutoFrameIterator()
     layout->addWidget(endFrameInput, 2, 4);
     layout->addWidget(byPassLabel, 3,1);
     layout->addWidget(byPassInput,3,2);
-    layout->addWidget(maxSampleLabel,3,3);
-    layout->addWidget(maxSamplesInput,3,4);
-    layout->addWidget(progressBar,4,1);
-    layout->addWidget(projectedSamplesLabel,5,1);
-    layout->addWidget(projectedSamplesDisplay,5,2);
-    layout->addWidget(startButton,6,1);
+    layout->addWidget(progressBar,4,1,1,4);
+    layout->addWidget(startButton,5,1,1,2);
+    layout->addWidget(projectedSamplesLabel,5,3);
+    layout->addWidget(projectedSamplesDisplay,5,4);
     //set layout into window
     window->setLayout(layout);
 }
@@ -108,6 +103,7 @@ void AutoFrameIterator::setInData(std::shared_ptr<QtNodes::NodeData> data, int l
 
             //instantiate output
             imagesOut = std::make_shared<ImageVector>();
+            calcValues(); //update values
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -129,10 +125,65 @@ QString AutoFrameIterator::validationMessage() const
 
 void AutoFrameIterator::startIteration()
 {
+    if(videoIn){
+        //handle endframe -1
+        int _endFrame = endFrame;
+        if(endFrame == -1){
+            _endFrame = totalFrames;
+        }
 
+        //setup progress bar parameters
+        progressBar->setMinimum(startFrame);
+        progressBar->setMaximum(_endFrame);
+
+        //iterate
+        for(int counter = startFrame; counter < _endFrame; counter += byPass){
+            imagesOut->data().push_back(videoIn->data().at(counter));
+            progressBar->setValue(counter);
+        }
+        progressBar->setValue(_endFrame);
+    }
 }
 
 void AutoFrameIterator::calcValues()
 {
-    //update values
+    if(videoIn){                                    //total frames
+        totalFrames = videoIn->data().size();
+        //set label
+        totalFramesDisplay->setText(QString::number(totalFrames));
+    }
+    if(!startFrameInput->text().isEmpty()){         //start frame
+        startFrame = startFrameInput->text().toInt();
+    }
+    if(!endFrameInput->text().isEmpty()){           //end frame
+        endFrame = endFrameInput->text().toInt();
+    }
+    if(!byPassInput->text().isEmpty()){             //bypass amount
+        byPass = byPassInput->text().toInt();
+    }
+
+    //calculate projected samples
+    projectedSamples = totalFrames;
+
+    if(startFrame > 0){
+        projectedSamples -= startFrame;
+    }
+    if(endFrame < totalFrames && endFrame != -1){
+        projectedSamples -= totalFrames - endFrame;
+    };
+
+    //logic checks
+    if(projectedSamples < 1){
+        projectedSamples = 0;
+    }
+
+    //divide by bypass
+    if(byPass > 0){
+        projectedSamples /= byPass;
+    }
+    //update display
+    projectedSamplesDisplay->setText(QString::number(projectedSamples));
+
+    LOG_JOHN() << "Values Updated";
+
 }

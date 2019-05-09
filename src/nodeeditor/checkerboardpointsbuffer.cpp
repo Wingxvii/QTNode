@@ -63,7 +63,7 @@ void CheckerboardPointsBuffer::setInData(std::shared_ptr<NodeData> data, int loc
     else{
         modelValidationState = NodeValidationState::Warning;
         modelValidationError = QStringLiteral("Missing or incorrect inputs");
-        LOG_CAMPBELL() << "Points in data was not found";
+        LOG_JOHN() << "Points in data was not found";
     }
 
 }

@@ -55,11 +55,11 @@ public:
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
-    QString modelValidationError = QStringLiteral("Missing or incorrect inputs");    \
+    QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
 
 
 
-public slots: //slots
+public slots:
     //iterates throught the video, saving frames to a image vector based on parameters
     void startIteration();
     //calculates the values displayed. This is called whenever a value or input is updated
@@ -75,7 +75,6 @@ private: //locals
     int startFrame = 0;
     int endFrame = -1;
     int byPass = 0;
-    int maxSamples = 0;
 
 private: //UI
     QWidget *window;
@@ -89,8 +88,6 @@ private: //UI
     QLineEdit* endFrameInput;
     QLabel *byPassLabel;
     QLineEdit *byPassInput;
-    QLabel *maxSampleLabel;
-    QLineEdit *maxSamplesInput;
     QProgressBar *progressBar;
     QLabel *projectedSamplesLabel;
     QLabel *projectedSamplesDisplay;

@@ -69,7 +69,7 @@ void ErodeImage::setInData(std::shared_ptr<NodeData> data, int location){
         else{
             modelValidationState = NodeValidationState::Warning;
             modelValidationError = QStringLiteral("Missing or incorrect inputs");
-            LOG_CAMPBELL() << "Video data was not found";
+            LOG_JOHN() << "Video data was not found";
         }
 
 }
@@ -118,9 +118,9 @@ void ErodeImage::startErosion(){
         for(int x = 0; x < videoIn->data().size(); x++){
             cv::erode(videoIn->data().at(x), temp, element);
             videoOut->_video.push_back(temp.clone());
-            LOG_CAMPBELL() << "Converted " + QString::number(x);
+            LOG_JOHN() << "Converted " + QString::number(x);
         }
-        LOG_CAMPBELL() << "Converted Successfully";
+        LOG_JOHN() << "Converted Successfully";
     }
 
 }

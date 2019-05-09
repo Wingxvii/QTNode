@@ -62,7 +62,7 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
         else{
             modelValidationState = NodeValidationState::Warning;
             modelValidationError = QStringLiteral("Missing or incorrect inputs");
-            LOG_CAMPBELL() << "Image data was not found";
+            LOG_JOHN() << "Image data was not found";
         }
 
     }else{
@@ -76,7 +76,7 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
         else{
             modelValidationState = NodeValidationState::Warning;
             modelValidationError = QStringLiteral("Missing or incorrect inputs");
-            LOG_CAMPBELL() << "Calibration data was not found";
+            LOG_JOHN() << "Calibration data was not found";
         }
 
     }
@@ -114,9 +114,9 @@ void GetCorners::findCorners(){
         //pushes into found list if found
         if (found) {
             cornersOut->setData(pointBuffer);
-            LOG_CAMPBELL() << "Corners found";
+            LOG_JOHN() << "Corners found";
         }else{
-            LOG_CAMPBELL() << "No Corners found";
+            LOG_JOHN() << "No Corners found";
 
         }
         //create a copy image of imagein, and send that instead #URGENT
