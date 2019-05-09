@@ -1,5 +1,5 @@
-#ifndef DebugGetCorners_H
-#define DebugGetCorners_H
+#ifndef DEBUGGETCORNERS_H
+#define DEBUGGETCORNERS_H
 
 #include <QtCore/QObject>
 
@@ -30,7 +30,7 @@ public:
     virtual ~DebugGetCorners() {}
 
     QString caption() const override{
-        return QStringLiteral("Find Corners");
+        return QStringLiteral("(DEBUG) Find Corners");
     }
 
     bool captionVisible(){
@@ -39,7 +39,7 @@ public:
 
     QString name()const override
     {
-        return QStringLiteral("Find Corners");
+        return QStringLiteral("(DEBUG) Find Corners");
     }
 
 public:
