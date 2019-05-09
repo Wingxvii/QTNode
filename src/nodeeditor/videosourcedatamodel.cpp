@@ -1,17 +1,23 @@
 #include "videosourcedatamodel.h"
 #include "nodegraphdata.h"
 #include <QFileDialog>
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/imgproc.hpp"
-#include "opencv2/videoio.hpp"
-#include <opencv2/highgui.hpp>
 #include <opencv2/video.hpp>
-#include <opencv2/videoio.hpp>  // Video write
 
 VideoSourceDataModel::VideoSourceDataModel()
 {
-    button = new QPushButton("load video");
+    window = new QWidget;
+    layout = new QVBoxLayout;
+
+    button = new QPushButton("Choose Video");
+    progress = new QProgressBar();
+
     connect(button, SIGNAL(clicked(bool)), this, SLOT(chooseVideo()));
+
+    layout->addWidget(button);
+    layout->addWidget(progress);
+
+    window->setLayout(layout);
+
 }
 
 VideoSourceDataModel::~VideoSourceDataModel()
@@ -49,7 +55,7 @@ std::shared_ptr<NodeData> VideoSourceDataModel::outData(PortIndex)
 
 void VideoSourceDataModel::chooseVideo()
 {
-    QString fileName = QFileDialog::getOpenFileName(button, tr("Open sensor"), "");
+    QString fileName = QFileDialog::getOpenFileName(button, tr("Choose Video"), "");
     cv::VideoCapture capture(fileName.toStdString());
 
     cv::Mat temp;
@@ -57,16 +63,23 @@ void VideoSourceDataModel::chooseVideo()
     capture >> temp;
 
     int start = 1;
+
+    //setup progress
+    progress->setMaximum(capture.get(cv::CAP_PROP_FRAME_COUNT));
+
+
+    //MULTITHREAD THIS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     while (!temp.empty())
     {
         LOG_CAMPBELL() << "id: " + QString::number(start);
+
+        progress->setValue(start);
         frames.push_back(temp.clone());
         capture >> temp;
         start++;
     }
 
     double fps = capture.get(cv::CAP_PROP_FPS);
-    LOG_JOHN() << "Frames per second using video.get(CAP_PROP_FPS) : " + QString::number(fps);
 
     _data = std::make_shared<VideoGraphData>(frames);
     _data->setFrameRate(fps);

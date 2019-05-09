@@ -11,6 +11,9 @@ FrameIterator::FrameIterator(){
     window = new QWidget;
     layout = new QGridLayout;
 
+
+    totalFramesDisplay = new QLabel(QString::number(totalFrames));
+    totalFramesLabel = new QLabel("Total Frames: ");
     forward = new QPushButton("Iterate Forward");
     backward = new QPushButton("Iterate Backward");
     frameTo = new QPushButton("Go To Selected Frame");
@@ -25,11 +28,13 @@ FrameIterator::FrameIterator(){
     connect(backward, SIGNAL(clicked(bool)), this, SLOT(iterateBackward()));
     connect(frameTo, SIGNAL(clicked(bool)), this, SLOT(selectFrame()));
 
-    layout->addWidget(frameNumber,1,1);
-    layout->addWidget(frameSelector,2,1);
-    layout->addWidget(frameTo,2,2);
-    layout->addWidget(forward,3,2);
-    layout->addWidget(backward,3,1);
+    layout->addWidget(totalFramesLabel, 1,1);
+    layout->addWidget(totalFramesDisplay, 1,2);
+    layout->addWidget(frameNumber,2,1);
+    layout->addWidget(frameSelector,3,1);
+    layout->addWidget(frameTo,3,2);
+    layout->addWidget(forward,4,2);
+    layout->addWidget(backward,4,1);
     window->setLayout(layout);
 
 }
@@ -73,6 +78,10 @@ void FrameIterator::setInData(std::shared_ptr<NodeData> data, int location){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
+
+            totalFrames = videoIn->data().size();
+            totalFramesDisplay->setText(QString::number(totalFrames));
+
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -104,16 +113,23 @@ QString FrameIterator::validationMessage() const
 void FrameIterator::iterateForward(){
 
     if(videoIn){
+
     frameNumber->setText("Current Frame: " + QString::number(++currFrame));
-    std::vector<cv::Mat> die = videoIn->data();
-    cv::Mat live = die.at(currFrame);
-    frameOut->_image = live;
+    if(currFrame < videoIn->data().size()){
+    frameOut->_image = videoIn->data().at(currFrame);
+    }else{
+        --currFrame;
+    }
     }
 }
 void FrameIterator::iterateBackward(){
     if(videoIn){
     frameNumber->setText("Current Frame: " + QString::number(--currFrame));
+    if(currFrame < videoIn->data().size()){
     frameOut->_image = videoIn->data().at(currFrame);
+    }else{
+        ++currFrame;
+    }
     }
 }
 void FrameIterator::selectFrame(){
@@ -121,8 +137,10 @@ void FrameIterator::selectFrame(){
         if(!frameSelector->text().isEmpty()){
             currFrame = frameSelector->text().toInt();
         }
-    frameNumber->setText("Current Frame: " + QString::number(currFrame));
-    frameOut->_image = videoIn->data().at(currFrame);
+        if(!currFrame < videoIn->data().size()){
+            frameNumber->setText("Current Frame: " + QString::number(currFrame));
+            frameOut->_image = videoIn->data().at(currFrame);
+        }
     }
 }
 

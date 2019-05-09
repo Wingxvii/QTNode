@@ -4,6 +4,8 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QLineEdit>
 #include <QComboBox>
+#include <QVBoxLayout>
+#include <QProgressBar>
 
 #include <nodes/NodeDataModel>
 #include <QPushButton>
@@ -49,14 +51,19 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
 
     void setInData(std::shared_ptr<NodeData>, int) override {}
-    QWidget *embeddedWidget() override {return button; }
+    QWidget *embeddedWidget() override {return window; }
 
 public slots:
     void chooseVideo();
 
-private:
+private: //UI
+    QWidget *window;
+    QVBoxLayout *layout;
+    QPushButton *button;
+    QProgressBar *progress;
+
+private: //Ports
     std::shared_ptr<VideoGraphData> _data;
-    QPushButton* button;
 };
 
 #endif // VIDEOSOURCEDATAMODEL_H

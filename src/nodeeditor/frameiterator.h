@@ -67,6 +67,7 @@ private: //port values
 
 private: //locals
     int currFrame = 0;
+    int totalFrames = 0;
 
 private: //UI
     QWidget *window;
@@ -76,6 +77,8 @@ private: //UI
     QPushButton* frameTo;
     QLabel* frameNumber;
     QLineEdit* frameSelector;
+    QLabel *totalFramesDisplay;
+    QLabel *totalFramesLabel;
 
     QRegExpValidator* intValid;
 };
