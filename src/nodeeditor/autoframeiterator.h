@@ -7,7 +7,6 @@
 #include <iostream>
 
 //data types
-#include "imagevector.h"
 #include "videographdata.h"
 
 //QT widgets
@@ -67,7 +66,7 @@ public slots:
 
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
-    std::shared_ptr<ImageVector> imagesOut;
+    std::shared_ptr<VideoGraphData> imagesOut;
 
 private: //locals
     int totalFrames = 0;

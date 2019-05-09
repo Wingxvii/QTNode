@@ -102,7 +102,7 @@ void AutoFrameIterator::setInData(std::shared_ptr<QtNodes::NodeData> data, int l
             modelValidationError = QString();
 
             //instantiate output
-            imagesOut = std::make_shared<ImageVector>();
+            imagesOut = std::make_shared<VideoGraphData>();
             calcValues(); //update values
         }
        else{

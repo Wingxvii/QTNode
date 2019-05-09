@@ -48,7 +48,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 
     //create the output display sensor
     outputSensor = std::make_shared<DataModelRegistry>();
-    outputSensor->registerModel<OutputDisplayModel>("Displays");
+    outputSensor->registerModel<OutputDisplayModel>("Output");
 
     //create the qt element of the editor
     scene = new FlowScene(outputSensor);
@@ -63,13 +63,13 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<VideoOutputModel>("zLegacy");//output
 
     //input
-    final->registerModel<FrameIterator>("Sources");
-    final->registerModel<AutoFrameIterator>("Sources");
-    final->registerModel<VideoSourceDataModel>("Sources");
+    final->registerModel<FrameIterator>("Input");
+    final->registerModel<AutoFrameIterator>("Input");
+    final->registerModel<VideoSourceDataModel>("Input");
 
     //output
-    final->registerModel<VideoDisplay>("Displays");
-    final->registerModel<ImageDisplay>("Displays");
+    final->registerModel<VideoDisplay>("Output");
+    final->registerModel<ImageDisplay>("Output");
 
     //processing
     final->registerModel<Calibrate>("Calibration");

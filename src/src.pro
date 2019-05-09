@@ -294,7 +294,6 @@ HEADERS  += mainwindow.h \
     nodeeditor/NodeEditorExample.h \
     nodeeditor/calibrate.h \
     nodeeditor/imagedata.h \
-    nodeeditor/imagevector.h \
     nodeeditor/pointsdata.h \
     nodeeditor/checkerboardpointsbuffer.h \
     nodeeditor/pointdata.h \
