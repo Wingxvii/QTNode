@@ -4,11 +4,6 @@
 #include "Logger.h"
 #include <qstring.h>
 
-#include "opencv2/calib3d.hpp"
-#include "opencv2/imgproc.hpp"
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/highgui.hpp"
-#include "opencv2/core/utility.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -16,6 +11,8 @@
 #include "qfiledialog.h"
 #include "iostream"
 
+#include "opencv2/calib3d.hpp"
+#include "opencv2/core/utility.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"

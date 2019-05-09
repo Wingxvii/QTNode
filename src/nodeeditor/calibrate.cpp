@@ -1,7 +1,5 @@
 #include "calibrate.h"
 
-#include <opencv2/highgui.hpp>
-
 //opencv
 #include "opencv2\core.hpp"
 #include "opencv2\imgcodecs.hpp"
