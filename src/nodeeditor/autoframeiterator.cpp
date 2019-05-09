@@ -1,7 +1,6 @@
 #include "autoframeiterator.h"
 
 //opencv
-#include "opencv2\core.hpp"
 
 
 AutoFrameIterator::AutoFrameIterator()
@@ -76,7 +75,7 @@ QtNodes::NodeDataType AutoFrameIterator::dataType(QtNodes::PortType portType, Qt
     if(portType == PortType::In){
         return VideoGraphData().type();
     }
-    return ImageVector().type();
+    return VideoGraphData().type();
 }
 
 std::shared_ptr<NodeData> AutoFrameIterator::outData(PortIndex port)
@@ -126,6 +125,8 @@ QString AutoFrameIterator::validationMessage() const
 void AutoFrameIterator::startIteration()
 {
     if(videoIn){
+        std::vector<cv::Mat> temp;
+
         //handle endframe -1
         int _endFrame = endFrame;
         if(endFrame == -1){
@@ -136,12 +137,13 @@ void AutoFrameIterator::startIteration()
         progressBar->setMinimum(startFrame);
         progressBar->setMaximum(_endFrame);
 
-        //iterate
+        //iterate     //MULTITHREAD THIS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         for(int counter = startFrame; counter < _endFrame; counter += byPass){
-            imagesOut->data().push_back(videoIn->data().at(counter));
+            temp.push_back(videoIn->data().at(counter));
             progressBar->setValue(counter);
         }
         progressBar->setValue(_endFrame);
+        imagesOut->_video = temp;
     }
 }
 
