@@ -150,7 +150,8 @@ SOURCES += main.cpp\
     nodeeditor/tohsv.cpp \
     nodeeditor/videothreshold.cpp \
     nodeeditor/erodeimage.cpp \
-    nodeeditor/dilateimage.cpp
+    nodeeditor/dilateimage.cpp \
+    nodeeditor/autoframeiterator.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -306,7 +307,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/tohsv.h \
     nodeeditor/videothreshold.h \
     nodeeditor/erodeimage.h \
-    nodeeditor/dilateimage.h
+    nodeeditor/dilateimage.h \
+    nodeeditor/autoframeiterator.h
 
 
 FORMS    += mainwindow.ui \

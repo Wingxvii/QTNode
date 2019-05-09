@@ -23,6 +23,7 @@
 #include "nodeeditor/undistort.h"
 
 #include "nodeeditor/frameiterator.h"
+#include "nodeeditor/autoframeiterator.h"
 
 #include "nodeeditor/videodisplay.h"
 #include "nodeeditor/imagedisplay.h"
@@ -47,7 +48,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 
     //create the output display sensor
     outputSensor = std::make_shared<DataModelRegistry>();
-    outputSensor->registerModel<OutputDisplayModel>("Output");
+    outputSensor->registerModel<OutputDisplayModel>("Displays");
 
     //create the qt element of the editor
     scene = new FlowScene(outputSensor);
@@ -63,13 +64,14 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 
     //input
     final->registerModel<FrameIterator>("Sources");
+    final->registerModel<AutoFrameIterator>("Sources");
     final->registerModel<VideoSourceDataModel>("Sources");
 
     //output
     final->registerModel<VideoDisplay>("Displays");
     final->registerModel<ImageDisplay>("Displays");
 
-    //process
+    //processing
     final->registerModel<Calibrate>("Calibration");
     final->registerModel<CheckerboardPointsBuffer>("Calibration");
     final->registerModel<GetCorners>("Calibration");

@@ -1,5 +1,5 @@
-#ifndef IMAGEDATA_H
-#define IMAGEDATA_H
+#ifndef IMAGEVECTOR_H
+#define IMAGEVECTOR_H
 
 #include <nodes/NodeDataModel>
 #include "Logger.h"
@@ -64,4 +64,4 @@ private:
 };
 
 
-#endif // IMAGEDATA_H
+#endif
