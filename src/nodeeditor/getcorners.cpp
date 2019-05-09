@@ -8,23 +8,34 @@
 #include "opencv2\calib3d.hpp"
 
 GetCorners::GetCorners(){
-    button = new QPushButton("Find Corners");
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(findCorners()));
-    imageOut = std::make_shared<ImageData>();
-    cornersOut = std::make_shared<PointData>();
+
+    window = new QWidget;
+    layout = new QGridLayout;
+
+    successDisplay = new QLabel(QString::number(successes));
+    successLabel = new QLabel("Succeeded: ");
+    failDisplay = new QLabel(QString::number(failures));
+    failLabel = new QLabel("Failures: ");
+
+    layout->addWidget(successLabel,1,1);
+    layout->addWidget(successDisplay,1,2);
+    layout->addWidget(failLabel,2,1);
+    layout->addWidget(failDisplay,2,2);
+
+    cornersOut = std::make_shared<PointsData>();
 
 }
 
 unsigned int GetCorners::nPorts(QtNodes::PortType portType)const
 {
-    unsigned int result = 2;
+    unsigned int result = 1;
 
     switch(portType){
     case PortType::In:
         result = 2;
         break;
     case PortType::Out:
-        result = 2;
+        result = 1;
         break;
     default:
         break;
@@ -36,11 +47,6 @@ unsigned int GetCorners::nPorts(QtNodes::PortType portType)const
 std::shared_ptr<NodeData> GetCorners::outData(PortIndex port){
     switch(port){
     case 0:
-        if(imageOut){
-            return imageOut;
-        }
-        break;
-    case 1:
         if(cornersOut){
             return cornersOut;
         }
@@ -52,9 +58,9 @@ std::shared_ptr<NodeData> GetCorners::outData(PortIndex port){
 
 void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
     if(location == 0){
-        imageIn = std::dynamic_pointer_cast<ImageData>(data);
+        imagesIn = std::dynamic_pointer_cast<VideoGraphData>(data);
 
-        if(imageIn){
+        if(imagesIn){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
@@ -68,7 +74,7 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
     }else{
         dataIn = std::dynamic_pointer_cast<CalibData>(data);
 
-        if(imageIn){
+        if(dataIn){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
@@ -80,17 +86,21 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
         }
 
     }
+
+    if(imagesIn && dataIn){
+        findCorners();
+    }
 }
 
 NodeDataType GetCorners::dataType(PortType portType, PortIndex portIndex) const
 {
-    if(portType == PortType::Out && portIndex == 1){
-        return PointData().type();
+    if(portType == PortType::Out){
+        return PointsData().type();
     }
     if(portType == PortType::In && portIndex == 1){
         return CalibData().type();
     }
-    return ImageData().type();
+    return VideoGraphData().type();
 }
 
 NodeValidationState GetCorners::validationState() const
@@ -105,27 +115,26 @@ QString GetCorners::validationMessage() const
 
 void GetCorners::findCorners(){
 
-    if(imageIn){
-        std::vector<cv::Point2f> pointBuffer;
-        //finds actual corners in each image
-        bool found = cv::findChessboardCorners(imageIn->data(), dataIn->sizeData(), pointBuffer, cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE);
-        imageOut = std::make_shared<ImageData>();
+    if(imagesIn){
 
-        //pushes into found list if found
-        if (found) {
-            cornersOut->setData(pointBuffer);
-            LOG_JOHN() << "Corners found";
-        }else{
-            LOG_JOHN() << "No Corners found";
+        cornersOut->data().clear();
 
+        for(int counter = 0; counter < imagesIn->data().size(); counter++){
+            std::vector<cv::Point2f> pointBuffer;
+            //finds actual corners in each image
+            bool found = cv::findChessboardCorners(imagesIn->data().at(counter), dataIn->sizeData(), pointBuffer, cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE);
+
+            //pushes into found list if found
+            if (found) {
+                cornersOut->data().push_back(pointBuffer);
+                LOG_JOHN() << "Corners found";
+                ++successes;
+            }else{
+                LOG_JOHN() << "No Corners found";
+                ++failures;
+            }
         }
-        //create a copy image of imagein, and send that instead #URGENT
-        cv::Mat temp = cv::Mat(imageIn->data().clone());
-
-        cv::drawChessboardCorners(temp, dataIn->sizeData(), pointBuffer, found);
-        imageOut->_image = temp;
     }
-
 }
 
 

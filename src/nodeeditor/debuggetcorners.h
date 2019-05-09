@@ -1,18 +1,18 @@
-#ifndef GETCORNERS_H
-#define GETCORNERS_H
+#ifndef DebugGetCorners_H
+#define DebugGetCorners_H
 
 #include <QtCore/QObject>
 
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
-#include "pointsdata.h"
-#include "videographdata.h"
+#include "pointdata.h"
+#include "imagedata.h"
 #include "calibdata.h"
 
 #include <iostream>
 #include <QLabel>
 #include <QPushButton>
-#include <QGridLayout>
+#include <QLineEdit>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -21,13 +21,13 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
-class GetCorners : public NodeDataModel{
+class DebugGetCorners : public NodeDataModel{
     Q_OBJECT
 
 
 public:
-    GetCorners();
-    virtual ~GetCorners() {}
+    DebugGetCorners();
+    virtual ~DebugGetCorners() {}
 
     QString caption() const override{
         return QStringLiteral("Find Corners");
@@ -49,7 +49,7 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override;
 
-    QWidget* embeddedWidget() override {return window;}
+    QWidget* embeddedWidget() override {return button;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
@@ -61,26 +61,15 @@ private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
 
-private: //local variables
-    int successes = 0;
-    int failures = 0;
-
 private: //port values
-    std::shared_ptr<VideoGraphData> imagesIn;
-    std::shared_ptr<PointsData> cornersOut;
+    std::shared_ptr<ImageData> imageIn;
+    std::shared_ptr<ImageData> imageOut;
+    std::shared_ptr<PointData> cornersOut;
     std::shared_ptr<CalibData> dataIn;
-
-private: //UI
-    QWidget *window;
-    QGridLayout *layout;
-    QLabel *successLabel;
-    QLabel *successDisplay;
-    QLabel *failLabel;
-    QLabel *failDisplay;
-
+    QPushButton* button;
 
 
 
 };
 
-#endif // GETCORNERS_H
+#endif // DebugGetCorners_H

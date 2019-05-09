@@ -19,6 +19,7 @@
 #include "nodeeditor/calibrate.h"
 #include "nodeeditor/checkerboardpointsbuffer.h"
 #include "nodeeditor/getcorners.h"
+#include "nodeeditor/debuggetcorners.h"
 #include "nodeeditor/calibinfo.h"
 #include "nodeeditor/undistort.h"
 
@@ -61,6 +62,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<GraphDisplayDataModel>("zLegacy"); //Displays
     final->registerModel<OutputDisplayModel>("zLegacy");//output
     final->registerModel<VideoOutputModel>("zLegacy");//output
+    final->registerModel<DebugGetCorners>("zLegacy");
 
     //input
     final->registerModel<FrameIterator>("Input");

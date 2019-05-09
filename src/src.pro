@@ -151,7 +151,8 @@ SOURCES += main.cpp\
     nodeeditor/videothreshold.cpp \
     nodeeditor/erodeimage.cpp \
     nodeeditor/dilateimage.cpp \
-    nodeeditor/autoframeiterator.cpp
+    nodeeditor/autoframeiterator.cpp \
+    nodeeditor/debuggetcorners.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -307,7 +308,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/videothreshold.h \
     nodeeditor/erodeimage.h \
     nodeeditor/dilateimage.h \
-    nodeeditor/autoframeiterator.h
+    nodeeditor/autoframeiterator.h \
+    nodeeditor/debuggetcorners.h
 
 
 FORMS    += mainwindow.ui \
