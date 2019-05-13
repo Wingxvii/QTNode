@@ -67,7 +67,10 @@ public:
         return text;
     }
 
+
     std::vector<cv::Mat> _video;
+
+
 
 private:
     QString _text;

@@ -20,7 +20,7 @@ AutoFrameIterator::AutoFrameIterator()
     progressBar = new QProgressBar();
     projectedSamplesLabel = new QLabel("Estimated number of samples: ");
     projectedSamplesDisplay = new QLabel(QString::number(projectedSamples));
-    startButton = new QPushButton("Start Iteration");
+   // startButton = new QPushButton("Start Iteration");
 
     //init out port
     imagesOut = std::make_shared<VideoGraphData>();
@@ -34,7 +34,7 @@ AutoFrameIterator::AutoFrameIterator()
     byPassInput->setValidator(intPos);
 
     //connect functions to slots
-    connect(startButton, SIGNAL(clicked(bool)), this, SLOT(startIteration()));
+    //connect(startButton, SIGNAL(clicked(bool)), this, SLOT(startIteration()));
     connect(startFrameInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
     connect(endFrameInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
     connect(byPassInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
@@ -49,9 +49,9 @@ AutoFrameIterator::AutoFrameIterator()
     layout->addWidget(byPassLabel, 3,1);
     layout->addWidget(byPassInput,3,2);
     layout->addWidget(progressBar,4,1,1,4);
-    layout->addWidget(startButton,5,1,1,2);
-    layout->addWidget(projectedSamplesLabel,5,3);
-    layout->addWidget(projectedSamplesDisplay,5,4);
+    //layout->addWidget(startButton,5,1,1,2);
+    layout->addWidget(projectedSamplesLabel,5,1);
+    layout->addWidget(projectedSamplesDisplay,5,2);
     //set layout into window
     window->setLayout(layout);
 }
@@ -127,27 +127,27 @@ QString AutoFrameIterator::validationMessage() const
 
 void AutoFrameIterator::startIteration()
 {
-    if(videoIn){
-        std::vector<cv::Mat> temp;
+    std::vector<cv::Mat> temp;
 
-        //handle endframe -1
-        int _endFrame = endFrame;
-        if(endFrame == -1){
-            _endFrame = totalFrames;
-        }
-
-        //setup progress bar parameters
-        progressBar->setMinimum(startFrame);
-        progressBar->setMaximum(_endFrame);
-
-        //iterate     //MULTITHREAD THIS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        for(int counter = startFrame; counter < _endFrame; counter += byPass){
-            temp.push_back(videoIn->data().at(counter));
-            progressBar->setValue(counter);
-        }
-        progressBar->setValue(_endFrame);
-        imagesOut->_video = temp;
+    //handle endframe -1
+    int _endFrame = endFrame;
+    if(endFrame == -1){
+        _endFrame = totalFrames;
     }
+
+    //setup progress bar parameters
+    progressBar->setMinimum(startFrame);
+    progressBar->setMaximum(_endFrame);
+
+    //iterate     //MULTITHREAD THIS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    for(int counter = startFrame; counter < _endFrame; counter += byPass){
+        temp.push_back(videoIn->data().at(counter));
+        progressBar->setValue(counter);
+    }
+    progressBar->setValue(_endFrame);
+    imagesOut->_video = temp;
+    imagesOut->ready();
+    emit dataUpdated(0);
 }
 
 void AutoFrameIterator::calcValues()
@@ -190,5 +190,10 @@ void AutoFrameIterator::calcValues()
     projectedSamplesDisplay->setText(QString::number(projectedSamples));
 
     LOG_JOHN() << "Values Updated";
+
+    //use this to check if ports are ready
+    if(videoIn && videoIn->isReady){
+        startIteration();
+    }
 
 }

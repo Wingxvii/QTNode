@@ -82,6 +82,8 @@ void VideoSourceDataModel::chooseVideo()
     double fps = capture.get(cv::CAP_PROP_FPS);
 
     _data = std::make_shared<VideoGraphData>(frames);
+    _data->ready();
+
     _data->setFrameRate(fps);
     emit dataUpdated(0);
 

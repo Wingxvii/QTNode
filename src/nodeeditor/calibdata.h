@@ -58,14 +58,26 @@ public:
         return text;
     }
 
-    void setSizeXData(int data){boardSize.height = data;}
-    void setSizeYData(int data){boardSize.width = data;}
-    void setLengthData(float data){squareEdgeLength =  data;}
+    void setSizeXData(int data){boardSize.height = data; xSet = true;}
+    void setSizeYData(int data){boardSize.width = data; ySet = true;}
+    void setLengthData(float data){squareEdgeLength =  data; lengthSet = true;}
+
+    void checkReady(){
+        if(xSet && ySet && lengthSet){
+            ready();
+        }else{
+        unready();
+        }
+    }
 
 private:
     QString _text;
     cv::Size boardSize;
     float squareEdgeLength;
+
+    bool xSet = false;
+    bool ySet = false;
+    bool lengthSet = false;
 
 };
 

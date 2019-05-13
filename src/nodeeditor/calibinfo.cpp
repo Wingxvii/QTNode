@@ -84,6 +84,8 @@ void CalibInfo::saveXData(){
     else{
         data->setSizeXData(0);
     }
+    data->checkReady();
+    emit dataUpdated(0);
 }
 void CalibInfo::saveYData(){
     if(!sizeY->text().isEmpty()){
@@ -93,6 +95,8 @@ void CalibInfo::saveYData(){
     else{
         data->setSizeYData(0);
     }
+    data->checkReady();
+    emit dataUpdated(0);
 }
 void CalibInfo::saveLengthData(){
     if(!length->text().isEmpty()){
@@ -100,6 +104,9 @@ void CalibInfo::saveLengthData(){
     }else{
         data->setLengthData(0.0f);
     }
+    data->checkReady();
+    emit dataUpdated(0);
 }
+
 
 

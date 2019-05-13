@@ -64,6 +64,7 @@ private:
 private: //local variables
     int successes = 0;
     int failures = 0;
+    int minimumSuccesses = 10;
 
 private: //port values
     std::shared_ptr<VideoGraphData> imagesIn;

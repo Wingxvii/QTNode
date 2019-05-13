@@ -66,6 +66,7 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
+            void findCorners();
         }
         else{
             modelValidationState = NodeValidationState::Warning;
@@ -117,7 +118,7 @@ QString GetCorners::validationMessage() const
 
 void GetCorners::findCorners(){
 
-    if(imagesIn){
+    if(imagesIn && imagesIn->isReady && dataIn && dataIn->isReady){
 
         cornersOut->data().clear();
         //these also need to be multithreaded @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -138,6 +139,13 @@ void GetCorners::findCorners(){
         }
         successDisplay->setText(QString::number(successes));
         failDisplay->setText(QString::number(failures));
+
+        //trigger next node
+        if(successes > minimumSuccesses){
+            cornersOut->ready();
+            emit dataUpdated(0);
+
+        }
     }
 }
 

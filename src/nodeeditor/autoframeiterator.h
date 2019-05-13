@@ -16,6 +16,7 @@
 #include <QGridLayout>
 #include <QRegExpValidator>
 #include <QProgressBar>
+#include <QCheckBox>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -64,16 +65,19 @@ public slots:
     //calculates the values displayed. This is called whenever a value or input is updated
     void calcValues();
 
+
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
     std::shared_ptr<VideoGraphData> imagesOut;
 
 private: //locals
+    bool active;
+
     int totalFrames = 0;
     int projectedSamples = 0;
     int startFrame = 0;
     int endFrame = -1;
-    int byPass = 0;
+    int byPass = 1;
 
 private: //UI
     QWidget *window;
@@ -90,7 +94,7 @@ private: //UI
     QProgressBar *progressBar;
     QLabel *projectedSamplesLabel;
     QLabel *projectedSamplesDisplay;
-    QPushButton *startButton;
+    //QPushButton *startButton;
 
     QRegExpValidator* intPos;
 
