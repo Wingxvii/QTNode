@@ -66,6 +66,7 @@ public:
         QString text = "data not representable in text format";
         return text;
     }
+
     std::vector<cv::Mat> _video;
 
 private:

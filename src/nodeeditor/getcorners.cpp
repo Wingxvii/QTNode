@@ -62,7 +62,7 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
     if(location == 0){
         imagesIn = std::dynamic_pointer_cast<VideoGraphData>(data);
 
-        if(imagesIn){
+        if(imagesIn ){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
@@ -89,7 +89,7 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
 
     }
 
-    if(imagesIn && dataIn){
+    if(imagesIn && imagesIn->data().size() > 1 && dataIn){
         findCorners();
     }
 }

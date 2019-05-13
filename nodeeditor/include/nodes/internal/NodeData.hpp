@@ -29,5 +29,7 @@ public:
 
   /// Type for inner use
   virtual NodeDataType type() const = 0;
+
+    bool ready = false;
 };
 }

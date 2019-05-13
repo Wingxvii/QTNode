@@ -22,6 +22,9 @@ AutoFrameIterator::AutoFrameIterator()
     projectedSamplesDisplay = new QLabel(QString::number(projectedSamples));
     startButton = new QPushButton("Start Iteration");
 
+    //init out port
+    imagesOut = std::make_shared<VideoGraphData>();
+
     //signed int
     intPos = new QRegExpValidator(QRegExp("-?\\d*"), this);
 
