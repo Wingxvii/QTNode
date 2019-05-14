@@ -135,7 +135,7 @@ void Calibrate::processData(){
 
     cv::calibrateCamera(worldSpaceCornerPoints, pointsIn->data(), calibDataIn->sizeData(), cameraMatData, distanceCoeffData, rVectors, tVectors);
 
-    updateProgressBar(100);s
+    updateProgressBar(100);
 
     cameraMat->_image = cameraMatData;
     distanceCoeff->_image = distanceCoeffData;
