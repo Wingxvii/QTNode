@@ -1,5 +1,6 @@
 #include "autoframeiterator.h"
-
+#include "QMenu"
+#include "QAction"
 //opencv
 
 
@@ -54,6 +55,14 @@ AutoFrameIterator::AutoFrameIterator()
     layout->addWidget(projectedSamplesDisplay,5,2);
     //set layout into window
     window->setLayout(layout);
+
+
+    //context window
+    window->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(window, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(ShowContextMenu(const QPoint &)));
+
+
 }
 
 unsigned int AutoFrameIterator::nPorts(QtNodes::PortType portType) const
@@ -196,4 +205,20 @@ void AutoFrameIterator::calcValues()
         startIteration();
     }
 
+}
+
+void AutoFrameIterator::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction action1("Test", this);
+    connect(&action1, SIGNAL(triggered()), this, SLOT(test()));
+    contextMenu.addAction(&action1);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}
+
+void AutoFrameIterator::test()
+{
+    LOG_JOHN() << "Works";
 }

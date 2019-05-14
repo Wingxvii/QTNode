@@ -66,6 +66,9 @@ public slots:
     void calcValues();
 
 
+    void ShowContextMenu(const QPoint &pos);
+    void test();
+
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
     std::shared_ptr<VideoGraphData> imagesOut;
