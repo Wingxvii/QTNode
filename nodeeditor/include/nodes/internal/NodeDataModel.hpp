@@ -140,5 +140,16 @@ signals:
 private:
 
   NodeStyle _nodeStyle;
+
+  //node core functions
+  public slots:
+
+    void processData();   //use this to do the data processing of our node
+    void preCheck();      //use this to trigger our processing function
+    void updateUI();      //this is called to update the ui of our node
+
+   public:
+    int id = 0;           //used for black box
+    void clearPorts();
 };
 }

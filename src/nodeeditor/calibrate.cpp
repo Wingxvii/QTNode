@@ -8,8 +8,13 @@
 #include "opencv2\calib3d.hpp"
 
 Calibrate::Calibrate(){
-    button = new QPushButton("Innitiate Calibration");
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(startCalibration()));
+    window = new QWidget;
+    layout = new QGridLayout;
+
+    progressBar = new QProgressBar();
+
+    layout->addWidget(progressBar);
+    window->setLayout(layout);
 }
 
 unsigned int Calibrate::nPorts(QtNodes::PortType portType)const
@@ -57,6 +62,7 @@ void Calibrate::setInData(std::shared_ptr<NodeData> data, int location){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
+            preCheck();
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -71,6 +77,8 @@ void Calibrate::setInData(std::shared_ptr<NodeData> data, int location){
                 modelValidationState = NodeValidationState::Valid;
                 modelValidationError = QString();
                 //data was found
+                preCheck();
+
             }
            else{
               modelValidationState = NodeValidationState::Warning;
@@ -104,36 +112,56 @@ QString Calibrate::validationMessage() const
     return modelValidationError;
 }
 
-void Calibrate::startCalibration(){
+void Calibrate::processData(){
 
-    if(pointsIn){
+    std::vector<std::vector<cv::Point3f>> worldSpaceCornerPoints(1);
 
-        std::vector<std::vector<cv::Point3f>> worldSpaceCornerPoints(1);
+    cameraMat = std::make_shared<ImageData>();
+    distanceCoeff = std::make_shared<ImageData>();
 
-        cameraMat = std::make_shared<ImageData>();
-        distanceCoeff = std::make_shared<ImageData>();
+    cv::Mat cameraMatData;
+    cv::Mat distanceCoeffData;
 
-        cv::Mat cameraMatData;
-        cv::Mat distanceCoeffData;
-
-        for (int i = 0; i < calibDataIn->sizeData().height; i++) {
-            for (int j = 0; j < calibDataIn->sizeData().width; j++) {
-                worldSpaceCornerPoints[0].push_back(cv::Point3f(j * calibDataIn->lengthData(), i*calibDataIn->lengthData(), 0.0f));
-            }
+    for (int i = 0; i < calibDataIn->sizeData().height; i++) {
+        for (int j = 0; j < calibDataIn->sizeData().width; j++) {
+            worldSpaceCornerPoints[0].push_back(cv::Point3f(j * calibDataIn->lengthData(), i*calibDataIn->lengthData(), 0.0f));
         }
-
-        worldSpaceCornerPoints.resize(pointsIn->data().size(), worldSpaceCornerPoints[0]);
-
-        std::vector<cv::Mat> rVectors, tVectors;
-        distanceCoeffData = cv::Mat::zeros(8,1,CV_64F);
-
-        cv::calibrateCamera(worldSpaceCornerPoints, pointsIn->data(), calibDataIn->sizeData(), cameraMatData, distanceCoeffData, rVectors, tVectors);
-
-        cameraMat->_image = cameraMatData;
-        distanceCoeff->_image = distanceCoeffData;
-        LOG_JOHN() << "Calibrate Sucessful";
     }
+
+    worldSpaceCornerPoints.resize(pointsIn->data().size(), worldSpaceCornerPoints[0]);
+
+    std::vector<cv::Mat> rVectors, tVectors;
+    distanceCoeffData = cv::Mat::zeros(8,1,CV_64F);
+
+    cv::calibrateCamera(worldSpaceCornerPoints, pointsIn->data(), calibDataIn->sizeData(), cameraMatData, distanceCoeffData, rVectors, tVectors);
+
+    updateProgressBar(100);s
+
+    cameraMat->_image = cameraMatData;
+    distanceCoeff->_image = distanceCoeffData;
+    LOG_JOHN() << "Calibrate Sucessful";
+
+    cameraMat->ready();
+    distanceCoeff->ready();
 
 }
 
+void Calibrate::preCheck()
+{
+    if(pointsIn && pointsIn->isReady && calibDataIn && calibDataIn->isReady){
+        processData();
+        emit dataUpdated(0);
+        emit dataUpdated(1);
+
+    }
+}
+
+void Calibrate::updateUI()
+{
+    progressBar->setMaximum(1);
+}
+
+void Calibrate::updateProgressBar(int value){
+    progressBar->setValue(value);
+}
 

@@ -36,9 +36,12 @@ AutoFrameIterator::AutoFrameIterator()
 
     //connect functions to slots
     //connect(startButton, SIGNAL(clicked(bool)), this, SLOT(startIteration()));
-    connect(startFrameInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
-    connect(endFrameInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
-    connect(byPassInput, SIGNAL(textChanged(QString)), this, SLOT(calcValues()));
+    connect(startFrameInput, SIGNAL(textChanged(QString)), this, SLOT(updateUI()));
+    connect(endFrameInput, SIGNAL(textChanged(QString)), this, SLOT(updateUI()));
+    connect(byPassInput, SIGNAL(textChanged(QString)), this, SLOT(updateUI()));
+    connect(startFrameInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(endFrameInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(byPassInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
 
     //build layout
     layout->addWidget(totalFramesLabel, 1,1);
@@ -114,7 +117,8 @@ void AutoFrameIterator::setInData(std::shared_ptr<QtNodes::NodeData> data, int l
 
             //instantiate output
             imagesOut = std::make_shared<VideoGraphData>();
-            calcValues(); //update values
+            updateUI(); //update values
+            preCheck();
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -134,7 +138,7 @@ QString AutoFrameIterator::validationMessage() const
     return modelValidationError;
 }
 
-void AutoFrameIterator::startIteration()
+void AutoFrameIterator::processData()
 {
     std::vector<cv::Mat> temp;
 
@@ -159,7 +163,7 @@ void AutoFrameIterator::startIteration()
     emit dataUpdated(0);
 }
 
-void AutoFrameIterator::calcValues()
+void AutoFrameIterator::updateUI()
 {
     if(videoIn){                                    //total frames
         totalFrames = videoIn->data().size();
@@ -199,10 +203,18 @@ void AutoFrameIterator::calcValues()
     projectedSamplesDisplay->setText(QString::number(projectedSamples));
 
     LOG_JOHN() << "Values Updated";
+}
 
+void AutoFrameIterator::preCheck(){
     //use this to check if ports are ready
-    if(videoIn && videoIn->isReady){
-        startIteration();
+
+    if(startFrame && endFrame && byPass && byPass != 0){
+        isReady = true;
+    }
+
+    if(videoIn && videoIn->isReady && isReady){
+        processData();
+        updateUI();
     }
 
 }
@@ -211,14 +223,29 @@ void AutoFrameIterator::ShowContextMenu(const QPoint &pos)
 {
     QMenu contextMenu(tr("Context menu"));
 
-    QAction action1("Test", this);
-    connect(&action1, SIGNAL(triggered()), this, SLOT(test()));
-    contextMenu.addAction(&action1);
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
 
     contextMenu.exec(window->mapToGlobal(pos));
 }
 
-void AutoFrameIterator::test()
+void AutoFrameIterator::activate()
 {
-    LOG_JOHN() << "Works";
+    active = true;
+    startFrameInput->setEnabled(true);
+    endFrameInput->setEnabled(true);
+    byPassInput->setEnabled(true);
+}
+void AutoFrameIterator::deactivate()
+{
+    active = false;
+    startFrameInput->setEnabled(false);
+    endFrameInput->setEnabled(false);
+    byPassInput->setEnabled(false);
+
 }

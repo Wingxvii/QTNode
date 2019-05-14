@@ -66,7 +66,7 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
-            void findCorners();
+            preCheck();
         }
         else{
             modelValidationState = NodeValidationState::Warning;
@@ -81,6 +81,8 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
+            preCheck();
+
         }
         else{
             modelValidationState = NodeValidationState::Warning;
@@ -88,10 +90,6 @@ void GetCorners::setInData(std::shared_ptr<NodeData> data, int location){
             LOG_JOHN() << "Calibration data was not found";
         }
 
-    }
-
-    if(imagesIn && imagesIn->data().size() > 1 && dataIn){
-        findCorners();
     }
 }
 
@@ -116,37 +114,45 @@ QString GetCorners::validationMessage() const
     return modelValidationError;
 }
 
-void GetCorners::findCorners(){
+void GetCorners::processData(){
 
-    if(imagesIn && imagesIn->isReady && dataIn && dataIn->isReady){
+    cornersOut->data().clear();
+    std::vector<std::vector<cv::Point2f>> pointsBuffer;
 
-        cornersOut->data().clear();
-        //these also need to be multithreaded @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        for(int counter = 0; counter < imagesIn->data().size(); counter++){
-            std::vector<cv::Point2f> pointBuffer;
-            //finds actual corners in each image
-            bool found = cv::findChessboardCorners(imagesIn->data().at(counter), dataIn->sizeData(), pointBuffer, cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE);
+    //these also need to be multithreaded @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    for(int counter = 0; counter < imagesIn->data().size(); counter++){
+        std::vector<cv::Point2f> pointBuffer;
+        //finds actual corners in each image
+        bool found = cv::findChessboardCorners(imagesIn->data().at(counter), dataIn->sizeData(), pointBuffer, cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE);
 
-            //pushes into found list if found
-            if (found) {
-                cornersOut->data().push_back(pointBuffer);
-                LOG_JOHN() << "Corners found";
-                ++successes;
-            }else{
-                LOG_JOHN() << "No Corners found";
-                ++failures;
-            }
+        //pushes into found list if found
+        if (found) {
+            pointsBuffer.push_back(pointBuffer);
+            LOG_JOHN() << "Corners found";
+            ++successes;
+        }else{
+            LOG_JOHN() << "No Corners found";
+            ++failures;
         }
-        successDisplay->setText(QString::number(successes));
-        failDisplay->setText(QString::number(failures));
-
-        //trigger next node
-        if(successes > minimumSuccesses){
-            cornersOut->ready();
-            emit dataUpdated(0);
-
-        }
+        updateUI();
+    }
+    //trigger next node
+    if(successes > minimumSuccesses){
+        cornersOut->pointList = pointsBuffer;
+        cornersOut->ready();
     }
 }
 
+void GetCorners::preCheck(){
+    if(imagesIn && imagesIn->isReady && dataIn && dataIn->isReady && imagesIn->data().size()){
+    processData();
+    emit dataUpdated(0);
+    }
+}
+
+void GetCorners::updateUI(){
+    successDisplay->setText(QString::number(successes));
+    failDisplay->setText(QString::number(failures));
+
+}
 

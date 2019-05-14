@@ -309,7 +309,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/erodeimage.h \
     nodeeditor/dilateimage.h \
     nodeeditor/autoframeiterator.h \
-    nodeeditor/debuggetcorners.h
+    nodeeditor/debuggetcorners.h \
+    nodeeditor/buffernode.h
 
 
 FORMS    += mainwindow.ui \

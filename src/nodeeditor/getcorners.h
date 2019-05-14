@@ -55,7 +55,9 @@ public:
     bool resizable() const override {return false;}
 
 public slots:
-    void findCorners();
+    void processData();
+    void preCheck();
+    void updateUI();
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;

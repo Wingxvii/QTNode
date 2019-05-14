@@ -11,7 +11,6 @@
 
 //QT widgets
 #include <QLabel>
-#include <QPushButton>
 #include <QLineEdit>
 #include <QGridLayout>
 #include <QRegExpValidator>
@@ -61,13 +60,15 @@ private:
 
 public slots:
     //iterates throught the video, saving frames to a image vector based on parameters
-    void startIteration();
+    void processData();
+    void preCheck();
     //calculates the values displayed. This is called whenever a value or input is updated
-    void calcValues();
+    void updateUI();
 
 
     void ShowContextMenu(const QPoint &pos);
-    void test();
+    void activate();
+    void deactivate();
 
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
@@ -75,12 +76,13 @@ private: //ports
 
 private: //locals
     bool active;
+    bool isReady;
 
     int totalFrames = 0;
     int projectedSamples = 0;
-    int startFrame = 0;
-    int endFrame = -1;
-    int byPass = 1;
+    int startFrame;
+    int endFrame;
+    int byPass;
 
 private: //UI
     QWidget *window;
@@ -97,7 +99,6 @@ private: //UI
     QProgressBar *progressBar;
     QLabel *projectedSamplesLabel;
     QLabel *projectedSamplesDisplay;
-    //QPushButton *startButton;
 
     QRegExpValidator* intPos;
 

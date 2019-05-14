@@ -57,27 +57,20 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final = std::make_shared<DataModelRegistry>();
     //Register the different nodes
 
-    //Legacy
+    //Debug
     final->registerModel<GraphSourceDataModel>("zLegacy"); //Sources
     final->registerModel<GraphDisplayDataModel>("zLegacy"); //Displays
     final->registerModel<OutputDisplayModel>("zLegacy");//output
     final->registerModel<VideoOutputModel>("zLegacy");//output
     final->registerModel<DebugGetCorners>("zLegacy");
 
-    //input
     final->registerModel<FrameIterator>("Input");
     final->registerModel<AutoFrameIterator>("Input");
-    final->registerModel<VideoSourceDataModel>("Input");
 
-    //output
     final->registerModel<VideoDisplay>("Output");
     final->registerModel<ImageDisplay>("Output");
 
-    //processing
-    final->registerModel<Calibrate>("Calibration");
     final->registerModel<CheckerboardPointsBuffer>("Calibration");
-    final->registerModel<GetCorners>("Calibration");
-    final->registerModel<CalibInfo>("Calibration");
     final->registerModel<UnDistort>("Calibration");
 
     final->registerModel<VideoThreshold>("Tracking");
@@ -92,9 +85,17 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<BlobFilterNode>("Operations");
     final->registerModel<BackgroundSubtraction>("Operations");
 
+    //Automated
+    final->registerModel<VideoSourceDataModel>("Input");
+
+    final->registerModel<GetCorners>("Calibration");
+    final->registerModel<Calibrate>("Calibration");
+    final->registerModel<CalibInfo>("Calibration");
+
 
     scene->setRegistry(final);
     layout->addWidget(new FlowView(scene));
+
 
     connect(scene, &FlowScene::nodeCreated, this, &FilterNode::onCreatedNode);
     connect(scene, &FlowScene::nodeDeleted, this, &FilterNode::onDeletedNode);
