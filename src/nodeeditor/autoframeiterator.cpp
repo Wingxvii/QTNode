@@ -1,5 +1,4 @@
 #include "autoframeiterator.h"
-#include "QMenu"
 #include "QAction"
 //opencv
 
@@ -58,11 +57,7 @@ AutoFrameIterator::AutoFrameIterator()
     //set layout into window
     window->setLayout(layout);
 
-
-    //context window
-    window->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(window, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(ShowContextMenu(const QPoint &)));
+    buildContextWindow();
 
 
 }
@@ -210,7 +205,7 @@ void AutoFrameIterator::preCheck(){
         isReady = true;
     }
 
-    if(videoIn && videoIn->isReady && isReady){
+    if(videoIn && videoIn->isReady && isReady && active){
         processData();
         emit dataUpdated(0);
         updateUI();
@@ -236,18 +231,3 @@ void AutoFrameIterator::ShowContextMenu(const QPoint &pos)
     contextMenu.exec(window->mapToGlobal(pos));
 }
 
-void AutoFrameIterator::activate()
-{
-    active = true;
-    startFrameInput->setEnabled(true);
-    endFrameInput->setEnabled(true);
-    byPassInput->setEnabled(true);
-}
-void AutoFrameIterator::deactivate()
-{
-    active = false;
-    startFrameInput->setEnabled(false);
-    endFrameInput->setEnabled(false);
-    byPassInput->setEnabled(false);
-
-}

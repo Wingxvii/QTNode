@@ -59,22 +59,19 @@ private:
 
 public slots:
     //iterates throught the video, saving frames to a image vector based on parameters
-    void processData();
-    void preCheck();
+    void processData() override;
+    void preCheck() override;
     //calculates the values displayed. This is called whenever a value or input is updated
     void updateUI();
 
 
-    void ShowContextMenu(const QPoint &pos);
-    void activate();
-    void deactivate();
+    void ShowContextMenu(const QPoint &pos) override;
 
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
     std::shared_ptr<VideoGraphData> imagesOut;
 
 private: //locals
-    bool active;
     bool isReady;
 
     int totalFrames = 0;

@@ -11,6 +11,7 @@
 #include "NodePainterDelegate.hpp"
 #include "Export.hpp"
 #include "memory.hpp"
+#include "QMenu"
 
 namespace QtNodes
 {
@@ -144,15 +145,26 @@ private:
   //node core functions
   public slots:
 
-    void processData();   //use this to do the data processing of our node
-    void preCheck();      //use this to trigger our processing function
+    virtual void processData();   //use this to do the data processing of our node
+    virtual void preCheck();      //use this to trigger our processing function
     void updateUI();      //this is called to update the ui of our node
 
-   public:
-    int id = 0;           //used for black box
+    virtual void ShowContextMenu(const QPoint &pos);
+    void activate(){active = true;preCheck();}
+    void deactivate(){active = false;}
 
+
+   public:
+    bool active = true;
 
 protected: //UI and Menu
     QWidget *window =  new QWidget;
+
+    void buildContextWindow(){  //build the context window
+        window->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(window, SIGNAL(customContextMenuRequested(const QPoint &)),
+                this, SLOT(ShowContextMenu(const QPoint &)));
+
+    };
 };
 }
