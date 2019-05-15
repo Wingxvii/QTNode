@@ -160,7 +160,6 @@ void AutoFrameIterator::processData()
     progressBar->setValue(_endFrame);
     imagesOut->_video = temp;
     imagesOut->ready();
-    emit dataUpdated(0);
 }
 
 void AutoFrameIterator::updateUI()
@@ -186,7 +185,7 @@ void AutoFrameIterator::updateUI()
     if(startFrame > 0){
         projectedSamples -= startFrame;
     }
-    if(endFrame < totalFrames && endFrame != -1){
+    if(endFrame < totalFrames && endFrame > startFrame && endFrame != -1){
         projectedSamples -= totalFrames - endFrame;
     };
 
@@ -214,7 +213,11 @@ void AutoFrameIterator::preCheck(){
 
     if(videoIn && videoIn->isReady && isReady){
         processData();
+        emit dataUpdated(0);
         updateUI();
+    }else{
+        if(imagesOut){imagesOut->unready();}
+
     }
 
 }

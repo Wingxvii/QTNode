@@ -80,9 +80,9 @@ private: //locals
 
     int totalFrames = 0;
     int projectedSamples = 0;
-    int startFrame;
-    int endFrame;
-    int byPass;
+    int startFrame = 0;
+    int endFrame = -1;
+    int byPass = 1;
 
 private: //UI
     QWidget *window;

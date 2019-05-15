@@ -71,7 +71,7 @@ private: //local variables
 private: //port values
     std::shared_ptr<VideoGraphData> imagesIn;
     std::shared_ptr<PointsData> cornersOut;
-    std::shared_ptr<CalibData> dataIn;
+    std::shared_ptr<CalibData> dataIn;  //does not need to be cleared
 
 private: //UI
     QWidget *window;

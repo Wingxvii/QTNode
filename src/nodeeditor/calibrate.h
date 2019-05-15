@@ -72,7 +72,7 @@ private:
 
 private: //port values
     std::shared_ptr<PointsData> pointsIn;
-    std::shared_ptr<CalibData> calibDataIn;
+    std::shared_ptr<CalibData> calibDataIn; //does not need ot be cleared
     std::shared_ptr<ImageData> cameraMat;
     std::shared_ptr<ImageData> distanceCoeff;
 

@@ -62,6 +62,7 @@ public:
     void setSizeYData(int data){boardSize.width = data; ySet = true;}
     void setLengthData(float data){squareEdgeLength =  data; lengthSet = true;}
 
+
     void checkReady(){
         if(xSet && ySet && lengthSet){
             ready();

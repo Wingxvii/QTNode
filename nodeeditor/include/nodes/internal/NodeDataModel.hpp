@@ -150,6 +150,5 @@ private:
 
    public:
     int id = 0;           //used for black box
-    void clearPorts();
 };
 }

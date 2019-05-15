@@ -147,6 +147,9 @@ void GetCorners::preCheck(){
     if(imagesIn && imagesIn->isReady && dataIn && dataIn->isReady && imagesIn->data().size()){
     processData();
     emit dataUpdated(0);
+    }else{
+        if(cornersOut){cornersOut->unready();}
+
     }
 }
 

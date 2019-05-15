@@ -7,36 +7,37 @@
 #include <nodes/TypeConverter>
 #include <nodes/Node>
 
+#include "nodeeditor/videooutputmodel.h"
+#include "nodeeditor/outputdisplaymodel.h"
 
-#include "nodeeditor/graphsourcedatamodel.h"
-#include "nodeeditor/graphdisplaydatamodel.h"
-#include "nodeeditor/minmodel.h"
-#include "nodeeditor/maxmodel.h"
-#include "nodeeditor/additive.h"
+
+//#include "nodeeditor/graphsourcedatamodel.h"
+//#include "nodeeditor/graphdisplaydatamodel.h"
+//#include "nodeeditor/minmodel.h"
+//#include "nodeeditor/maxmodel.h"
+//#include "nodeeditor/additive.h"
+//
+//#include "nodeeditor/backgroundsubtraction.h"
+//#include "nodeeditor/debuggetcorners.h"
+//#include "nodeeditor/checkerboardpointsbuffer.h"
+//#include "nodeeditor/tohsv.h"
+//#include "nodeeditor/videothreshold.h"
+//#include "nodeeditor/erodeimage.h"
+//#include "nodeeditor/dilateimage.h"
+//#include "nodeeditor/blobfilternode.h"
+
+
 #include "nodeeditor/videosourcedatamodel.h"
-#include "nodeeditor/backgroundsubtraction.h"
-
-#include "nodeeditor/calibrate.h"
-#include "nodeeditor/checkerboardpointsbuffer.h"
-#include "nodeeditor/getcorners.h"
-#include "nodeeditor/debuggetcorners.h"
-#include "nodeeditor/calibinfo.h"
-#include "nodeeditor/undistort.h"
-
 #include "nodeeditor/frameiterator.h"
 #include "nodeeditor/autoframeiterator.h"
-
+#include "nodeeditor/calibrate.h"
+#include "nodeeditor/getcorners.h"
+#include "nodeeditor/calibinfo.h"
+#include "nodeeditor/undistort.h"
 #include "nodeeditor/videodisplay.h"
 #include "nodeeditor/imagedisplay.h"
 
-#include "nodeeditor/tohsv.h"
-#include "nodeeditor/videothreshold.h"
-#include "nodeeditor/erodeimage.h"
-#include "nodeeditor/dilateimage.h"
 
-#include "nodeeditor/outputdisplaymodel.h"
-#include "nodeeditor/videooutputmodel.h"
-#include "nodeeditor/blobfilternode.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -58,39 +59,38 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     //Register the different nodes
 
     //Debug
-    final->registerModel<GraphSourceDataModel>("zLegacy"); //Sources
-    final->registerModel<GraphDisplayDataModel>("zLegacy"); //Displays
-    final->registerModel<OutputDisplayModel>("zLegacy");//output
-    final->registerModel<VideoOutputModel>("zLegacy");//output
-    final->registerModel<DebugGetCorners>("zLegacy");
+//    final->registerModel<GraphSourceDataModel>("zLegacy"); //Sources
+//    final->registerModel<GraphDisplayDataModel>("zLegacy"); //Displays
+//    final->registerModel<OutputDisplayModel>("zLegacy");//output
+//    final->registerModel<VideoOutputModel>("zLegacy");//output
+//    final->registerModel<DebugGetCorners>("zLegacy");
 
+//    final->registerModel<CheckerboardPointsBuffer>("Calibration");
+
+//    final->registerModel<VideoThreshold>("Tracking");
+//    final->registerModel<ErodeImage>("Tracking");
+//    final->registerModel<DilateImage>("Tracking");
+
+//    final->registerModel<ToHSV>("Operations");
+
+//    final->registerModel<MinModel>("Operations");
+//    final->registerModel<MaxModel>("Operations");
+//    final->registerModel<Additive>("Operations");
+//    final->registerModel<BlobFilterNode>("Operations");
+//    final->registerModel<BackgroundSubtraction>("Operations");
+
+    //Working Nodes
+    final->registerModel<VideoSourceDataModel>("Input");
     final->registerModel<FrameIterator>("Input");
     final->registerModel<AutoFrameIterator>("Input");
 
     final->registerModel<VideoDisplay>("Output");
     final->registerModel<ImageDisplay>("Output");
 
-    final->registerModel<CheckerboardPointsBuffer>("Calibration");
-    final->registerModel<UnDistort>("Calibration");
-
-    final->registerModel<VideoThreshold>("Tracking");
-    final->registerModel<ErodeImage>("Tracking");
-    final->registerModel<DilateImage>("Tracking");
-
-    final->registerModel<ToHSV>("Operations");
-
-    final->registerModel<MinModel>("Operations");
-    final->registerModel<MaxModel>("Operations");
-    final->registerModel<Additive>("Operations");
-    final->registerModel<BlobFilterNode>("Operations");
-    final->registerModel<BackgroundSubtraction>("Operations");
-
-    //Automated
-    final->registerModel<VideoSourceDataModel>("Input");
-
     final->registerModel<GetCorners>("Calibration");
     final->registerModel<Calibrate>("Calibration");
     final->registerModel<CalibInfo>("Calibration");
+    final->registerModel<UnDistort>("Calibration");
 
 
     scene->setRegistry(final);

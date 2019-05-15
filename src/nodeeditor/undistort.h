@@ -4,7 +4,11 @@
 
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
+#include "videographdata.h"
 #include "imagedata.h"
+
+#include <QGridLayout>
+#include <QProgressBar>
 
 #include <iostream>
 #include <QLabel>
@@ -43,13 +47,16 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override;
 
-    QWidget* embeddedWidget() override {return button;}
+    QWidget* embeddedWidget() override {return window;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
 
 public slots:
-    void startUnDistort();
+    void processData();
+    void preCheck();
+    void updateUI();
+
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
@@ -58,9 +65,15 @@ private:
 private: //port values
     std::shared_ptr<ImageData> cameraMatIn;
     std::shared_ptr<ImageData> distanceCoeffIn;
-    std::shared_ptr<ImageData> imageIn;
-    std::shared_ptr<ImageData> imageOut;
-    QPushButton* button;
+    std::shared_ptr<VideoGraphData> videoIn;
+    std::shared_ptr<VideoGraphData> videoOut;
+
+private: //UI
+    QWidget *window;
+    QGridLayout *layout;
+    QProgressBar *progressBar;
+
+
 
 
 };

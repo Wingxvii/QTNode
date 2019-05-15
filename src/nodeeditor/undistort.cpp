@@ -8,8 +8,15 @@
 #include "opencv2\calib3d.hpp"
 
 UnDistort::UnDistort(){
-    button = new QPushButton("Innitiate Undistort");
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(startUnDistort()));
+
+    window = new QWidget;
+    layout = new QGridLayout;
+
+    progressBar = new QProgressBar();
+
+    layout->addWidget(progressBar);
+
+    window->setLayout(layout);
 
 }
 
@@ -34,8 +41,8 @@ unsigned int UnDistort::nPorts(QtNodes::PortType portType)const
 std::shared_ptr<NodeData> UnDistort::outData(PortIndex port){
     switch(port){
     case 0:
-        if(imageOut){
-            return imageOut;
+        if(videoOut){
+            return videoOut;
         }
         break;
     }
@@ -52,6 +59,7 @@ void UnDistort::setInData(std::shared_ptr<NodeData> data, int location){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
+            preCheck();
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -66,6 +74,7 @@ void UnDistort::setInData(std::shared_ptr<NodeData> data, int location){
                 modelValidationState = NodeValidationState::Valid;
                 modelValidationError = QString();
                 //data was found
+                preCheck();
             }
            else{
               modelValidationState = NodeValidationState::Warning;
@@ -74,12 +83,13 @@ void UnDistort::setInData(std::shared_ptr<NodeData> data, int location){
             }
         break;
     case 2:
-         imageIn = std::dynamic_pointer_cast<ImageData>(data);
+         videoIn = std::dynamic_pointer_cast<VideoGraphData>(data);
 
-            if(imageIn){
+            if(videoIn){
                 modelValidationState = NodeValidationState::Valid;
                 modelValidationError = QString();
                 //data was found
+                preCheck();
             }
            else{
               modelValidationState = NodeValidationState::Warning;
@@ -93,7 +103,11 @@ void UnDistort::setInData(std::shared_ptr<NodeData> data, int location){
 
 NodeDataType UnDistort::dataType(PortType portType, PortIndex portIndex) const
 {
-    return ImageData().type();
+    if(portType == PortType::In && portIndex != 2){
+        return ImageData().type();
+    }
+    return VideoGraphData().type();
+
 }
 
 NodeValidationState UnDistort::validationState() const
@@ -106,16 +120,36 @@ QString UnDistort::validationMessage() const
     return modelValidationError;
 }
 
-void UnDistort::startUnDistort(){
+void UnDistort::processData(){
 
-    if(imageIn && cameraMatIn && distanceCoeffIn){
-        imageOut = std::make_shared<ImageData>();
-        cv::Mat temp = imageOut->_image;
+    videoOut = std::make_shared<VideoGraphData>();
+    std::vector<cv::Mat> temp;
 
-        cv::undistort(imageIn->data(), temp, cameraMatIn->data(), distanceCoeffIn->data());
-        imageOut->_image = temp;
-        LOG_JOHN() << "Undistort Sucessful";
+    for(int i = 0;i < videoIn->data().size(); i++){
+        cv::Mat output = cv::Mat();
+        cv::undistort(videoIn->data().at(i), output, cameraMatIn->data(), distanceCoeffIn->data());
+        temp.push_back(output);
     }
 
+    videoOut->_video = temp;
+    LOG_JOHN() << "Undistort Sucessful";
+
+    videoOut->ready();
+}
+
+void UnDistort::preCheck()
+{
+    if(videoIn && videoIn->isReady && cameraMatIn && cameraMatIn->isReady && distanceCoeffIn && distanceCoeffIn->isReady){
+        processData();
+        emit dataUpdated(0);
+        updateUI();
+    }else{
+        if(videoOut) {videoOut->unready();}
+    }
+}
+
+void UnDistort::updateUI()
+{
+    progressBar->setValue(100);
 }
 

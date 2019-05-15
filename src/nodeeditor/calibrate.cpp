@@ -152,7 +152,9 @@ void Calibrate::preCheck()
         processData();
         emit dataUpdated(0);
         emit dataUpdated(1);
-
+    }else{
+        if(cameraMat){cameraMat->unready();}
+        if(distanceCoeff){distanceCoeff->unready();}
     }
 }
 
