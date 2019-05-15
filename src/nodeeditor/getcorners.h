@@ -5,9 +5,9 @@
 
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
-#include "pointsdata.h"
-#include "videographdata.h"
-#include "calibdata.h"
+#include "DataTypes/pointsdata.h"
+#include "DataTypes/videographdata.h"
+#include "DataTypes/calibdata.h"
 
 #include <iostream>
 #include <QLabel>
@@ -49,7 +49,6 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override;
 
-    QWidget* embeddedWidget() override {return window;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
@@ -74,7 +73,6 @@ private: //port values
     std::shared_ptr<CalibData> dataIn;  //does not need to be cleared
 
 private: //UI
-    QWidget *window;
     QGridLayout *layout;
     QLabel *successLabel;
     QLabel *successDisplay;

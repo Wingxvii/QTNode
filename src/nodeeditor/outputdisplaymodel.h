@@ -36,7 +36,6 @@ public:
     std::shared_ptr<NodeData> outData(QtNodes::PortIndex port) override;
     void setInData(std::shared_ptr<NodeData> data, int) override;
 
-    QWidget *embeddedWidget() override {return container;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
@@ -61,7 +60,6 @@ private:
     LineGraph* _lineGraph;
     QPushButton *createEvents;
     QVBoxLayout* layout;
-    QWidget* container;
 
 };
 

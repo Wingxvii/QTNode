@@ -13,7 +13,7 @@
 #include <iostream>
 
 #include "QLabel"
-#include "videographdata.h"
+#include "DataTypes/videographdata.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -51,13 +51,11 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
 
     void setInData(std::shared_ptr<NodeData>, int) override {}
-    QWidget *embeddedWidget() override {return window; }
 
 public slots:
     void chooseVideo();
 
 private: //UI
-    QWidget *window;
     QVBoxLayout *layout;
     QPushButton *button;
     QProgressBar *progress;

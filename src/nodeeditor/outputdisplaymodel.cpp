@@ -1,12 +1,12 @@
 #include "OutputDisplayModel.h"
 
-#include "nodeeditor/nodegraphdata.h"
+#include "nodeeditor/DataTypes/nodegraphdata.h"
 
 OutputDisplayModel::OutputDisplayModel()
 {
     layout = new QVBoxLayout();
-    container = new QWidget();
-    container->setLayout(layout);
+    window = new QWidget();
+    window->setLayout(layout);
 
     _lineGraph = new LineGraph();
     createEvents = new QPushButton("create events");
@@ -121,7 +121,7 @@ void OutputDisplayModel::setInData(std::shared_ptr<QtNodes::NodeData> data, int)
 
     }
     _lineGraph->adjustSize();
-    container->adjustSize();
+    window->adjustSize();
 }
 
 NodeValidationState OutputDisplayModel::validationState() const

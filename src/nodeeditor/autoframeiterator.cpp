@@ -7,7 +7,6 @@
 AutoFrameIterator::AutoFrameIterator()
 {
     //init everything
-    window = new QWidget;
     layout = new QGridLayout;
 
     totalFramesDisplay = new QLabel(QString::number(totalFrames));

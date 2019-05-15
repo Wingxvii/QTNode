@@ -14,7 +14,7 @@
 #include <QRegExpValidator>
 #include <QDoubleValidator>
 
-#include "calibdata.h"
+#include "DataTypes/calibdata.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -49,8 +49,6 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override{}
 
-    QWidget* embeddedWidget() override {return window;}
-
 public slots:
 
     void saveXData();
@@ -65,7 +63,6 @@ private: //data
     std::shared_ptr<CalibData> data;
 
 private: //UI
-    QWidget *window;
     QFormLayout* formLayout;
     QLineEdit* sizeX;
     QLineEdit* sizeY;

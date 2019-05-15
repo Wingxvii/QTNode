@@ -5,8 +5,8 @@
 
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
-#include "imagedata.h"
-#include "videographdata.h"
+#include "DataTypes/imagedata.h"
+#include "DataTypes/videographdata.h"
 
 #include <iostream>
 #include <QLabel>
@@ -48,7 +48,6 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override;
 
-    QWidget* embeddedWidget() override {return window;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
@@ -70,7 +69,6 @@ private: //locals
     int totalFrames = 0;
 
 private: //UI
-    QWidget *window;
     QGridLayout *layout;
     QPushButton* forward;
     QPushButton* backward;

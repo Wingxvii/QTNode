@@ -9,9 +9,6 @@
 
 CalibInfo::CalibInfo(){
 
-    //create the window
-    window = new QWidget;
-
     //instantiate input boxes and labels
     sizeX = new QLineEdit();
     sizeXText = new QLabel("Number of X corners");

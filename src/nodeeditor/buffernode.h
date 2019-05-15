@@ -41,7 +41,6 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override;
 
-    QWidget* embeddedWidget() override {return window;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
@@ -59,8 +58,6 @@ private: //ports
     std::shared_ptr<NodeData> inPort2;
     std::shared_ptr<NodeData> inPort3;
 
-
-    QWidget* window;
 
 
 };

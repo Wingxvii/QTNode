@@ -7,7 +7,7 @@
 #include <iostream>
 
 //data types
-#include "videographdata.h"
+#include "DataTypes/videographdata.h"
 
 //QT widgets
 #include <QLabel>
@@ -47,7 +47,6 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override;
 
-    QWidget* embeddedWidget() override {return window;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
@@ -85,7 +84,6 @@ private: //locals
     int byPass = 1;
 
 private: //UI
-    QWidget *window;
     QGridLayout *layout;
 
     QLabel *totalFramesDisplay;

@@ -4,7 +4,6 @@
 
 VideoDisplay::VideoDisplay()
 {
-    window = new QWidget;
 
     framerateEdit = new QLineEdit();
     framerateText = new QLabel("Frame Rate");

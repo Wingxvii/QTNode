@@ -8,9 +8,7 @@
 #include "opencv2\calib3d.hpp"
 
 FrameIterator::FrameIterator(){
-    window = new QWidget;
     layout = new QGridLayout;
-
 
     totalFramesDisplay = new QLabel(QString::number(totalFrames));
     totalFramesLabel = new QLabel("Total Frames: ");

@@ -5,10 +5,11 @@
 #include <QtWidgets/QLabel>
 #include <analyzer/linegraph.h>
 #include <QPushButton>
+#include <QGridLayout>
 //<>><><<>><><<>//
 
 #include <nodes/NodeDataModel>
-#include "nodeeditor/videographdata.h"
+#include "nodeeditor/DataTypes/videographdata.h"
 #include <iostream>
 
 using QtNodes::PortType;
@@ -38,9 +39,6 @@ public:
     void setInData(std::shared_ptr<NodeData> data, int) override;
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
-
-
-    QWidget *embeddedWidget() override {return button;}
     bool resizable() const override {return false;}
 
 public slots:
@@ -57,6 +55,7 @@ private:
 
     std::shared_ptr<VideoGraphData> _data;
     QPushButton* button;
+    QGridLayout* layout;
 
     std::vector<float> events;
 

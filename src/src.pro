@@ -136,10 +136,30 @@ SOURCES += main.cpp\
     nodeeditor/imagedisplay.cpp \
     nodeeditor/undistort.cpp \
     nodeeditor/autoframeiterator.cpp \
-    nodeeditor/outputdisplaymodel.cpp \
     nodeeditor/videosourcedatamodel.cpp \
     nodeeditor/videodisplay.cpp \
     nodeeditor/videooutputmodel.cpp \
+    nodeeditor/autoframeiterator.cpp \
+    nodeeditor/calibinfo.cpp \
+    nodeeditor/calibrate.cpp \
+    nodeeditor/frameiterator.cpp \
+    nodeeditor/getcorners.cpp \
+    nodeeditor/imagedisplay.cpp \
+    nodeeditor/undistort.cpp \
+    nodeeditor/videodisplay.cpp \
+    nodeeditor/videooutputmodel.cpp \
+    nodeeditor/videosourcedatamodel.cpp \
+    nodeeditor/autoframeiterator.cpp \
+    nodeeditor/calibinfo.cpp \
+    nodeeditor/calibrate.cpp \
+    nodeeditor/frameiterator.cpp \
+    nodeeditor/getcorners.cpp \
+    nodeeditor/imagedisplay.cpp \
+    nodeeditor/undistort.cpp \
+    nodeeditor/videodisplay.cpp \
+    nodeeditor/videooutputmodel.cpp \
+    nodeeditor/videosourcedatamodel.cpp \
+    nodeeditor/outputdisplaymodel.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -265,26 +285,25 @@ HEADERS  += mainwindow.h \
     analyzer/linegraph.h \
     analyzer/graphstats.h \
     analyzer/scrubeventmanager.h \
-    nodeeditor/outputdisplaymodel.h \
-    nodeeditor/videosourcedatamodel.h \
-    nodeeditor/videographdata.h \
-    nodeeditor/videodisplay.h \
-    nodeeditor/videooutputmodel.h \
-    nodeeditor/NodeEditorDataExample.h \
-    nodeeditor/NodeEditorExample.h \
-    nodeeditor/calibrate.h \
-    nodeeditor/imagedata.h \
-    nodeeditor/pointsdata.h \
-    nodeeditor/pointdata.h \
-    nodeeditor/getcorners.h \
-    nodeeditor/calibinfo.h \
-    nodeeditor/calibdata.h \
-    nodeeditor/frameiterator.h \
-    nodeeditor/imagedisplay.h \
-    nodeeditor/undistort.h \
     nodeeditor/autoframeiterator.h \
     nodeeditor/buffernode.h \
-    nodeeditor/nodegraphdata.h
+    nodeeditor/calibinfo.h \
+    nodeeditor/calibrate.h \
+    nodeeditor/frameiterator.h \
+    nodeeditor/getcorners.h \
+    nodeeditor/imagedisplay.h \
+    nodeeditor/undistort.h \
+    nodeeditor/videodisplay.h \
+    nodeeditor/videooutputmodel.h \
+    nodeeditor/videosourcedatamodel.h \
+    nodeeditor/DataTypes/calibdata.h \
+    nodeeditor/DataTypes/imagedata.h \
+    nodeeditor/DataTypes/pointdata.h \
+    nodeeditor/DataTypes/pointsdata.h \
+    nodeeditor/DataTypes/videographdata.h \
+    nodeeditor/outputdisplaymodel.h \
+    nodeeditor/DataTypes/nodegraphdata.h
+
 
 
 FORMS    += mainwindow.ui \

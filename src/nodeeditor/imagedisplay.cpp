@@ -3,8 +3,13 @@
 #include <opencv/highgui.h>
 
 ImageDisplay::ImageDisplay(){
+
+    layout = new QGridLayout;
     button = new QPushButton("Open Image");
     connect(button, SIGNAL(clicked(bool)), this, SLOT(showImage()));
+    layout->addWidget(button);
+
+    window->setLayout(layout);
 }
 
 unsigned int ImageDisplay::nPorts(QtNodes::PortType portType) const

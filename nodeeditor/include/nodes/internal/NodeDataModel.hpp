@@ -106,7 +106,7 @@ public:
 
   virtual
   QWidget *
-  embeddedWidget() = 0;
+  embeddedWidget(){return window;}
 
   virtual
   bool
@@ -150,5 +150,9 @@ private:
 
    public:
     int id = 0;           //used for black box
+
+
+protected: //UI and Menu
+    QWidget *window =  new QWidget;
 };
 }

@@ -1,11 +1,9 @@
 #include "videosourcedatamodel.h"
-#include "nodegraphdata.h"
 #include <QFileDialog>
 #include <opencv2/video.hpp>
 
 VideoSourceDataModel::VideoSourceDataModel()
 {
-    window = new QWidget;
     layout = new QVBoxLayout;
 
     button = new QPushButton("Choose Video");

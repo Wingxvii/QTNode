@@ -4,8 +4,10 @@
 #include <QtCore/QObject>
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
-#include "imagedata.h"
+#include "DataTypes/imagedata.h"
 #include <iostream>
+
+#include <QGridLayout>
 
 #include <QPushButton>
 
@@ -58,6 +60,7 @@ private:
 
 private:
     std::shared_ptr<ImageData> _data;
+    QGridLayout* layout;
     QPushButton* button;
 
 };

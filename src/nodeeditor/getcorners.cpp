@@ -9,7 +9,6 @@
 
 GetCorners::GetCorners(){
 
-    window = new QWidget;
     layout = new QGridLayout;
 
     successDisplay = new QLabel(QString::number(successes));
