@@ -1,4 +1,4 @@
-CONFIG   += link_prl
+CONFI   += link_prl
 
 QT       += widgets opengl xml network printsupport qml quick sql webkitwidgets
 QT       += multimedia websockets quickwidgets
@@ -121,17 +121,6 @@ SOURCES += main.cpp\
     events.cpp \
     dialogs/blacklist.cpp \
     dialogs/filterlist.cpp \
-    nodeeditor/graphsourcedatamodel.cpp \
-    nodeeditor/graphdisplaydatamodel.cpp \
-    nodeeditor/minmodel.cpp \
-    nodeeditor/maxmodel.cpp \
-    nodeeditor/additive.cpp \
-    nodeeditor/outputdisplaymodel.cpp \
-    nodeeditor/videosourcedatamodel.cpp \
-    nodeeditor/videodisplay.cpp \
-    nodeeditor/backgroundsubtraction.cpp \
-    nodeeditor/videooutputmodel.cpp \
-    nodeeditor/blobfilternode.cpp \
     analyzer/graphcontoller.cpp \
     analyzer/sensorwindow.cpp \
     analyzer/filternode.cpp \
@@ -141,18 +130,16 @@ SOURCES += main.cpp\
     analyzer/linegraph.cpp \
     analyzer/scrubeventmanager.cpp \
     nodeeditor/calibrate.cpp \
-    nodeeditor/checkerboardpointsbuffer.cpp \
     nodeeditor/getcorners.cpp \
     nodeeditor/calibinfo.cpp \
     nodeeditor/frameiterator.cpp \
     nodeeditor/imagedisplay.cpp \
     nodeeditor/undistort.cpp \
-    nodeeditor/tohsv.cpp \
-    nodeeditor/videothreshold.cpp \
-    nodeeditor/erodeimage.cpp \
-    nodeeditor/dilateimage.cpp \
     nodeeditor/autoframeiterator.cpp \
-    nodeeditor/debuggetcorners.cpp
+    nodeeditor/outputdisplaymodel.cpp \
+    nodeeditor/videosourcedatamodel.cpp \
+    nodeeditor/videodisplay.cpp \
+    nodeeditor/videooutputmodel.cpp \
 
 
 HEADERS  += mainwindow.h \
@@ -269,19 +256,6 @@ HEADERS  += mainwindow.h \
     events.h \
     dialogs/blacklist.h \
     dialogs/filterlist.h \
-    nodeeditor/graphsourcedatamodel.h \
-    nodeeditor/nodegraphdata.h \
-    nodeeditor/graphdisplaydatamodel.h \
-    nodeeditor/minmodel.h \
-    nodeeditor/maxmodel.h \
-    nodeeditor/additive.h \
-    nodeeditor/outputdisplaymodel.h \
-    nodeeditor/videosourcedatamodel.h \
-    nodeeditor/videographdata.h \
-    nodeeditor/videodisplay.h \
-    nodeeditor/backgroundsubtraction.h \
-    nodeeditor/videooutputmodel.h \
-    nodeeditor/blobfilternode.h \
     analyzer/graphcontoller.h \
     analyzer/sensorwindow.h \
     analyzer/filternode.h \
@@ -291,12 +265,16 @@ HEADERS  += mainwindow.h \
     analyzer/linegraph.h \
     analyzer/graphstats.h \
     analyzer/scrubeventmanager.h \
+    nodeeditor/outputdisplaymodel.h \
+    nodeeditor/videosourcedatamodel.h \
+    nodeeditor/videographdata.h \
+    nodeeditor/videodisplay.h \
+    nodeeditor/videooutputmodel.h \
     nodeeditor/NodeEditorDataExample.h \
     nodeeditor/NodeEditorExample.h \
     nodeeditor/calibrate.h \
     nodeeditor/imagedata.h \
     nodeeditor/pointsdata.h \
-    nodeeditor/checkerboardpointsbuffer.h \
     nodeeditor/pointdata.h \
     nodeeditor/getcorners.h \
     nodeeditor/calibinfo.h \
@@ -304,13 +282,9 @@ HEADERS  += mainwindow.h \
     nodeeditor/frameiterator.h \
     nodeeditor/imagedisplay.h \
     nodeeditor/undistort.h \
-    nodeeditor/tohsv.h \
-    nodeeditor/videothreshold.h \
-    nodeeditor/erodeimage.h \
-    nodeeditor/dilateimage.h \
     nodeeditor/autoframeiterator.h \
-    nodeeditor/debuggetcorners.h \
-    nodeeditor/buffernode.h
+    nodeeditor/buffernode.h \
+    nodeeditor/nodegraphdata.h
 
 
 FORMS    += mainwindow.ui \

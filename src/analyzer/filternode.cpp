@@ -16,7 +16,6 @@
 //#include "nodeeditor/minmodel.h"
 //#include "nodeeditor/maxmodel.h"
 //#include "nodeeditor/additive.h"
-//
 //#include "nodeeditor/backgroundsubtraction.h"
 //#include "nodeeditor/debuggetcorners.h"
 //#include "nodeeditor/checkerboardpointsbuffer.h"
@@ -64,15 +63,11 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 //    final->registerModel<OutputDisplayModel>("zLegacy");//output
 //    final->registerModel<VideoOutputModel>("zLegacy");//output
 //    final->registerModel<DebugGetCorners>("zLegacy");
-
 //    final->registerModel<CheckerboardPointsBuffer>("Calibration");
-
 //    final->registerModel<VideoThreshold>("Tracking");
 //    final->registerModel<ErodeImage>("Tracking");
 //    final->registerModel<DilateImage>("Tracking");
-
 //    final->registerModel<ToHSV>("Operations");
-
 //    final->registerModel<MinModel>("Operations");
 //    final->registerModel<MaxModel>("Operations");
 //    final->registerModel<Additive>("Operations");
