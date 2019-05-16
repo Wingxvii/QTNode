@@ -55,8 +55,11 @@ public:
     bool resizable() const override {return false;}
 
 public slots:
-    void playVideo();
+    void processData() override;
+    void preCheck() override;
     void saveFrameRate();
+
+    void ShowContextMenu(const QPoint &pos) override;
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;

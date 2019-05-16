@@ -52,10 +52,11 @@ public:
     bool resizable() const override {return false;}
 
 public slots:
-    void processData();
-    void preCheck();
+    void processData() override;
+    void preCheck() override;
     void updateUI();
 
+    void ShowContextMenu(const QPoint &pos) override;
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;

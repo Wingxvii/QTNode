@@ -24,6 +24,7 @@ GetCorners::GetCorners(){
     cornersOut = std::make_shared<PointsData>();
 
     window->setLayout(layout);
+    buildContextWindow();
 
 }
 
@@ -143,7 +144,7 @@ void GetCorners::processData(){
 }
 
 void GetCorners::preCheck(){
-    if(imagesIn && imagesIn->isReady && dataIn && dataIn->isReady && imagesIn->data().size()){
+    if(imagesIn && imagesIn->isReady && dataIn && dataIn->isReady && imagesIn->data().size() && active){
     processData();
     emit dataUpdated(0);
     }else{
@@ -157,4 +158,20 @@ void GetCorners::updateUI(){
     failDisplay->setText(QString::number(failures));
 
 }
+
+void GetCorners::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}
+
 

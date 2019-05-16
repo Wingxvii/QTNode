@@ -30,9 +30,9 @@ CalibInfo::CalibInfo(){
     length->setValidator(doublePos);
 
     //connect input boxes to functions
-    connect(sizeX, SIGNAL(textChanged(QString)), this, SLOT(saveXData()));
-    connect(sizeY, SIGNAL(textChanged(QString)), this, SLOT(saveYData()));
-    connect(length, SIGNAL(textChanged(QString)), this, SLOT(saveLengthData()));
+    connect(sizeX, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(sizeY, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(length, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
 
     //attach input and labels to layout
     formLayout->addRow(sizeXText, sizeX);
@@ -41,6 +41,9 @@ CalibInfo::CalibInfo(){
 
     //attach layout to window
     window->setLayout(formLayout);
+
+    //init context window
+    buildContextWindow();
 
     data = std::make_shared<CalibData>();
 }
@@ -72,8 +75,7 @@ NodeDataType CalibInfo::dataType(PortType portType, PortIndex portIndex) const
     return CalibData().type();
 }
 
-
-void CalibInfo::saveXData(){
+void CalibInfo::preCheck(){
     if(!sizeX->text().isEmpty()){
     data->setSizeXData(sizeX->text().toInt());
     LOG_JOHN() << "X Data Recieved: " << sizeX->text().toInt();
@@ -81,10 +83,6 @@ void CalibInfo::saveXData(){
     else{
         data->setSizeXData(0);
     }
-    data->checkReady();
-    emit dataUpdated(0);
-}
-void CalibInfo::saveYData(){
     if(!sizeY->text().isEmpty()){
     data->setSizeYData(sizeY->text().toInt());
     LOG_JOHN() << "Y Data Recieved: " << sizeX->text().toInt();
@@ -92,18 +90,38 @@ void CalibInfo::saveYData(){
     else{
         data->setSizeYData(0);
     }
-    data->checkReady();
-    emit dataUpdated(0);
-}
-void CalibInfo::saveLengthData(){
     if(!length->text().isEmpty()){
     data->setLengthData(length->text().toFloat());
     }else{
         data->setLengthData(0.0f);
     }
+
+    if(active){
+        processData();
+    }
+
+}
+
+void CalibInfo::processData(){
     data->checkReady();
     emit dataUpdated(0);
 }
+
+void CalibInfo::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}
+
 
 
 

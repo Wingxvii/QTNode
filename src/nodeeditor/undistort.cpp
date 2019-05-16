@@ -17,6 +17,7 @@ UnDistort::UnDistort(){
     layout->addWidget(progressBar);
 
     window->setLayout(layout);
+    buildContextWindow();
 
 }
 
@@ -139,7 +140,7 @@ void UnDistort::processData(){
 
 void UnDistort::preCheck()
 {
-    if(videoIn && videoIn->isReady && cameraMatIn && cameraMatIn->isReady && distanceCoeffIn && distanceCoeffIn->isReady){
+    if(videoIn && videoIn->isReady && cameraMatIn && cameraMatIn->isReady && distanceCoeffIn && distanceCoeffIn->isReady && active){
         processData();
         emit dataUpdated(0);
         updateUI();
@@ -153,3 +154,17 @@ void UnDistort::updateUI()
     progressBar->setValue(100);
 }
 
+void UnDistort::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}

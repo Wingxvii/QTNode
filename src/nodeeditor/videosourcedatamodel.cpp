@@ -9,12 +9,13 @@ VideoSourceDataModel::VideoSourceDataModel()
     button = new QPushButton("Choose Video");
     progress = new QProgressBar();
 
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(chooseVideo()));
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
 
     layout->addWidget(button);
     layout->addWidget(progress);
 
     window->setLayout(layout);
+    buildContextWindow();
 
 }
 
@@ -51,7 +52,7 @@ std::shared_ptr<NodeData> VideoSourceDataModel::outData(PortIndex)
     return _data;
 }
 
-void VideoSourceDataModel::chooseVideo()
+void VideoSourceDataModel::processData()
 {
     QString fileName = QFileDialog::getOpenFileName(button, tr("Choose Video"), "");
     cv::VideoCapture capture(fileName.toStdString());
@@ -89,4 +90,27 @@ void VideoSourceDataModel::chooseVideo()
     emit dataUpdated(0);
 
 }
+
+void VideoSourceDataModel::preCheck()
+{
+    if(active){
+        processData();
+    }
+}
+
+void VideoSourceDataModel::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}
+
 

@@ -51,9 +51,10 @@ public:
 
 public slots:
 
-    void saveXData();
-    void saveYData();
-    void saveLengthData();
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;

@@ -15,13 +15,15 @@ VideoDisplay::VideoDisplay()
     framerateEdit->setValidator(intPos);
 
 
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(playVideo()));
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
     connect(framerateEdit, SIGNAL(textChanged(QString)), this, SLOT(saveFrameRate()));
 
     formLayout->addRow(button);
     formLayout->addRow(framerateText,framerateEdit);
 
     window->setLayout(formLayout);
+
+    buildContextWindow();
 
 }
 
@@ -73,35 +75,36 @@ NodeDataType VideoDisplay::dataType(PortType, PortIndex) const
 }
 
 
-void VideoDisplay::playVideo()
+void VideoDisplay::processData()
 {
+   auto frames = _data->data();
+   LOG_JOHN() << frameRate;
 
-    if (_data)
+   cv::namedWindow("Display");
+
+   //NEED TO ADD A BREAK
+   for (int it = 0; it < frames.size(); it++)
+   {
+       if(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE) >= 0){
+       cv::imshow("Display", frames[it]);
+       cv::waitKey( 1000 / frameRate );
+       }
+   }
+   cv::destroyWindow("Display");
+}
+
+void VideoDisplay::preCheck()
+{
+    if (frameRate == 0)
     {
-        auto frames = _data->data();
+        LOG_CAMPBELL() << "error: framerate is zero, automaitcally setting framerate to 30";
+        frameRate = 30;
+    }
 
-        /*
-        frameRate = _data->getFrameRate();
-        */
-        if (frameRate == 0)
-        {
-            LOG_JOHN() << "error: framerate is zero, automaitcally setting framerate to 30";
-            frameRate = 30;
-        }
-
-        LOG_JOHN() << frameRate;
-
-        cv::namedWindow("Display");
-        //LOG_JOHN() << QString::number(frames.size());
-
-        for (int it = 0; it < frames.size(); it++)
-        {
-            if(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE) >= 0){
-            cv::imshow("Display", frames[it]);
-            cv::waitKey( 1000 / frameRate );
-            }
-        }
-        cv::destroyWindow("Display");
+    if(_data && _data->isReady && active){
+        processData();
+    }else{
+        LOG_JOHN() << "Sum ting wong";
     }
 }
 
@@ -123,5 +126,20 @@ void VideoDisplay::saveFrameRate(){
     else{
         frameRate = 0;
     }
+}
+
+void VideoDisplay::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
 }
 

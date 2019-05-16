@@ -15,6 +15,8 @@ Calibrate::Calibrate(){
 
     layout->addWidget(progressBar);
     window->setLayout(layout);
+
+    buildContextWindow();
 }
 
 unsigned int Calibrate::nPorts(QtNodes::PortType portType)const
@@ -148,7 +150,7 @@ void Calibrate::processData(){
 
 void Calibrate::preCheck()
 {
-    if(pointsIn && pointsIn->isReady && calibDataIn && calibDataIn->isReady){
+    if(pointsIn && pointsIn->isReady && calibDataIn && calibDataIn->isReady && active){
         processData();
         emit dataUpdated(0);
         emit dataUpdated(1);
@@ -167,3 +169,17 @@ void Calibrate::updateProgressBar(int value){
     progressBar->setValue(value);
 }
 
+void Calibrate::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}

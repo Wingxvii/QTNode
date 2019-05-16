@@ -53,7 +53,11 @@ public:
     void setInData(std::shared_ptr<NodeData>, int) override {}
 
 public slots:
-    void chooseVideo();
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
+
 
 private: //UI
     QVBoxLayout *layout;

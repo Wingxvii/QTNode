@@ -55,15 +55,17 @@ public:
 
 public slots:
     //this is our work function
-    void processData();
+    void processData() override;
     //this is our check function
-    void preCheck();
+    void preCheck() override;
     //this updates our UI
     void updateUI();
 
     //faster check for the progress bar
     void updateProgressBar(int value);
 
+    //context menu slots
+    void ShowContextMenu(const QPoint &pos) override;
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;

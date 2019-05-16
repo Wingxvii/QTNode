@@ -55,7 +55,12 @@ public:
 public slots:
     void iterateForward();
     void iterateBackward();
-    void selectFrame();
+    void processData() override;
+    void preCheck() override;
+    void updateUI();
+
+    void ShowContextMenu(const QPoint &pos) override;
+
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");

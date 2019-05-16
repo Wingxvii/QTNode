@@ -24,7 +24,7 @@ FrameIterator::FrameIterator(){
 
     connect(forward, SIGNAL(clicked(bool)), this, SLOT(iterateForward()));
     connect(backward, SIGNAL(clicked(bool)), this, SLOT(iterateBackward()));
-    connect(frameTo, SIGNAL(clicked(bool)), this, SLOT(selectFrame()));
+    connect(frameTo, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
 
     layout->addWidget(totalFramesLabel, 1,1);
     layout->addWidget(totalFramesDisplay, 1,2);
@@ -34,6 +34,8 @@ FrameIterator::FrameIterator(){
     layout->addWidget(forward,4,2);
     layout->addWidget(backward,4,1);
     window->setLayout(layout);
+
+    buildContextWindow();
 
 }
 
@@ -76,6 +78,7 @@ void FrameIterator::setInData(std::shared_ptr<NodeData> data, int location){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
+            preCheck();
 
             totalFrames = videoIn->data().size();
             totalFramesDisplay->setText(QString::number(totalFrames));
@@ -109,36 +112,55 @@ QString FrameIterator::validationMessage() const
 }
 
 void FrameIterator::iterateForward(){
-
-    if(videoIn){
-
-    frameNumber->setText("Current Frame: " + QString::number(++currFrame));
-    if(currFrame < videoIn->data().size()){
-    frameOut->_image = videoIn->data().at(currFrame);
-    }else{
-        --currFrame;
-    }
-    }
+    --currFrame;
+    preCheck();
 }
 void FrameIterator::iterateBackward(){
-    if(videoIn){
-    frameNumber->setText("Current Frame: " + QString::number(--currFrame));
-    if(currFrame < videoIn->data().size()){
-    frameOut->_image = videoIn->data().at(currFrame);
-    }else{
-        ++currFrame;
-    }
-    }
+    ++currFrame;
+    preCheck();
 }
-void FrameIterator::selectFrame(){
-    if(videoIn){
-        if(!frameSelector->text().isEmpty()){
-            currFrame = frameSelector->text().toInt();
-        }
-        if(!currFrame < videoIn->data().size()){
-            frameNumber->setText("Current Frame: " + QString::number(currFrame));
-            frameOut->_image = videoIn->data().at(currFrame);
-        }
+void FrameIterator::processData(){
+
+    frameOut->_image = videoIn->data().at(currFrame);
+    if(currFrame != 0){
+    frameOut->ready();
     }
 }
 
+void FrameIterator::preCheck()
+{
+    //exception handeling for frame size
+    if(currFrame > videoIn->data().size()){
+        currFrame = videoIn->data().size();
+    }
+
+    if(active && videoIn && videoIn->isReady){
+        processData();
+        emit dataUpdated(0);
+    }else{
+        frameOut->unready();
+    }
+
+    updateUI();
+
+}
+
+void FrameIterator::updateUI()
+{
+    frameNumber->setText("Current Frame: " + QString::number(currFrame));
+}
+
+void FrameIterator::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}
