@@ -43,11 +43,6 @@ public:
 private slots:
     void onCreateEvents();
 
-    //IGNORED
-    void processData() override{}
-    void preCheck() override{}
-    void ShowContextMenu(const QPoint &pos) override{}
-
 signals:
     void sendCreateEvents(std::vector<float>);
     void sendDeleteEvents(std::vector<float>);

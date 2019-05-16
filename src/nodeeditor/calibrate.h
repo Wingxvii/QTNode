@@ -66,6 +66,8 @@ public slots:
 
     //context menu slots
     void ShowContextMenu(const QPoint &pos) override;
+    void activate(){active = true;preCheck();}
+    void deactivate(){active = false;}
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;

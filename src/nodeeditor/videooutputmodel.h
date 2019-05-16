@@ -44,11 +44,6 @@ public:
 public slots:
     void createEvents();
 
-    //IGNORED
-    void processData() override{}
-    void preCheck() override{}
-    void ShowContextMenu(const QPoint &pos) override{}
-
 signals:
     void sendCreateEvents(std::vector<float>);
     void sendDeleteEvents(std::vector<float>);

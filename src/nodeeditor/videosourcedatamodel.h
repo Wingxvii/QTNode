@@ -57,6 +57,9 @@ public slots:
     void preCheck() override;
 
     void ShowContextMenu(const QPoint &pos) override;
+    void activate(){active = true;window->setStyleSheet("background-color:gray;");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:red;");}
+
 
 
 private: //UI

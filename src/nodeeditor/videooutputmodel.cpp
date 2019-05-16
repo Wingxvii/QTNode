@@ -3,6 +3,8 @@
 VideoOutputModel::VideoOutputModel()
 {
     layout = new QGridLayout;
+    window = new QWidget();
+
 
     button = new QPushButton("Create Events");
     connect(button, SIGNAL(clicked(bool)), this, SLOT(createEvents()));

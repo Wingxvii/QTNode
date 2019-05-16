@@ -145,20 +145,18 @@ private:
   //node core functions
   public slots:
 
-    virtual void processData();   //use this to do the data processing of our node
-    virtual void preCheck();      //use this to trigger our processing function
+  virtual void processData(){}   //use this to do the data processing of our node
+    virtual void preCheck(){}      //use this to trigger our processing function
     void updateUI();      //this is called to update the ui of our node
 
-    virtual void ShowContextMenu(const QPoint &pos);
-    void activate(){active = true;preCheck();}
-    void deactivate(){active = false;}
+    virtual void ShowContextMenu(const QPoint &pos){}
 
 
    public:
     bool active = true;
 
-protected: //UI and Menu
-    QWidget *window =  new QWidget;
+    protected: //UI and Menu
+    QWidget *window;
 
     void buildContextWindow(){  //build the context window
         window->setContextMenuPolicy(Qt::CustomContextMenu);

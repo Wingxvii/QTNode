@@ -8,7 +8,7 @@
 #include "opencv2\calib3d.hpp"
 
 GetCorners::GetCorners(){
-
+    window =  new QWidget;
     layout = new QGridLayout;
 
     successDisplay = new QLabel(QString::number(successes));

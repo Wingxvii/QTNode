@@ -59,7 +59,7 @@ signals:
     void clear();
     void clearEvents();
 
-    sendEvents(QString, std::vector<double>);
+    void sendEvents(QString, std::vector<double>);
 
 
 private slots:

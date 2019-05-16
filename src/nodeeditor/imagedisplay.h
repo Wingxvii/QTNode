@@ -55,6 +55,9 @@ public slots:
     void preCheck() override;
 
     void ShowContextMenu(const QPoint &pos) override;
+    void activate(){active = true;preCheck();}
+    void deactivate(){active = false;}
+
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");

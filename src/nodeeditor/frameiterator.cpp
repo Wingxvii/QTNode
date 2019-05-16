@@ -9,6 +9,7 @@
 
 FrameIterator::FrameIterator(){
     layout = new QGridLayout;
+    window =  new QWidget;
 
     totalFramesDisplay = new QLabel(QString::number(totalFrames));
     totalFramesLabel = new QLabel("Total Frames: ");

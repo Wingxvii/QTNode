@@ -39,7 +39,7 @@ signals:
     void sendData(QString, std::map<float, float>, GraphStats);
 
 private:
-    setupData();
+    void setupData();
 
     const int graphIndex = 1;
     Events* events;

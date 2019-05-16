@@ -3,7 +3,7 @@
 #include <opencv/highgui.h>
 
 ImageDisplay::ImageDisplay(){
-
+    window =  new QWidget;
     layout = new QGridLayout;
     button = new QPushButton("Open Image");
     connect(button, SIGNAL(clicked(bool)), this, SLOT(preCheck()));

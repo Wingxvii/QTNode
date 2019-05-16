@@ -4,6 +4,7 @@
 
 VideoSourceDataModel::VideoSourceDataModel()
 {
+    window =  new QWidget;
     layout = new QVBoxLayout;
 
     button = new QPushButton("Choose Video");

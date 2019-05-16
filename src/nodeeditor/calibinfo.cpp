@@ -19,6 +19,7 @@ CalibInfo::CalibInfo(){
 
     //instantiate layout
     formLayout = new QFormLayout;
+    window =  new QWidget;
 
     //instantiate regulation for input
     intPos = new QRegExpValidator(QRegExp("\\d*"), this);
