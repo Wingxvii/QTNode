@@ -55,8 +55,9 @@ public slots:
     void preCheck() override;
 
     void ShowContextMenu(const QPoint &pos) override;
-    void activate(){active = true;preCheck();}
-    void deactivate(){active = false;}
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;

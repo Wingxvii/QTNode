@@ -65,9 +65,8 @@ public slots:
 
 
     void ShowContextMenu(const QPoint &pos) override;
-    void activate(){active = true;preCheck();window->setStyleSheet("background-color:rgba(255,0,0,50%);");}
-    void deactivate(){active = false;window->setStyleSheet("background-color:rgba(200,200,200,50%);");}
-
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
 
 
 private: //ports

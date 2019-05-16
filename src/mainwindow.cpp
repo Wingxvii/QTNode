@@ -236,7 +236,6 @@ MainWindow::MainWindow()
     connect(MLT.videoWidget(), SIGNAL(paused()), m_player, SLOT(showPaused()));
     connect(MLT.videoWidget(), SIGNAL(playing()), m_player, SLOT(showPlaying()));
 
-
     setupSettingsMenu();
     readPlayerSettings();
     configureVideoWidget();
