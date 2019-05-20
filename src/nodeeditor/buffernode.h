@@ -16,7 +16,7 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
-/*
+
 class BufferNode: public NodeDataModel{
     Q_OBJECT
 
@@ -53,14 +53,29 @@ public slots:
     void processData();
     void preCheck();
 
+    void ShowContextMenu(const QPoint &pos) override;
+    void activate();
+    void deactivate();
+
 private: //ports
     std::shared_ptr<NodeData> inPort1;
     std::shared_ptr<NodeData> inPort2;
     std::shared_ptr<NodeData> inPort3;
 
+    std::shared_ptr<NodeData> outPort1;
+    std::shared_ptr<NodeData> outPort2;
+    std::shared_ptr<NodeData> outPort3;
+
+private:
+    QGridLayout *layout;
+    QLabel *status;
+    QPushButton *activateButton;
+    QPushButton *deactivateButton;
+
+
 
 
 };
-*/
+
 
 #endif // BUFFERNODE_H

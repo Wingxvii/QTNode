@@ -139,7 +139,8 @@ SOURCES += main.cpp\
     nodeeditor/videosourcedatamodel.cpp \
     nodeeditor/videodisplay.cpp \
     nodeeditor/videooutputmodel.cpp \
-    nodeeditor/outputdisplaymodel.cpp
+    nodeeditor/outputdisplaymodel.cpp \
+    nodeeditor/buffernode.cpp
 
 
 

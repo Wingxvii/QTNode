@@ -28,7 +28,9 @@ public:
   }
 
   /// Type for inner use
-  virtual NodeDataType type() const = 0;
+  virtual NodeDataType type() const{
+        return NodeDataType{"", ""};
+    }
 
     void ready(){
         isReady = true;
