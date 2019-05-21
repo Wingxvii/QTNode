@@ -140,7 +140,28 @@ SOURCES += main.cpp\
     nodeeditor/videodisplay.cpp \
     nodeeditor/videooutputmodel.cpp \
     nodeeditor/outputdisplaymodel.cpp \
-    nodeeditor/buffernode.cpp
+    nodeeditor/buffernode.cpp \
+    nodeeditor/dynamic_framework/Connection.cpp \
+    nodeeditor/dynamic_framework/ConnectionBlurEffect.cpp \
+    nodeeditor/dynamic_framework/ConnectionGeometry.cpp \
+    nodeeditor/dynamic_framework/ConnectionGraphicsObject.cpp \
+    nodeeditor/dynamic_framework/ConnectionPainter.cpp \
+    nodeeditor/dynamic_framework/ConnectionState.cpp \
+    nodeeditor/dynamic_framework/ConnectionStyle.cpp \
+    nodeeditor/dynamic_framework/DataModelRegistry.cpp \
+    nodeeditor/dynamic_framework/FlowScene.cpp \
+    nodeeditor/dynamic_framework/FlowView.cpp \
+    nodeeditor/dynamic_framework/FlowViewStyle.cpp \
+    nodeeditor/dynamic_framework/Node.cpp \
+    nodeeditor/dynamic_framework/NodeConnectionInteraction.cpp \
+    nodeeditor/dynamic_framework/NodeDataModel.cpp \
+    nodeeditor/dynamic_framework/NodeGeometry.cpp \
+    nodeeditor/dynamic_framework/NodeGraphicsObject.cpp \
+    nodeeditor/dynamic_framework/NodePainter.cpp \
+    nodeeditor/dynamic_framework/NodeState.cpp \
+    nodeeditor/dynamic_framework/NodeStyle.cpp \
+    nodeeditor/dynamic_framework/Properties.cpp \
+    nodeeditor/dynamic_framework/StyleCollection.cpp
 
 
 
@@ -284,7 +305,38 @@ HEADERS  += mainwindow.h \
     nodeeditor/DataTypes/pointdata.h \
     nodeeditor/DataTypes/pointsdata.h \
     nodeeditor/DataTypes/videographdata.h \
-    nodeeditor/DataTypes/nodegraphdata.h
+    nodeeditor/DataTypes/nodegraphdata.h \
+    nodeeditor/dynamic_framework/Connection.hpp \
+    nodeeditor/dynamic_framework/ConnectionBlurEffect.hpp \
+    nodeeditor/dynamic_framework/ConnectionGeometry.hpp \
+    nodeeditor/dynamic_framework/ConnectionGraphicsObject.hpp \
+    nodeeditor/dynamic_framework/ConnectionPainter.hpp \
+    nodeeditor/dynamic_framework/ConnectionState.hpp \
+    nodeeditor/dynamic_framework/ConnectionStyle.hpp \
+    nodeeditor/dynamic_framework/DataModelRegistry.hpp \
+    nodeeditor/dynamic_framework/Export.hpp \
+    nodeeditor/dynamic_framework/FlowScene.hpp \
+    nodeeditor/dynamic_framework/FlowView.hpp \
+    nodeeditor/dynamic_framework/FlowViewStyle.hpp \
+    nodeeditor/dynamic_framework/memory.hpp \
+    nodeeditor/dynamic_framework/Node.hpp \
+    nodeeditor/dynamic_framework/NodeConnectionInteraction.hpp \
+    nodeeditor/dynamic_framework/NodeData.hpp \
+    nodeeditor/dynamic_framework/NodeDataModel.hpp \
+    nodeeditor/dynamic_framework/NodeGeometry.hpp \
+    nodeeditor/dynamic_framework/NodeGraphicsObject.hpp \
+    nodeeditor/dynamic_framework/NodePainter.hpp \
+    nodeeditor/dynamic_framework/NodePainterDelegate.hpp \
+    nodeeditor/dynamic_framework/NodeState.hpp \
+    nodeeditor/dynamic_framework/NodeStyle.hpp \
+    nodeeditor/dynamic_framework/PortType.hpp \
+    nodeeditor/dynamic_framework/Properties.hpp \
+    nodeeditor/dynamic_framework/QStringStdHash.hpp \
+    nodeeditor/dynamic_framework/QUuidStdHash.hpp \
+    nodeeditor/dynamic_framework/Serializable.hpp \
+    nodeeditor/dynamic_framework/Style.hpp \
+    nodeeditor/dynamic_framework/StyleCollection.hpp \
+    nodeeditor/dynamic_framework/TypeConverter.hpp
 
 
 
@@ -483,7 +535,7 @@ LIBS += "$$PWD/../opencv/bin/libopencv_xobjdetect342.dll"
 LIBS += "$$PWD/../opencv/bin/libopencv_xphoto342.dll"
 }
 
-LIBS += "$$PWD/../nodeeditor/NodeEditor.dll"
+#LIBS += "$$PWD/../nodeeditor/NodeEditor.dll"
 
 debug_and_release {
     build_pass:CONFIG(debug, debug|release) {
