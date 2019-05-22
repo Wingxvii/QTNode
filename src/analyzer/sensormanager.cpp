@@ -350,9 +350,7 @@ void SensorManager::saveEvents()
         file.resize(0);
         QTextStream stream(&file);
         stream << doc.toJson();
-
     }
-
 }
 
 void SensorManager::videoLength(double time)
