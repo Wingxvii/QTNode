@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 
 #include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QtWidgets>
 
 namespace QtNodes
 {
@@ -55,6 +56,8 @@ protected:
 
   FlowScene * scene();
 
+private slots:
+    void treeClickSlot(QTreeWidgetItem *item, int);
 private:
 
   QAction* _clearSelectionAction;
@@ -63,5 +66,8 @@ private:
   QPointF _clickPos;
 
   FlowScene* _scene;
+
+  QMenu modelMenu;
+    QPoint pos;
 };
 }

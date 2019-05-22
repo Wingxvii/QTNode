@@ -10,7 +10,6 @@
 #include <QtCore/QPointF>
 
 #include <QtOpenGL/QtOpenGL>
-#include <QtWidgets/QtWidgets>
 
 #include <QDebug>
 #include <iostream>
@@ -102,14 +101,13 @@ void
 FlowView::
 contextMenuEvent(QContextMenuEvent *event)
 {
+  modelMenu.clear();
+
   if (itemAt(event->pos()))
   {
     QGraphicsView::contextMenuEvent(event);
     return;
   }
-
-  QMenu modelMenu;
-
   auto skipText = QStringLiteral("skip me");
 
   //Add filterbox to the context menu
@@ -151,34 +149,9 @@ contextMenuEvent(QContextMenuEvent *event)
 
   treeView->expandAll();
 
-  connect(treeView, SLOT(itemClicked(QTreeWidgetItem *, int)), [&](QTreeWidgetItem *item, int)
-  {
-    QString modelName = item->data(0, Qt::UserRole).toString();
+  pos = event->pos();
 
-    if (modelName == skipText)
-    {
-      return;
-    }
-
-    auto type = _scene->registry().create(modelName);
-
-    if (type)
-    {
-      auto& node = _scene->createNode(std::move(type));
-
-      QPoint pos = event->pos();
-
-      QPointF posView = this->mapToScene(pos);
-
-      node.nodeGraphicsObject().setPos(posView);
-    }
-    else
-    {
-      qDebug() << "Model not found";
-    }
-
-    modelMenu.close();
-  });
+  connect(treeView, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(treeClickSlot(QTreeWidgetItem *, int)));
 
   //Setup filtering
   connect(txtBox, &QLineEdit::textChanged, [&](const QString &text)
@@ -404,5 +377,32 @@ FlowScene *
 FlowView::
 scene()
 {
-  return _scene;
+    return _scene;
+}
+
+void FlowView::treeClickSlot(QTreeWidgetItem *item, int)
+{
+    QString modelName = item->data(0, Qt::UserRole).toString();
+
+    if (modelName == QStringLiteral("skip me"))
+    {
+      return;
+    }
+
+    auto type = _scene->registry().create(modelName);
+
+    if (type)
+    {
+      auto& node = _scene->createNode(std::move(type));
+
+      QPointF posView = this->mapToScene(pos);
+
+      node.nodeGraphicsObject().setPos(posView);
+    }
+    else
+    {
+      qDebug() << "Model not found";
+    }
+
+    modelMenu.close();
 }
