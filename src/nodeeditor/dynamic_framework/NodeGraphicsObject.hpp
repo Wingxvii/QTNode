@@ -91,6 +91,9 @@ private:
   void
   embedQWidget();
 
+private slots:
+  void onMoveSlot();
+
 private:
 
   FlowScene & _scene;

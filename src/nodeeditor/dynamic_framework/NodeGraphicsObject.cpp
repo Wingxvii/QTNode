@@ -60,11 +60,8 @@ NodeGraphicsObject(FlowScene &scene,
   embedQWidget();
 
   // connect to the move signals to emit the move signals in FlowScene
-  auto onMoveSlot = [this] {
-    _scene.nodeMoved(_node, pos());
-  };
-  connect(this, &QGraphicsObject::xChanged, this, onMoveSlot);
-  connect(this, &QGraphicsObject::yChanged, this, onMoveSlot);
+  connect(this, SIGNAL(xChanged()), this, SLOT(onMoveSlot()));
+  connect(this, SIGNAL(yChanged()), this, SLOT(onMoveSlot()));
 
 }
 
@@ -114,6 +111,11 @@ embedQWidget()
     _proxyWidget->setOpacity(1.0);
     _proxyWidget->setFlag(QGraphicsItem::ItemIgnoresParentOpacity);
   }
+}
+
+void NodeGraphicsObject::onMoveSlot()
+{
+    this->_scene.nodeMoved(_node, pos());
 }
 
 

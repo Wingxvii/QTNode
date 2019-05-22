@@ -58,6 +58,8 @@ protected:
 
 private slots:
     void treeClickSlot(QTreeWidgetItem *item, int);
+    void filterSlot(const QString &text);
+
 private:
 
   QAction* _clearSelectionAction;
@@ -69,5 +71,7 @@ private:
 
   QMenu modelMenu;
     QPoint pos;
+    QMap<QString, QTreeWidgetItem*> topLevelItems;
+
 };
 }

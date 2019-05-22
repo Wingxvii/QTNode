@@ -130,7 +130,7 @@ contextMenuEvent(QContextMenuEvent *event)
 
   modelMenu.addAction(treeViewAction);
 
-  QMap<QString, QTreeWidgetItem*> topLevelItems;
+
   for (auto const &cat : _scene->registry().categories())
   {
     auto item = new QTreeWidgetItem(treeView);
@@ -147,6 +147,7 @@ contextMenuEvent(QContextMenuEvent *event)
     item->setData(0, Qt::UserRole, assoc.first);
   }
 
+
   treeView->expandAll();
 
   pos = event->pos();
@@ -154,19 +155,7 @@ contextMenuEvent(QContextMenuEvent *event)
   connect(treeView, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(treeClickSlot(QTreeWidgetItem *, int)));
 
   //Setup filtering
-  connect(txtBox, &QLineEdit::textChanged, [&](const QString &text)
-  {
-    for (auto& topLvlItem : topLevelItems)
-    {
-      for (int i = 0; i < topLvlItem->childCount(); ++i)
-      {
-        auto child = topLvlItem->child(i);
-        auto modelName = child->data(0, Qt::UserRole).toString();
-        const bool match = (modelName.contains(text, Qt::CaseInsensitive));
-        child->setHidden(!match);
-      }
-    }
-  });
+  connect(txtBox, SIGNAL(textChanged(const QString &)),this ,SLOT(filterSlot(const QString &)));
 
   // make sure the text box gets focus so the user doesn't have to click on it
   txtBox->setFocus();
@@ -406,3 +395,17 @@ void FlowView::treeClickSlot(QTreeWidgetItem *item, int)
 
     modelMenu.close();
 }
+
+void FlowView::filterSlot(const QString &text)
+  {
+    for (auto& topLvlItem : topLevelItems)
+    {
+      for (int i = 0; i < topLvlItem->childCount(); ++i)
+      {
+        auto child = topLvlItem->child(i);
+        auto modelName = child->data(0, Qt::UserRole).toString();
+        const bool match = (modelName.contains(text, Qt::CaseInsensitive));
+        child->setHidden(!match);
+      }
+    }
+  }
