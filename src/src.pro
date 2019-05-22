@@ -140,7 +140,6 @@ SOURCES += main.cpp\
     nodeeditor/videodisplay.cpp \
     nodeeditor/videooutputmodel.cpp \
     nodeeditor/outputdisplaymodel.cpp \
-    nodeeditor/buffernode.cpp \
     nodeeditor/dynamic_framework/Connection.cpp \
     nodeeditor/dynamic_framework/ConnectionBlurEffect.cpp \
     nodeeditor/dynamic_framework/ConnectionGeometry.cpp \
@@ -289,7 +288,6 @@ HEADERS  += mainwindow.h \
     analyzer/graphstats.h \
     analyzer/scrubeventmanager.h \
     nodeeditor/autoframeiterator.h \
-    nodeeditor/buffernode.h \
     nodeeditor/calibinfo.h \
     nodeeditor/calibrate.h \
     nodeeditor/frameiterator.h \
