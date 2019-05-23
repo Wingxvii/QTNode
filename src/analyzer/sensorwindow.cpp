@@ -93,6 +93,10 @@ void SensorWindow::createMenus()
 void SensorWindow::newSlot()
 {
     LOG_JOHN() << "New Slot Triggered";
+    if(m_graphs->dockedContainer){
+        m_graphs->dockedContainer->editor->scene->clearScene();
+    }
+
 }
 
 void SensorWindow::openSlot()

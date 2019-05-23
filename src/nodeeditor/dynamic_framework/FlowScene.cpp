@@ -466,7 +466,6 @@ void
 FlowScene::
 load()
 {
-  clearScene();
 
   //-------------
 
@@ -483,6 +482,8 @@ load()
 
   if (!file.open(QIODevice::ReadOnly))
     return;
+
+  clearScene();
 
   QByteArray wholeFile = file.readAll();
 
