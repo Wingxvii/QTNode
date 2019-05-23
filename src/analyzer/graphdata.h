@@ -69,3 +69,4 @@ private:
     QWidget * graphWidget;
 };
 #endif // GRAPHDATA_H
+

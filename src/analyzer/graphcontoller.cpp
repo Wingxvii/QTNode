@@ -33,6 +33,7 @@ void GraphController::setupData(QString name, QJsonArray data)
     this->data = data;
     createGraphDataContainer(name, QData);
     this->data = QJsonArray();
+
 }
 
 void GraphController::createEvents(QString name)
@@ -107,6 +108,7 @@ void GraphController::setWidgetDocked(GraphDataContainer* container)
     graphLayout->addWidget(container->data->getContainer());
     container->dock->hide();
     container->data->setDraggable(true);
+    dockedContainer = container;
 }
 
 //creates the container
@@ -121,6 +123,8 @@ void GraphController::createGraphDataContainer(QString name, std::map<QString, G
         container[name]->dock = new QDockWidget();
         container[name]->currentWidget = graphLayout;
 
+        dockedContainer = container[name];
+
         //lambda function to connect the
         connect(pointer, &GraphData::switched, [&, gdc]()
         {
@@ -131,6 +135,7 @@ void GraphController::createGraphDataContainer(QString name, std::map<QString, G
     {
         LOG_CAMPBELL() << "data already exists";
     }
+
 }
 
 //sets up the node editor

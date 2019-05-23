@@ -39,6 +39,8 @@ class GraphController : public QObject
 public:
     explicit GraphController(EventContainer *container, QWidget* parent, QGridLayout* graphLayout);
 
+    GraphDataContainer* dockedContainer;
+
 public slots:
     //used to create the orignal graphs without filters
     void setupData(QString, QJsonArray);

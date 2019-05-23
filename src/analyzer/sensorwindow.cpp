@@ -98,9 +98,16 @@ void SensorWindow::newSlot()
 void SensorWindow::openSlot()
 {
     LOG_JOHN() << "Open Slot Triggered";
+    if(m_graphs->dockedContainer){
+        m_graphs->dockedContainer->editor->scene->load();
+    }
 }
 
 void SensorWindow::saveSlot()
 {
+    if(m_graphs->dockedContainer){
+        m_graphs->dockedContainer->editor->scene->save();
+    }
+
     LOG_JOHN() << "Save Slot Triggered";
 }
