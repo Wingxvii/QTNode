@@ -30,6 +30,26 @@ private:
     QSize currentSize;
 
     int refreshSize;
+
+
+    //menu bar items
+    void createActions();
+    void createMenus();
+
+    QActionGroup *alignmentGroup;
+    QMenu* fileMenu;
+    QAction* fileNewAction;
+    QAction* fileOpenAction;
+    QAction* fileSaveAction;
+
+    QMenu* blackBoxMenu;
+
+public slots:
+    void newSlot();
+    void openSlot();
+    void saveSlot();
+
+
 };
 
 #endif // SENSORWINDOW_H

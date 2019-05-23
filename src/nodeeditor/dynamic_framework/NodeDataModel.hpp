@@ -160,6 +160,6 @@ private:
         connect(window, SIGNAL(customContextMenuRequested(const QPoint &)),
                 this, SLOT(ShowContextMenu(const QPoint &)));
 
-    };
+    }
 };
 }

@@ -29,6 +29,10 @@ SensorWindow::SensorWindow(QWidget *parent) :
     connect(m_sensorManager, SIGNAL(createVirtual(QString)), m_graphs, SLOT(createVirtual(QString)));
 
     refreshSize = 200;
+
+    //setup menu bar
+    createActions();
+    createMenus();
 }
 
 void SensorWindow::resizeEvent(QResizeEvent *e)
@@ -53,4 +57,50 @@ void SensorWindow::resizeEvent(QResizeEvent *e)
 SensorManager* SensorWindow::getManager()
 {
     return m_sensorManager;
+}
+
+void SensorWindow::createActions()
+{
+    fileNewAction = new QAction(tr("&New"), this);
+    fileNewAction->setShortcut(QKeySequence::New);
+    fileNewAction->setStatusTip("Create a new file");
+    connect(fileNewAction, SIGNAL(triggered()), this, SLOT(newSlot()));
+
+    fileOpenAction = new QAction(tr("&Open..."), this);
+    fileOpenAction->setShortcut(QKeySequence::Open);
+    fileOpenAction->setStatusTip("Open an existing file");
+    connect(fileOpenAction, SIGNAL(triggered()), this, SLOT(openSlot()));
+
+    fileSaveAction = new QAction(tr("&Save"), this);
+    fileSaveAction->setShortcut(QKeySequence::Save);
+    fileSaveAction->setStatusTip("Save the node setup to disk");
+    connect(fileSaveAction, SIGNAL(triggered()), this, SLOT(saveSlot()));
+
+}
+
+void SensorWindow::createMenus()
+{
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(fileNewAction);
+    fileMenu->addAction(fileOpenAction);
+    fileMenu->addAction(fileSaveAction);
+    fileMenu->addSeparator();
+
+    blackBoxMenu = menuBar()->addMenu(tr("&Black Box"));
+
+}
+
+void SensorWindow::newSlot()
+{
+    LOG_JOHN() << "New Slot Triggered";
+}
+
+void SensorWindow::openSlot()
+{
+    LOG_JOHN() << "Open Slot Triggered";
+}
+
+void SensorWindow::saveSlot()
+{
+    LOG_JOHN() << "Save Slot Triggered";
 }
