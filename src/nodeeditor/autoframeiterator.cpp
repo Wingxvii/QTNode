@@ -21,7 +21,6 @@ AutoFrameIterator::AutoFrameIterator()
     progressBar = new QProgressBar();
     projectedSamplesLabel = new QLabel("Estimated number of samples: ");
     projectedSamplesDisplay = new QLabel(QString::number(projectedSamples));
-   // startButton = new QPushButton("Start Iteration");
 
     //init out port
     imagesOut = std::make_shared<VideoGraphData>();
@@ -132,6 +131,38 @@ QtNodes::NodeValidationState AutoFrameIterator::validationState() const
 QString AutoFrameIterator::validationMessage() const
 {
     return modelValidationError;
+}
+
+QJsonObject AutoFrameIterator::save() const
+{
+    QJsonObject dataJson;
+
+    dataJson["name"] = name();
+    dataJson["isReady"] = isReady;
+    dataJson["startFrame"] = startFrame;
+    dataJson["endFrame"] = endFrame;
+    dataJson["byPass"] = byPass;
+
+    return dataJson;
+}
+
+void AutoFrameIterator::restore(const QJsonObject & json)
+{
+    if(json.contains("isReady")){
+        isReady = json["isReady"].toBool();
+    }
+    if(json.contains("startFrame")){
+        startFrameInput->setText(QString::number(json["startFrame"].toInt()));
+    }
+    if(json.contains("endFrame")){
+        endFrameInput->setText(QString::number(json["endFrame"].toInt()));
+    }
+    if(json.contains("byPass")){
+        byPassInput->setText(QString::number(json["byPass"].toInt()));
+    }
+
+    updateUI();
+    preCheck();
 }
 
 void AutoFrameIterator::processData()

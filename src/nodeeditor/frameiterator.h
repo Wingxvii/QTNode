@@ -68,6 +68,9 @@ private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
 
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
 private: //port values
     std::shared_ptr<VideoGraphData> videoIn;
     std::shared_ptr<ImageData> frameOut;

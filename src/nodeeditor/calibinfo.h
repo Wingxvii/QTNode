@@ -63,6 +63,9 @@ private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
 
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
 private: //data
     std::shared_ptr<CalibData> data;
 

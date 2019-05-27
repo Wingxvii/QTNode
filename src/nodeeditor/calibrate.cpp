@@ -183,3 +183,4 @@ void Calibrate::ShowContextMenu(const QPoint &pos)
 
     contextMenu.exec(window->mapToGlobal(pos));
 }
+

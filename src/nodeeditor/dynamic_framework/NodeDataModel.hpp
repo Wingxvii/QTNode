@@ -11,6 +11,7 @@
 #include "NodePainterDelegate.hpp"
 #include "memory.hpp"
 #include "QMenu"
+#include <string>
 
 namespace QtNodes
 {

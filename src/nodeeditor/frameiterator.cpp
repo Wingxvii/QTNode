@@ -36,6 +36,8 @@ FrameIterator::FrameIterator(){
     layout->addWidget(backward,4,1);
     window->setLayout(layout);
 
+    frameOut = std::make_shared<ImageData>();
+
     buildContextWindow();
 
 }
@@ -74,7 +76,6 @@ void FrameIterator::setInData(std::shared_ptr<NodeData> data, int location){
     switch(location){
     case 0:
     videoIn = std::dynamic_pointer_cast<VideoGraphData>(data);
-    frameOut = std::make_shared<ImageData>();
         if(videoIn){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
@@ -130,19 +131,22 @@ void FrameIterator::processData(){
 
 void FrameIterator::preCheck()
 {
-    //exception handeling for frame size
-    if(currFrame > videoIn->data().size()){
-        currFrame = videoIn->data().size();
+    if(videoIn){
+        //exception handeling for frame size
+        if(currFrame > videoIn->data().size()){
+            currFrame = videoIn->data().size();
+            updateUI();
+        }
     }
 
-    if(active && videoIn && videoIn->isReady){
-        processData();
-        emit dataUpdated(0);
+    if(active && videoIn){
+        if(videoIn->isReady){
+            processData();
+            emit dataUpdated(0);
+        }
     }else{
         frameOut->unready();
     }
-
-    updateUI();
 
 }
 
@@ -164,4 +168,22 @@ void FrameIterator::ShowContextMenu(const QPoint &pos)
     contextMenu.addAction(&deactivateAction);
 
     contextMenu.exec(window->mapToGlobal(pos));
+}
+
+QJsonObject FrameIterator::save() const
+{
+    QJsonObject dataJson;
+
+    dataJson["name"] = name();
+    dataJson["frameSelector"] = frameSelector->text().toInt();
+    return dataJson;
+}
+
+void FrameIterator::restore(const QJsonObject &json)
+{
+
+    if(json.contains("frameSelector")){
+        frameSelector->setText(QString::number(json["frameSelector"].toInt()));
+    }
+    preCheck();
 }

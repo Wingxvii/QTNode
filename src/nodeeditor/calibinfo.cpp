@@ -103,6 +103,7 @@ void CalibInfo::preCheck(){
 
 }
 
+
 void CalibInfo::processData(){
     data->checkReady();
     emit dataUpdated(0);
@@ -121,6 +122,34 @@ void CalibInfo::ShowContextMenu(const QPoint &pos)
     contextMenu.addAction(&deactivateAction);
 
     contextMenu.exec(window->mapToGlobal(pos));
+}
+
+QJsonObject CalibInfo::save() const
+{
+    QJsonObject dataJson;
+    dataJson["name"] = name();
+
+    dataJson["sizeX"] = sizeX->text();
+    dataJson["sizeY"] = sizeY->text();
+    dataJson["length"] = length->text();
+
+    return dataJson;
+
+}
+
+void CalibInfo::restore(const QJsonObject &json)
+{
+    if(json.contains("sizeX")){
+        sizeX->setText(json["sizeX"].toString());
+    }
+    if(json.contains("sizeY")){
+        sizeY->setText(json["sizeY"].toString());
+    }
+    if(json.contains("length")){
+        length->setText(json["length"].toString());
+    }
+
+    preCheck();
 }
 
 

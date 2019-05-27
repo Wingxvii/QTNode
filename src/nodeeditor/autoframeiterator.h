@@ -54,7 +54,8 @@ private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
 
-
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
 
 public slots:
     //iterates throught the video, saving frames to a image vector based on parameters
@@ -62,7 +63,6 @@ public slots:
     void preCheck() override;
     //calculates the values displayed. This is called whenever a value or input is updated
     void updateUI();
-
 
     void ShowContextMenu(const QPoint &pos) override;
     void activate(){active = true;preCheck();window->setStyleSheet("");}
