@@ -71,6 +71,11 @@ void SensorWindow::createActions()
     fileOpenAction->setStatusTip("Open an existing file");
     connect(fileOpenAction, SIGNAL(triggered()), this, SLOT(openSlot()));
 
+    filePlaceAction = new QAction(tr("&Place"), this);
+    filePlaceAction->setShortcut(QKeySequence::Save);
+    filePlaceAction->setStatusTip("Place an existing file");
+    connect(filePlaceAction, SIGNAL(triggered()), this, SLOT(placeSlot()));
+
     fileSaveAction = new QAction(tr("&Save"), this);
     fileSaveAction->setShortcut(QKeySequence::Save);
     fileSaveAction->setStatusTip("Save the node setup to disk");
@@ -80,11 +85,11 @@ void SensorWindow::createActions()
 
 void SensorWindow::createMenus()
 {
-    fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(fileNewAction);
-    fileMenu->addAction(fileOpenAction);
-    fileMenu->addAction(fileSaveAction);
-    fileMenu->addSeparator();
+    ui->menuFIle->addAction(fileNewAction);
+    ui->menuFIle->addAction(fileOpenAction);
+    ui->menuFIle->addAction(filePlaceAction);
+    ui->menuFIle->addAction(fileSaveAction);
+    ui->menuFIle->addSeparator();
 
     blackBoxMenu = menuBar()->addMenu(tr("&Black Box"));
 
@@ -114,4 +119,14 @@ void SensorWindow::saveSlot()
     }
 
     LOG_JOHN() << "Save Slot Triggered";
+}
+
+void SensorWindow::placeSlot()
+{
+    if(m_graphs->dockedContainer){
+        m_graphs->dockedContainer->editor->scene->place();
+    }
+
+    LOG_JOHN() << "Place Slot Triggered";
+
 }

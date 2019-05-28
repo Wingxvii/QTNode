@@ -41,6 +41,7 @@ private:
     QAction* fileNewAction;
     QAction* fileOpenAction;
     QAction* fileSaveAction;
+    QAction* filePlaceAction;
 
     QMenu* blackBoxMenu;
 
@@ -48,6 +49,7 @@ public slots:
     void newSlot();
     void openSlot();
     void saveSlot();
+    void placeSlot();
 
 
 };

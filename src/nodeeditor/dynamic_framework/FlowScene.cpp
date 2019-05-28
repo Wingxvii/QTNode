@@ -91,8 +91,8 @@ createConnection(Node& nodeIn,
                  PortIndex portIndexOut,
                  TypeConverter const &converter)
 {
-  auto connection =
-    std::make_shared<Connection>(nodeIn,
+    std::shared_ptr<Connection> connection;
+    connection = std::make_shared<Connection>(nodeIn,
                                  portIndexIn,
                                  nodeOut,
                                  portIndexOut,
@@ -100,19 +100,19 @@ createConnection(Node& nodeIn,
 
   auto cgo = detail::make_unique<ConnectionGraphicsObject>(*this, *connection);
 
-  nodeIn.nodeState().setConnection(PortType::In, portIndexIn, *connection);
-  nodeOut.nodeState().setConnection(PortType::Out, portIndexOut, *connection);
 
-  // after this function connection points are set to node port
-  connection->setGraphicsObject(std::move(cgo));
+    nodeIn.nodeState().setConnection(PortType::In, portIndexIn, *connection);
+    nodeOut.nodeState().setConnection(PortType::Out, portIndexOut, *connection);
 
-  // trigger data propagation
-  nodeOut.onDataUpdated(portIndexOut);
+     // after this function connection points are set to node port
+    connection->setGraphicsObject(std::move(cgo));
 
-  _connections[connection->id()] = connection;
+     // trigger data propagation
+     nodeOut.onDataUpdated(portIndexOut);
 
-  connectionCreated(*connection);
+    _connections[connection->id()] = connection;
 
+     connectionCreated(*connection);
   return connection;
 }
 
@@ -154,8 +154,11 @@ restoreConnection(QJsonObject const &connectionJson)
     return TypeConverter{};
   };
 
-  std::shared_ptr<Connection> connection =
-    createConnection(*nodeIn, portIndexIn,
+  std::shared_ptr<Connection> connection;
+
+
+
+  connection = createConnection(*nodeIn, portIndexIn,
                      *nodeOut, portIndexOut,
                      getConverter());
 
@@ -209,9 +212,13 @@ restoreNode(QJsonObject const& nodeJson)
   node->restore(nodeJson);
 
   auto nodePtr = node.get();
-  _nodes[node->id()] = std::move(node);
 
-  nodeCreated(*nodePtr);
+  if(_nodes[node->id()].get()){
+    removeNode(*_nodes[node->id()].get());
+  }
+    _nodes[node->id()] = std::move(node);
+    nodeCreated(*nodePtr);
+
   return *nodePtr;
 }
 
@@ -373,9 +380,8 @@ QSizeF
 FlowScene::
 getNodeSize(const Node& node) const
 {
-  return QSizeF(node.nodeGeometry().width(), node.nodeGeometry().height());
+    return QSizeF(node.nodeGeometry().width(), node.nodeGeometry().height());
 }
-
 
 std::unordered_map<QUuid, std::unique_ptr<Node> > const &
 FlowScene::
@@ -488,6 +494,30 @@ load()
   QByteArray wholeFile = file.readAll();
 
   loadFromMemory(wholeFile);
+}
+
+
+void FlowScene::place()
+{
+    //-------------
+
+    QString fileName =
+      QFileDialog::getOpenFileName(nullptr,
+                                   tr("Open Flow Scene"),
+                                   QDir::homePath(),
+                                   tr("Flow Scene Files (*.flow)"));
+
+    if (!QFileInfo::exists(fileName))
+      return;
+
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::ReadOnly))
+      return;
+
+    QByteArray wholeFile = file.readAll();
+
+    loadFromMemory(wholeFile);
 }
 
 
