@@ -13,8 +13,8 @@ GraphData::GraphData(QJsonArray data, QString name, Events* events)
     QStringListModel* model = new QStringListModel(this);
 
 
-    connect(this, &GraphData::sendData,
-            &GraphDataConnector::getInstance(), GraphDataConnector::addData);
+    connect(this, SIGNAL(sendData(QString, std::map<float, float>, GraphStats)),
+            &GraphDataConnector::getInstance(), SLOT(addData(QString, std::map<float, float>, GraphStats)));
 
     //create vertical layout
     //this will contain the name and the tabWidget
@@ -27,15 +27,10 @@ GraphData::GraphData(QJsonArray data, QString name, Events* events)
     container = new QWidget();
     container->setLayout(layout);
 
+    this->name = name;
 
     draggable = new QLabel("|||");
     layout->addWidget(draggable, 1, 0);
-
-    qButton = new QPushButton(name);
-    qButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    layout->addWidget(qButton, 0, 1, Qt::AlignLeft);
-    connect(qButton, SIGNAL(clicked(bool)), this, SIGNAL(switched()));
-
 
     tabWidget = new QTabWidget();
     tabWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -172,7 +167,7 @@ QWidget* GraphData::getContainer()
 
 QString GraphData::getName()
 {
-    return qButton->text();
+    return name;
 }
 
 void GraphData::setDraggable(bool state)
@@ -186,6 +181,7 @@ void GraphData::setDraggable(bool state)
         draggable->hide();
     }
 }
+
 
 void GraphData::updateGraphs()
 {

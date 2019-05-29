@@ -38,7 +38,7 @@ SensorManager::SensorManager(QWidget *parent) :
     events = new QListWidget();
 
     virtualSource->addItem("+");
-    events->addItem("+");
+    //events->addItem("+");
     virtualIndex = 0;
     eventsIndex = 0;
 
@@ -245,6 +245,11 @@ void SensorManager::on_blackList_clicked()
     testing.exec();
 }
 
+void SensorManager::on_events_closed(QString eventName)
+{
+
+}
+
 //Emits signal to tell main to make a new dock for the given sensor
 //Also outputs the sensors data to the console for debugging
 void SensorManager::on_listView_doubleClicked(const QModelIndex& index)
@@ -367,6 +372,14 @@ void SensorManager::videoLength(double time)
             LOG_CAMPBELL() << "Error difference is greater than 10 seconds";
         }
     }
+}
+
+void SensorManager::createNew()
+{
+    events->insertItem(eventsIndex, QString::number(eventsIndex + 1));
+    emit createVirtual("events" + QString::number(eventsIndex + 1));
+    emit graphOpened("events" + QString::number(virtualIndex + 1));
+    eventsIndex++;
 }
 
 void SensorManager::openDialog(double time)

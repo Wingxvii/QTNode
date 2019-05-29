@@ -78,9 +78,21 @@ void GraphController::updateGraphs()
     }
 }
 
+void GraphController::closeDockedWidget()
+{
+    clearWidgets(dockedContainer->data->getLayout());
+    graphLayout->removeWidget(dockedContainer->data->getContainer());
+
+    eventData.erase(dockedContainer->data->getName());
+    if(!eventData.empty()){
+        dockedContainer = eventData.begin()->second;
+    }
+}
+
 void GraphController::switchWidget(GraphDataContainer* container)
 {
 
+    dockedContainer = container;
     if (container->currentWidget == graphLayout)
     {
         setWidgetDock(container);
@@ -99,16 +111,29 @@ void GraphController::setWidgetDock(GraphDataContainer* container)
     container->dock->setWidget(container->data->getContainer());
     container->dock->show();
     container->data->setDraggable(false);
+    dockedContainer = container;
 }
 
 void GraphController::setWidgetDocked(GraphDataContainer* container)
 {
     LOG_CAMPBELL() << "set to window widget";
     container->currentWidget = graphLayout;
+
+    graphLayout->removeWidget(dockedContainer->data->getContainer());
     graphLayout->addWidget(container->data->getContainer());
     container->dock->hide();
     container->data->setDraggable(true);
     dockedContainer = container;
+}
+
+void GraphController::clearWidgets(QLayout *layout)
+{
+    if (! layout)
+       return;
+    while (auto item = layout->takeAt(0)) {
+       delete item->widget();
+       clearWidgets(item->layout());
+    }
 }
 
 //creates the container

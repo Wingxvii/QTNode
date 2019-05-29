@@ -43,6 +43,7 @@ public slots:
     void updateEvents(QString, std::vector<double>);
     void saveEvents();
     void videoLength(double);
+    void createNew();
 
 private slots:
 
@@ -69,6 +70,7 @@ private slots:
     void on_virtual_clicked(const QModelIndex& index);
     void on_events_Clicked(const QModelIndex& index);
     void on_blackList_clicked();
+    void on_events_closed(QString eventName);
 
 public:
     //ui
@@ -85,6 +87,9 @@ public:
 
     QListWidget * events;
     int eventsIndex;
+
+    QListWidget * nodePackages;
+    int packagesIndex;
 
 };
 

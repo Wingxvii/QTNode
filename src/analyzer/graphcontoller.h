@@ -48,6 +48,7 @@ public slots:
     void createVirtual(QString);
     void createEvents(QString);
     void updateGraphs();
+    void closeDockedWidget();
 
 protected:
 
@@ -59,6 +60,7 @@ private:
     void switchWidget(GraphDataContainer*);
     void setWidgetDock(GraphDataContainer*);
     void setWidgetDocked(GraphDataContainer*);
+    void clearWidgets(QLayout * layout);
 
     bool checkBlacklist(QString);
 

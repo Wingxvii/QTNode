@@ -64,7 +64,7 @@ void SensorWindow::createActions()
     fileNewAction = new QAction(tr("&New"), this);
     fileNewAction->setShortcut(QKeySequence::New);
     fileNewAction->setStatusTip("Create a new file");
-    connect(fileNewAction, SIGNAL(triggered()), this, SLOT(newSlot()));
+    connect(fileNewAction, SIGNAL(triggered()), m_sensorManager, SLOT(createNew()));
 
     fileOpenAction = new QAction(tr("&Open..."), this);
     fileOpenAction->setShortcut(QKeySequence::Open);
@@ -72,7 +72,6 @@ void SensorWindow::createActions()
     connect(fileOpenAction, SIGNAL(triggered()), this, SLOT(openSlot()));
 
     filePlaceAction = new QAction(tr("&Place"), this);
-    filePlaceAction->setShortcut(QKeySequence::Save);
     filePlaceAction->setStatusTip("Place an existing file");
     connect(filePlaceAction, SIGNAL(triggered()), this, SLOT(placeSlot()));
 
@@ -80,6 +79,15 @@ void SensorWindow::createActions()
     fileSaveAction->setShortcut(QKeySequence::Save);
     fileSaveAction->setStatusTip("Save the node setup to disk");
     connect(fileSaveAction, SIGNAL(triggered()), this, SLOT(saveSlot()));
+
+    fileClearAction = new QAction(tr("&Clear"), this);
+    fileClearAction->setStatusTip("Clear selected file");
+    connect(fileClearAction, SIGNAL(triggered()), this, SLOT(clearSlot()));
+
+    fileCloseAction = new QAction(tr("&Close"), this);
+    fileCloseAction->setStatusTip("Close selected file without saving");
+    connect(fileCloseAction, SIGNAL(triggered()), this, SLOT(closeSlot()));
+
 
 }
 
@@ -89,18 +97,9 @@ void SensorWindow::createMenus()
     ui->menuFIle->addAction(fileOpenAction);
     ui->menuFIle->addAction(filePlaceAction);
     ui->menuFIle->addAction(fileSaveAction);
+    ui->menuFIle->addAction(fileClearAction);
+    ui->menuFIle->addAction(fileCloseAction);
     ui->menuFIle->addSeparator();
-
-    blackBoxMenu = menuBar()->addMenu(tr("&Black Box"));
-
-}
-
-void SensorWindow::newSlot()
-{
-    LOG_JOHN() << "New Slot Triggered";
-    if(m_graphs->dockedContainer){
-        m_graphs->dockedContainer->editor->scene->clearScene();
-    }
 
 }
 
@@ -129,4 +128,18 @@ void SensorWindow::placeSlot()
 
     LOG_JOHN() << "Place Slot Triggered";
 
+}
+
+void SensorWindow::clearSlot()
+{
+    if(m_graphs->dockedContainer){
+        m_graphs->dockedContainer->editor->scene->clearScene();
+    }
+}
+
+void SensorWindow::closeSlot()
+{
+    if(m_graphs->dockedContainer){
+        m_graphs->closeDockedWidget();
+    }
 }

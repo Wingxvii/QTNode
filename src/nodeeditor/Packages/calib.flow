@@ -1,0 +1,99 @@
+{
+    "connections": [
+        {
+            "in_id": "{4181c83b-80b0-4822-a2e4-bda3971a6840}",
+            "in_index": 0,
+            "out_id": "{5b215cf7-b95b-413d-90f7-3defc16e1360}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{0659bdd6-785f-439a-810b-6c1ae1fce183}",
+            "in_index": 0,
+            "out_id": "{4c8bc0f0-9d9a-466f-bde8-00a9bfd8d2fe}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{0659bdd6-785f-439a-810b-6c1ae1fce183}",
+            "in_index": 1,
+            "out_id": "{306880a6-28f3-415e-be59-dfc3aa20a8ba}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5b215cf7-b95b-413d-90f7-3defc16e1360}",
+            "in_index": 0,
+            "out_id": "{0659bdd6-785f-439a-810b-6c1ae1fce183}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5b215cf7-b95b-413d-90f7-3defc16e1360}",
+            "in_index": 1,
+            "out_id": "{306880a6-28f3-415e-be59-dfc3aa20a8ba}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{4181c83b-80b0-4822-a2e4-bda3971a6840}",
+            "in_index": 1,
+            "out_id": "{5b215cf7-b95b-413d-90f7-3defc16e1360}",
+            "out_index": 1
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{306880a6-28f3-415e-be59-dfc3aa20a8ba}",
+            "model": {
+                "length": "0.02",
+                "name": "Calibration Info",
+                "sizeX": "11",
+                "sizeY": "8"
+            },
+            "position": {
+                "x": 52,
+                "y": 316
+            }
+        },
+        {
+            "id": "{4181c83b-80b0-4822-a2e4-bda3971a6840}",
+            "model": {
+                "name": "Undistort Image"
+            },
+            "position": {
+                "x": 649,
+                "y": 637
+            }
+        },
+        {
+            "id": "{4c8bc0f0-9d9a-466f-bde8-00a9bfd8d2fe}",
+            "model": {
+                "byPass": 50,
+                "endFrame": 2500,
+                "isReady": true,
+                "name": "Automatic Frame Iterator",
+                "startFrame": 500
+            },
+            "position": {
+                "x": 539,
+                "y": 127
+            }
+        },
+        {
+            "id": "{5b215cf7-b95b-413d-90f7-3defc16e1360}",
+            "model": {
+                "name": "Calibrate Camera"
+            },
+            "position": {
+                "x": 596.20000000000016,
+                "y": 504.79999999999995
+            }
+        },
+        {
+            "id": "{0659bdd6-785f-439a-810b-6c1ae1fce183}",
+            "model": {
+                "name": "Find Corners"
+            },
+            "position": {
+                "x": 633,
+                "y": 366
+            }
+        }
+    ]
+}

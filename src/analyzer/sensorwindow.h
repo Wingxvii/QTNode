@@ -38,19 +38,21 @@ private:
 
     QActionGroup *alignmentGroup;
     QMenu* fileMenu;
+
     QAction* fileNewAction;
     QAction* fileOpenAction;
     QAction* fileSaveAction;
     QAction* filePlaceAction;
+    QAction* fileClearAction;
+    QAction* fileCloseAction;
 
-    QMenu* blackBoxMenu;
 
 public slots:
-    void newSlot();
     void openSlot();
     void saveSlot();
     void placeSlot();
-
+    void clearSlot();
+    void closeSlot();
 
 };
 

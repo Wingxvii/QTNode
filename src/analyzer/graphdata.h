@@ -5,7 +5,6 @@
 #include <QScrollArea>
 #include <qgridlayout.h>
 #include <QTabWidget>
-#include <QPushButton>
 #include <QLabel>
 #include <events.h>
 #include <QJsonArray>
@@ -50,6 +49,7 @@ private:
         std::map<float, float> points;
     };
 
+    QString name;
     LineGraph* lineGraph;
     GraphStats stats;
     std::map<QString, DataPoints> sources;
@@ -61,7 +61,6 @@ private:
     QScrollArea* scrollarea;
     QGridLayout* layout;
     QTabWidget* tabWidget;
-    QPushButton* qButton;
     QLabel* draggable;
     QListView *listview;
 
