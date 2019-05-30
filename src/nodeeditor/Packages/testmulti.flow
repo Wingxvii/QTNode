@@ -1,0 +1,36 @@
+{
+    "connections": [
+        {
+            "in_id": "{ffb1ffc8-8e6e-4561-abe4-9b08de6e1490}",
+            "in_index": 0,
+            "out_id": "{d5a55178-6861-44c2-90b9-03aa00d2a401}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{ffb1ffc8-8e6e-4561-abe4-9b08de6e1490}",
+            "model": {
+                "byPass": 50,
+                "endFrame": 2500,
+                "isReady": true,
+                "name": "Automatic Frame Iterator",
+                "startFrame": 500
+            },
+            "position": {
+                "x": 249,
+                "y": 53
+            }
+        },
+        {
+            "id": "{d5a55178-6861-44c2-90b9-03aa00d2a401}",
+            "model": {
+                "name": "Video Source"
+            },
+            "position": {
+                "x": -17,
+                "y": 50
+            }
+        }
+    ]
+}

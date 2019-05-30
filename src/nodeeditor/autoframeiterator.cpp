@@ -18,7 +18,7 @@ AutoFrameIterator::AutoFrameIterator()
     endFrameInput = new QLineEdit();
     byPassLabel = new QLabel("Bypass: ");
     byPassInput = new QLineEdit();
-    progressBar = new QProgressBar();
+    progressBar = new QLabel("Inactive");
     projectedSamplesLabel = new QLabel("Estimated number of samples: ");
     projectedSamplesDisplay = new QLabel(QString::number(projectedSamples));
 
@@ -169,7 +169,7 @@ void AutoFrameIterator::restore(const QJsonObject & json)
 void AutoFrameIterator::processData()
 {
     //setup progress bar parameters
-    progressBar->setMaximum(100);
+    progressBar->setText("Processing...");
 
     funct = QtConcurrent::run(this, &AutoFrameIterator::multiThreadedProcess);
     functWatcher.setFuture(funct);
@@ -267,7 +267,7 @@ void AutoFrameIterator::multiThreadedProcess()
 
 void AutoFrameIterator::multiThreadedFinished()
 {
-    progressBar->setValue(100);
+    progressBar->setText("Finished");
     imagesOut->ready();
     emit dataUpdated(0);
     updateUI();

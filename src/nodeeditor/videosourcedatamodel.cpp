@@ -8,7 +8,7 @@ VideoSourceDataModel::VideoSourceDataModel()
     layout = new QVBoxLayout;
 
     button = new QPushButton("Choose Video");
-    progressBar = new QProgressBar();
+    progressBar = new QLabel("Inactive");
 
     connect(button, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
@@ -59,7 +59,7 @@ void VideoSourceDataModel::processData()
     QString fileName = QFileDialog::getOpenFileName(button, tr("Choose Video"), "");
     cv::VideoCapture capture(fileName.toStdString());
 
-    progressBar->setMaximum(capture.get(cv::CAP_PROP_FRAME_COUNT));
+    progressBar->setText("Processing...");
 
     funct = QtConcurrent::run(this, &VideoSourceDataModel::multiThreadedProcess, capture);
     functWatcher.setFuture(funct);
@@ -119,7 +119,7 @@ void VideoSourceDataModel::multiThreadedProcess(cv::VideoCapture capture)
 void VideoSourceDataModel::multiThreadedFinished()
 {
     LOG_JOHN() << "Emitted Update";
-    progressBar->setValue(progressBar->maximum());
+    progressBar->setText("Finished");
     emit dataUpdated(0);
 }
 

@@ -75,7 +75,7 @@ public: //multithread
 
     QFuture<void> funct;
     QFutureWatcher<void> functWatcher;
-    QProgressBar *progressBar;
+    QLabel *progressBar;
 public slots:
     void multiThreadedFinished();
 
