@@ -80,13 +80,7 @@ void GraphController::updateGraphs()
 
 void GraphController::closeDockedWidget()
 {
-    clearWidgets(dockedContainer->data->getLayout());
-    graphLayout->removeWidget(dockedContainer->data->getContainer());
 
-    eventData.erase(dockedContainer->data->getName());
-    if(!eventData.empty()){
-        dockedContainer = eventData.begin()->second;
-    }
 }
 
 void GraphController::switchWidget(GraphDataContainer* container)
@@ -119,7 +113,6 @@ void GraphController::setWidgetDocked(GraphDataContainer* container)
     LOG_CAMPBELL() << "set to window widget";
     container->currentWidget = graphLayout;
 
-    graphLayout->removeWidget(dockedContainer->data->getContainer());
     graphLayout->addWidget(container->data->getContainer());
     container->dock->hide();
     container->data->setDraggable(true);

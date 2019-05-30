@@ -245,10 +245,6 @@ void SensorManager::on_blackList_clicked()
     testing.exec();
 }
 
-void SensorManager::on_events_closed(QString eventName)
-{
-
-}
 
 //Emits signal to tell main to make a new dock for the given sensor
 //Also outputs the sensors data to the console for debugging
@@ -380,6 +376,11 @@ void SensorManager::createNew()
     emit createVirtual("events" + QString::number(eventsIndex + 1));
     emit graphOpened("events" + QString::number(virtualIndex + 1));
     eventsIndex++;
+}
+
+void SensorManager::on_events_closed(QString eventName)
+{
+
 }
 
 void SensorManager::openDialog(double time)

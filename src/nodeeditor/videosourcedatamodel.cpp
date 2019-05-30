@@ -8,12 +8,13 @@ VideoSourceDataModel::VideoSourceDataModel()
     layout = new QVBoxLayout;
 
     button = new QPushButton("Choose Video");
-    progress = new QProgressBar();
+    progressBar = new QProgressBar();
 
     connect(button, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
+    connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     layout->addWidget(button);
-    layout->addWidget(progress);
+    layout->addWidget(progressBar);
 
     window->setLayout(layout);
     buildContextWindow();
@@ -57,38 +58,11 @@ void VideoSourceDataModel::processData()
 {
     QString fileName = QFileDialog::getOpenFileName(button, tr("Choose Video"), "");
     cv::VideoCapture capture(fileName.toStdString());
-    progress->setValue(0);
 
-    cv::Mat temp;
-    std::vector<cv::Mat> frames;
-    capture >> temp;
+    progressBar->setMaximum(capture.get(cv::CAP_PROP_FRAME_COUNT));
 
-    int start = 1;
-
-    //setup progress
-    progress->setMaximum(capture.get(cv::CAP_PROP_FRAME_COUNT));
-
-
-    //MULTITHREAD THIS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    while (!temp.empty())
-    {
-        LOG_CAMPBELL() << "id: " + QString::number(start);
-
-        progress->setValue(start);
-        frames.push_back(temp.clone());
-        capture >> temp;
-        start++;
-    }
-
-    double fps = capture.get(cv::CAP_PROP_FPS);
-
-    _data = std::make_shared<VideoGraphData>(frames);
-    if(_data->data().size() > 0){
-        _data->ready();
-    }
-
-    _data->setFrameRate(fps);
-    emit dataUpdated(0);
+    funct = QtConcurrent::run(this, &VideoSourceDataModel::multiThreadedProcess, capture);
+    functWatcher.setFuture(funct);
 
 }
 
@@ -112,6 +86,41 @@ void VideoSourceDataModel::ShowContextMenu(const QPoint &pos)
     contextMenu.addAction(&deactivateAction);
 
     contextMenu.exec(window->mapToGlobal(pos));
+}
+
+void VideoSourceDataModel::multiThreadedProcess(cv::VideoCapture capture)
+{
+
+    cv::Mat temp;
+    std::vector<cv::Mat> frames;
+    capture >> temp;
+    int start = 1;
+
+    while (!temp.empty())
+    {
+        frames.push_back(temp.clone());
+        capture >> temp;
+        start++;
+    }
+
+    double fps = capture.get(cv::CAP_PROP_FPS);
+
+    _data = std::make_shared<VideoGraphData>(frames);
+    if(_data->data().size() > 0){
+        _data->ready();
+    }
+
+    _data->setFrameRate(fps);
+
+    LOG_JOHN() << "Done";
+
+}
+
+void VideoSourceDataModel::multiThreadedFinished()
+{
+    LOG_JOHN() << "Emitted Update";
+    progressBar->setValue(progressBar->maximum());
+    emit dataUpdated(0);
 }
 
 

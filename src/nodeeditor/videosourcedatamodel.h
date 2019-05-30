@@ -9,7 +9,7 @@
 
 #include <nodes/NodeDataModel>
 #include <QPushButton>
-
+#include <QtConcurrent/QtConcurrent>
 #include <iostream>
 
 #include "QLabel"
@@ -60,12 +60,20 @@ public slots:
     void activate(){active = true;window->setStyleSheet("");}
     void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
 
+public: //multithread
 
+    void multiThreadedProcess(cv::VideoCapture capture);
+
+    QFuture<void> funct;
+    QFutureWatcher<void> functWatcher;
+
+public slots:
+    void multiThreadedFinished();
 
 private: //UI
     QVBoxLayout *layout;
     QPushButton *button;
-    QProgressBar *progress;
+    QProgressBar *progressBar;
 
 private: //Ports
     std::shared_ptr<VideoGraphData> _data;

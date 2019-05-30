@@ -98,15 +98,15 @@ void SensorWindow::createMenus()
     ui->menuFIle->addAction(filePlaceAction);
     ui->menuFIle->addAction(fileSaveAction);
     ui->menuFIle->addAction(fileClearAction);
-    ui->menuFIle->addAction(fileCloseAction);
+    //ui->menuFIle->addAction(fileCloseAction);
     ui->menuFIle->addSeparator();
-
 }
 
 void SensorWindow::openSlot()
 {
     LOG_JOHN() << "Open Slot Triggered";
     if(m_graphs->dockedContainer){
+        m_sensorManager->createNew();
         m_graphs->dockedContainer->editor->scene->load();
     }
 }
