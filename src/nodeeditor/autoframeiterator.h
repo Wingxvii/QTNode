@@ -4,6 +4,7 @@
 #include <QtCore/QObject>
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
+#include <QtConcurrent/QtConcurrent>
 
 //data types
 #include "DataTypes/videographdata.h"
@@ -68,6 +69,15 @@ public slots:
     void activate(){active = true;preCheck();window->setStyleSheet("");}
     void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
 
+public: //multithread
+
+    void multiThreadedProcess();
+
+    QFuture<void> funct;
+    QFutureWatcher<void> functWatcher;
+    QProgressBar *progressBar;
+public slots:
+    void multiThreadedFinished();
 
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
@@ -93,7 +103,6 @@ private: //UI
     QLineEdit* endFrameInput;
     QLabel *byPassLabel;
     QLineEdit *byPassInput;
-    QProgressBar *progressBar;
     QLabel *projectedSamplesLabel;
     QLabel *projectedSamplesDisplay;
 

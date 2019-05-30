@@ -41,6 +41,7 @@ AutoFrameIterator::AutoFrameIterator()
     connect(startFrameInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
     connect(endFrameInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
     connect(byPassInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     //build layout
     layout->addWidget(totalFramesLabel, 1,1);
@@ -167,26 +168,13 @@ void AutoFrameIterator::restore(const QJsonObject & json)
 
 void AutoFrameIterator::processData()
 {
-    std::vector<cv::Mat> temp;
-
-    //handle endframe -1
-    int _endFrame = endFrame;
-    if(endFrame == -1){
-        _endFrame = totalFrames;
-    }
-
     //setup progress bar parameters
-    progressBar->setMinimum(startFrame);
-    progressBar->setMaximum(_endFrame);
+    progressBar->setMaximum(100);
 
-    //iterate     //MULTITHREAD THIS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    for(int counter = startFrame; counter < _endFrame; counter += byPass){
-        temp.push_back(videoIn->data().at(counter));
-        progressBar->setValue(counter);
-    }
-    progressBar->setValue(_endFrame);
-    imagesOut->_video = temp;
-    imagesOut->ready();
+    funct = QtConcurrent::run(this, &AutoFrameIterator::multiThreadedProcess);
+    functWatcher.setFuture(funct);
+
+
 }
 
 void AutoFrameIterator::updateUI()
@@ -240,13 +228,10 @@ void AutoFrameIterator::preCheck(){
 
     if(videoIn && videoIn->isReady && isReady && active){
         processData();
-        emit dataUpdated(0);
-        updateUI();
     }else{
         if(imagesOut){imagesOut->unready();}
 
     }
-
 }
 
 void AutoFrameIterator::ShowContextMenu(const QPoint &pos)
@@ -262,5 +247,29 @@ void AutoFrameIterator::ShowContextMenu(const QPoint &pos)
     contextMenu.addAction(&deactivateAction);
 
     contextMenu.exec(window->mapToGlobal(pos));
+}
+
+void AutoFrameIterator::multiThreadedProcess()
+{
+    //handle endframe -1
+    int _endFrame = endFrame;
+    if(endFrame == -1){
+        _endFrame = totalFrames;
+    }
+
+    std::vector<cv::Mat> temp;
+    //iterate
+    for(int counter = startFrame; counter < _endFrame; counter += byPass){
+        temp.push_back(videoIn->data().at(counter));
+    }
+    imagesOut->_video = temp;
+}
+
+void AutoFrameIterator::multiThreadedFinished()
+{
+    progressBar->setValue(100);
+    imagesOut->ready();
+    emit dataUpdated(0);
+    updateUI();
 }
 

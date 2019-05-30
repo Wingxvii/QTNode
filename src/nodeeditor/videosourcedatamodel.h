@@ -66,14 +66,13 @@ public: //multithread
 
     QFuture<void> funct;
     QFutureWatcher<void> functWatcher;
-
+    QProgressBar *progressBar;
 public slots:
     void multiThreadedFinished();
 
 private: //UI
     QVBoxLayout *layout;
     QPushButton *button;
-    QProgressBar *progressBar;
 
 private: //Ports
     std::shared_ptr<VideoGraphData> _data;
