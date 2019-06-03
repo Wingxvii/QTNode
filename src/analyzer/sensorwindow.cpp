@@ -108,20 +108,30 @@ void SensorWindow::newSlot()
 
 void SensorWindow::openSlot()
 {
+    newSlot();
+    nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->load();
 }
 
 void SensorWindow::saveSlot()
 {
+    nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->save();
 }
 
 void SensorWindow::placeSlot()
 {
+    nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->place();
 }
 
 void SensorWindow::clearSlot()
 {
+    nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->clearScene();
 }
 
 void SensorWindow::closeSlot()
 {
+    //is this right???????? idk! someone teach me some pointers
+    NodeEditorContainer* temp = &nodeWindowList[nodeEditorWindow->currentIndex()];
+    nodeEditorWindow->removeTab(nodeEditorWindow->currentIndex());
+    nodeWindowList.removeAt(nodeEditorWindow->currentIndex());
+    delete &temp;
 }
