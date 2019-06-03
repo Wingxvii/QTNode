@@ -222,7 +222,7 @@ MainWindow::MainWindow()
     m_sensorWindow = new SensorWindow();
     m_sensorWindow->show();
 
-    scrubEventLayout = new ScrubEventManager(m_sensorWindow->getManager()->getContainer());
+    scrubEventLayout = new ScrubEventManager(m_sensorWindow->getContainer());
     // Add the player widget.
     m_player = new Player(scrubEventLayout);
     MLT.videoWidget()->installEventFilter(this);
@@ -406,14 +406,15 @@ MainWindow::MainWindow()
     m_encodeDock->onProfileChanged();
 
     //Campbells code
-
+    /*
     connect(ui->actionSensors, SIGNAL(triggered(bool)), this, SLOT(onSensorDockTriggered()));
     connect(m_sensorWindow->getManager(), SIGNAL(graphOpened(QString)), scrubEventLayout, SLOT(eventUpdated(QString)));
     connect(scrubEventLayout, SIGNAL(saveEvents()), m_sensorWindow->getManager(), SLOT(saveEvents()));
     connect(m_player, SIGNAL(videoTime(double)), m_sensorWindow->getManager(), SLOT(videoLength(double)));
     connect(m_sensorWindow->getManager(), SIGNAL(sendSensorDuration(double)), m_player, SLOT(setSensorTime(double)));
     connect(m_sensorWindow->getManager(), SIGNAL(clear()), scrubEventLayout, SLOT(closeEvents()));
-
+    */
+    //John Notes: Fix this at some point
 
     m_jobsDock = new JobsDock(this);
     m_jobsDock->hide();

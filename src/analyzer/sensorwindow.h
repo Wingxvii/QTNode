@@ -3,12 +3,25 @@
 
 #include <QMainWindow>
 #include <QGridLayout>
-#include "analyzer/sensormanager.h"
-#include "analyzer/graphcontoller.h"
+#include "analyzer\filternode.h"
+
+#include <QList>
+#include <QTabWidget>
+#include <QBoxLayout>
+#include <QLabel>
+
 
 namespace Ui {
 class SensorWindow;
 }
+
+//this contains one node editor file
+struct NodeEditorContainer{
+    FilterNode* editor;
+    Events* events;
+    QString name;
+    int index;
+};
 
 class SensorWindow : public QMainWindow
 {
@@ -16,19 +29,15 @@ class SensorWindow : public QMainWindow
 public:
     explicit SensorWindow(QWidget *parent = nullptr);
     void resizeEvent( QResizeEvent *e );
-    SensorManager* getManager();
 
-signals:
-    //signal that we want to redraw the
-    void redraw();
+    //system that interacts with Shotcut
+    EventContainer* getContainer();
+    EventSystem sensorEvents;
 
 private:
-    SensorManager* m_sensorManager;
-    GraphController* m_graphs;
 
     Ui::SensorWindow* ui;
     QSize currentSize;
-
     int refreshSize;
 
 
@@ -46,13 +55,22 @@ private:
     QAction* fileClearAction;
     QAction* fileCloseAction;
 
+private: //replace sensormanager
+
+    QTabWidget* nodeEditorWindow;
+    QList<NodeEditorContainer> nodeWindowList;
+
+    QWidget* leftDataWindow;
+    QBoxLayout* leftDataWindowLayout;
 
 public slots:
+    void newSlot();
     void openSlot();
     void saveSlot();
     void placeSlot();
     void clearSlot();
     void closeSlot();
+
 
 };
 

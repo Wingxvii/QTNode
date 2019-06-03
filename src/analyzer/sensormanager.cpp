@@ -23,7 +23,6 @@ SensorManager::SensorManager(QWidget *parent) :
     sensorEvents()
 {
 
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     resize(0, 0);
     LOG_CAMPBELL() << "begin";
     model = new QStringListModel(this);

@@ -1,6 +1,5 @@
 #include "sensorwindow.h"
 #include "ui_sensorwindow.h"
-#include <QLabel>
 #include <Logger.h>
 #include <QResizeEvent>
 
@@ -8,31 +7,20 @@ SensorWindow::SensorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::SensorWindow)
 {
-    ui->setupUi(this);
-    ui->titles->addWidget(new QLabel("testing"));
+    //ui
+    nodeEditorWindow = new QTabWidget();
 
-    m_sensorManager = new SensorManager(this);
+    ui->setupUi(this);
+    //ui->titles->addWidget(new QLabel("testing"));
+    ui->titles->addWidget(nodeEditorWindow);
+
+    createActions();
 
     //setup
     ui->options->setSizeConstraint(QLayout::SetFixedSize);
-    m_sensorManager->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    ui->options->addWidget(m_sensorManager, 0);
-    m_sensorManager->adjustSize();
-
-    m_graphs = new GraphController(m_sensorManager->getContainer(), this, ui->graphs);
-
-    connect(this, SIGNAL(redraw()), m_graphs, SLOT(updateGraphs()));
-    connect(m_sensorManager, SIGNAL(createGraphDoc(QString,QJsonArray)), m_graphs, SLOT(setupData(QString, QJsonArray)));
-    connect(m_sensorManager, SIGNAL(graphOpened(QString)), m_graphs, SLOT(setDocked(QString)));
-    connect(m_sensorManager, SIGNAL(clear()), m_graphs, SLOT(ClearData()));
-    connect(m_sensorManager, SIGNAL(createEvents(QString)), m_graphs, SLOT(createEvents(QString)));
-    connect(m_sensorManager, SIGNAL(createVirtual(QString)), m_graphs, SLOT(createVirtual(QString)));
-
     refreshSize = 200;
 
-    //setup menu bar
-    createActions();
-    createMenus();
+
 }
 
 void SensorWindow::resizeEvent(QResizeEvent *e)
@@ -50,21 +38,21 @@ void SensorWindow::resizeEvent(QResizeEvent *e)
         LOG_CAMPBELL() << QString::number(temp.width());
 
         currentSize = e->size();
-        emit redraw();
     }
 }
 
-SensorManager* SensorWindow::getManager()
+EventContainer *SensorWindow::getContainer()
 {
-    return m_sensorManager;
+    return &sensorEvents;
 }
+
 
 void SensorWindow::createActions()
 {
     fileNewAction = new QAction(tr("&New"), this);
     fileNewAction->setShortcut(QKeySequence::New);
     fileNewAction->setStatusTip("Create a new file");
-    connect(fileNewAction, SIGNAL(triggered()), m_sensorManager, SLOT(createNew()));
+    connect(fileNewAction, SIGNAL(triggered()), this, SLOT(newSlot()));
 
     fileOpenAction = new QAction(tr("&Open..."), this);
     fileOpenAction->setShortcut(QKeySequence::Open);
@@ -88,7 +76,7 @@ void SensorWindow::createActions()
     fileCloseAction->setStatusTip("Close selected file without saving");
     connect(fileCloseAction, SIGNAL(triggered()), this, SLOT(closeSlot()));
 
-
+    createMenus();
 }
 
 void SensorWindow::createMenus()
@@ -98,48 +86,42 @@ void SensorWindow::createMenus()
     ui->menuFIle->addAction(filePlaceAction);
     ui->menuFIle->addAction(fileSaveAction);
     ui->menuFIle->addAction(fileClearAction);
-    //ui->menuFIle->addAction(fileCloseAction);
+    ui->menuFIle->addAction(fileCloseAction);
     ui->menuFIle->addSeparator();
+}
+
+void SensorWindow::newSlot()
+{
+    //create the container
+    NodeEditorContainer *container = new NodeEditorContainer();
+    container->name = "Container #" + QString::number(nodeWindowList.size());
+    container->index = nodeWindowList.size();
+    container->events = new Events();                      //this doesnt do anything yet
+    container->editor = new FilterNode(container->events);
+
+    //then add a tab
+    nodeEditorWindow->addTab(container->editor, container->name);
+
+    //and push it into the list
+    nodeWindowList.push_back(*container);
 }
 
 void SensorWindow::openSlot()
 {
-    LOG_JOHN() << "Open Slot Triggered";
-    if(m_graphs->dockedContainer){
-        m_sensorManager->createNew();
-        m_graphs->dockedContainer->editor->scene->load();
-    }
 }
 
 void SensorWindow::saveSlot()
 {
-    if(m_graphs->dockedContainer){
-        m_graphs->dockedContainer->editor->scene->save();
-    }
-
-    LOG_JOHN() << "Save Slot Triggered";
 }
 
 void SensorWindow::placeSlot()
 {
-    if(m_graphs->dockedContainer){
-        m_graphs->dockedContainer->editor->scene->place();
-    }
-
-    LOG_JOHN() << "Place Slot Triggered";
-
 }
 
 void SensorWindow::clearSlot()
 {
-    if(m_graphs->dockedContainer){
-        m_graphs->dockedContainer->editor->scene->clearScene();
-    }
 }
 
 void SensorWindow::closeSlot()
 {
-    if(m_graphs->dockedContainer){
-        m_graphs->closeDockedWidget();
-    }
 }
