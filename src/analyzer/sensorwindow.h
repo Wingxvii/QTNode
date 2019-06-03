@@ -9,6 +9,7 @@
 #include <QTabWidget>
 #include <QBoxLayout>
 #include <QLabel>
+#include <QInputDialog>
 
 
 namespace Ui {

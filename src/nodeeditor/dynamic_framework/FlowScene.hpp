@@ -99,6 +99,8 @@ public:
 
   void loadFromMemory(const QByteArray& data);
 
+  QString currentFileName;
+
 signals:
 
   void nodeCreated(Node &n);

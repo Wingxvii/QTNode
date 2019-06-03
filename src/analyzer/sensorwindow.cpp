@@ -12,12 +12,12 @@ SensorWindow::SensorWindow(QWidget *parent) :
 
     ui->setupUi(this);
     //ui->titles->addWidget(new QLabel("testing"));
-    ui->titles->addWidget(nodeEditorWindow);
+    ui->MainLayout->addWidget(nodeEditorWindow);
 
     createActions();
 
     //setup
-    ui->options->setSizeConstraint(QLayout::SetFixedSize);
+    //ui->MainLayout->setSizeConstraint(QLayout::SetFixedSize);
     refreshSize = 200;
 
 
@@ -92,10 +92,13 @@ void SensorWindow::createMenus()
 
 void SensorWindow::newSlot()
 {
+
+    QString name = QInputDialog::getText(this, "Name File", "Input a name: ");
+
     //create the container
     NodeEditorContainer *container = new NodeEditorContainer();
-    container->name = "Container #" + QString::number(nodeWindowList.size());
-    container->index = nodeWindowList.size();
+    container->name = name;
+    container->index = nodeWindowList.size()-1;
     container->events = new Events();                      //this doesnt do anything yet
     container->editor = new FilterNode(container->events);
 
@@ -109,7 +112,10 @@ void SensorWindow::newSlot()
 void SensorWindow::openSlot()
 {
     newSlot();
+    nodeEditorWindow->setCurrentIndex(nodeWindowList.size()-1);
     nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->load();
+    nodeEditorWindow->setTabText(nodeEditorWindow->currentIndex(),nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->currentFileName);
+
 }
 
 void SensorWindow::saveSlot()
@@ -129,9 +135,6 @@ void SensorWindow::clearSlot()
 
 void SensorWindow::closeSlot()
 {
-    //is this right???????? idk! someone teach me some pointers
-    NodeEditorContainer* temp = &nodeWindowList[nodeEditorWindow->currentIndex()];
     nodeEditorWindow->removeTab(nodeEditorWindow->currentIndex());
     nodeWindowList.removeAt(nodeEditorWindow->currentIndex());
-    delete &temp;
 }

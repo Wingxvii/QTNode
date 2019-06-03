@@ -488,10 +488,12 @@ load()
 
   if (!file.open(QIODevice::ReadOnly))
     return;
+  currentFileName = fileName;
 
   clearScene();
 
   QByteArray wholeFile = file.readAll();
+
 
   loadFromMemory(wholeFile);
 }
@@ -512,8 +514,10 @@ void FlowScene::place()
 
     QFile file(fileName);
 
+
     if (!file.open(QIODevice::ReadOnly))
       return;
+    currentFileName = fileName;
 
     QByteArray wholeFile = file.readAll();
 
