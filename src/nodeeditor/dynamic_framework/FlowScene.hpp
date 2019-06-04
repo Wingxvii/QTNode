@@ -89,7 +89,7 @@ public:
 
   void clearScene();
 
-  void save() const;
+  void save();
 
   void load();
 
@@ -99,7 +99,7 @@ public:
 
   void loadFromMemory(const QByteArray& data);
 
-  QString currentFileName;
+  QString currentFileName;  //name of file opened
 
 signals:
 

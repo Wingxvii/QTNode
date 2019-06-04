@@ -16,9 +16,13 @@ SensorWindow::SensorWindow(QWidget *parent) :
 
     createActions();
 
+    //connections
+
+
     //setup
     //ui->MainLayout->setSizeConstraint(QLayout::SetFixedSize);
     refreshSize = 200;
+
 
 
 }
@@ -111,16 +115,36 @@ void SensorWindow::newSlot()
 
 void SensorWindow::openSlot()
 {
-    newSlot();
+
+    //create the container
+    NodeEditorContainer *container = new NodeEditorContainer();
+    container->name = "Opening File...";
+    container->index = nodeWindowList.size()-1;
+    container->events = new Events();                      //this doesnt do anything yet
+    container->editor = new FilterNode(container->events);
+
+    //then add a tab
+    nodeEditorWindow->addTab(container->editor, container->name);
+
+    //and push it into the list
+    nodeWindowList.push_back(*container);
+
     nodeEditorWindow->setCurrentIndex(nodeWindowList.size()-1);
     nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->load();
+    if(nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->currentFileName != ""){
     nodeEditorWindow->setTabText(nodeEditorWindow->currentIndex(),nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->currentFileName);
+    }else{
+        closeSlot();
+    }
 
 }
 
 void SensorWindow::saveSlot()
 {
     nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->save();
+    if(nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->currentFileName != ""){
+        nodeEditorWindow->setTabText(nodeEditorWindow->currentIndex(),nodeWindowList[nodeEditorWindow->currentIndex()].editor->scene->currentFileName);
+    }
 }
 
 void SensorWindow::placeSlot()

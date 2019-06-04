@@ -446,7 +446,7 @@ clearScene()
 
 void
 FlowScene::
-save() const
+save()
 {
   QString fileName =
     QFileDialog::getSaveFileName(nullptr,
@@ -456,6 +456,8 @@ save() const
 
   if (!fileName.isEmpty())
   {
+     currentFileName = fileName;
+
     if (!fileName.endsWith("flow", Qt::CaseInsensitive))
       fileName += ".flow";
 

@@ -161,7 +161,8 @@ SOURCES += main.cpp\
     nodeeditor/dynamic_framework/NodeState.cpp \
     nodeeditor/dynamic_framework/NodeStyle.cpp \
     nodeeditor/dynamic_framework/Properties.cpp \
-    nodeeditor/dynamic_framework/StyleCollection.cpp
+    nodeeditor/dynamic_framework/StyleCollection.cpp \
+    analyzer/linkmanager.cpp
 
 
 
@@ -335,7 +336,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/dynamic_framework/Serializable.hpp \
     nodeeditor/dynamic_framework/Style.hpp \
     nodeeditor/dynamic_framework/StyleCollection.hpp \
-    nodeeditor/dynamic_framework/TypeConverter.hpp
+    nodeeditor/dynamic_framework/TypeConverter.hpp \
+    analyzer/linkmanager.h
 
 
 

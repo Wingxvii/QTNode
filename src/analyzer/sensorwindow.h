@@ -21,6 +21,7 @@ struct NodeEditorContainer{
     FilterNode* editor;
     Events* events;
     QString name;
+    QString fileName;
     int index;
 };
 
