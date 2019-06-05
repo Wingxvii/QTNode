@@ -4,67 +4,82 @@ LinkManager* LinkManager::m_instance = 0;
 
 LinkManager::LinkManager()
 {
-    calibList = QList<std::shared_ptr<CalibData>>();
-    imageList = QList<std::shared_ptr<ImageData>>();
-    pointList = QList<std::shared_ptr<PointData>>();
-    pointsList = QList<std::shared_ptr<PointsData>>();
-    videoGraphList = QList<std::shared_ptr<VideoGraphData>>();
+    calibList = std::map<QString, std::shared_ptr<CalibData>>();
+    imageList = std::map<QString, std::shared_ptr<ImageData>>();
+    pointList = std::map<QString, std::shared_ptr<PointData>>();
+    pointsList = std::map<QString, std::shared_ptr<PointsData>>();
+    videoGraphList = std::map<QString, std::shared_ptr<VideoGraphData>>();
 
 }
 
-void LinkManager::sendData(std::shared_ptr<CalibData> data, int index)
+void LinkManager::sendData(std::shared_ptr<CalibData> data, QString name)
 {
-    calibList[index] = data;
-    emit calibUpdated(index);
+    calibList[name] = data;
+    emit calibUpdated(name);
 }
 
-void LinkManager::sendData(std::shared_ptr<ImageData> data, int index)
+void LinkManager::sendData(std::shared_ptr<ImageData> data, QString name)
 {
-    imageList[index] = data;
-    emit imageUpdated(index);
+    imageList[name] = data;
+    emit imageUpdated(name);
 }
 
-void LinkManager::sendData(std::shared_ptr<PointData> data, int index)
+void LinkManager::sendData(std::shared_ptr<PointData> data, QString name)
 {
-    pointList[index] = data;
-    emit pointUpdated(index);
+    pointList[name] = data;
+    emit pointUpdated(name);
 }
 
-void LinkManager::sendData(std::shared_ptr<PointsData> data, int index)
+void LinkManager::sendData(std::shared_ptr<PointsData> data, QString name)
 {
-    pointsList[index] = data;
-    emit pointsUpdated(index);
+    pointsList[name] = data;
+    emit pointsUpdated(name);
 }
 
-void LinkManager::sendData(std::shared_ptr<VideoGraphData> data, int index)
+void LinkManager::sendData(std::shared_ptr<VideoGraphData> data, QString name)
 {
-    videoGraphList[index] = data;
-    emit videoUpdated(index);
+    videoGraphList[name] = data;
+    emit videoUpdated(name);
 }
 
-std::shared_ptr<CalibData> LinkManager::getCalibData(int index)
+std::shared_ptr<CalibData> LinkManager::getCalibData(QString name)
 {
-    return calibList[index];
+    if(calibList.find(name) == calibList.end()){
+        return NULL;
+    }
+    return calibList[name];
+
+}
+std::shared_ptr<ImageData> LinkManager::getImageData(QString name)
+{
+    if(imageList.find(name) == imageList.end()){
+        return NULL;
+    }
+    return imageList[name];
 }
 
-std::shared_ptr<ImageData> LinkManager::getImageData(int index)
+std::shared_ptr<PointData> LinkManager::getPointData(QString name)
 {
-    return imageList[index];
+    if(pointList.find(name) == pointList.end()){
+        return NULL;
+    }
+    return pointList[name];
 }
 
-std::shared_ptr<PointData> LinkManager::getPointData(int index)
+std::shared_ptr<PointsData> LinkManager::getPointsData(QString name)
 {
-    return pointList[index];
+    if(pointsList.find(name) == pointsList.end()){
+        return NULL;
+    }
+    return pointsList[name];
 }
 
-std::shared_ptr<PointsData> LinkManager::getPointsData(int index)
+std::shared_ptr<VideoGraphData> LinkManager::getVideoData(QString name)
 {
-    return pointsList[index];
-}
-
-std::shared_ptr<VideoGraphData> LinkManager::getVideoData(int index)
-{
-    return videoGraphList[index];
+    if(videoGraphList.find(name) == videoGraphList.end()){
+        return NULL;
+    }
+    return videoGraphList[name];
 }
 
 void LinkManager::clearAllData()

@@ -27,32 +27,23 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
-enum dataTypes{
-    NONE = -1,
-   CALIBDATATYPE = 0,
-    IMAGEDATATYPE = 1,
-    POINTDATATYPE = 2,
-    POINTSDATATYPE = 3,
-    VIDEODATATYPE = 4
 
-};
-
-class LinkIn : public NodeDataModel{
+class CalibLinkIn : public NodeDataModel{
 Q_OBJECT
 
 public:
-    LinkIn();
-    virtual ~LinkIn() {}
+    CalibLinkIn();
+    virtual ~CalibLinkIn() {}
 
     QString caption()const override{
-        return QStringLiteral("Linker Input");
+        return QStringLiteral("Calib Linker Input");
     }
 
     bool captionVisible(){
         return true;
     }
     QString name()const override{
-        return QStringLiteral("Linker Input");
+        return QStringLiteral("Calib Linker Input");
     }
 
 public:
@@ -82,11 +73,10 @@ public slots:
 
 private: //ports
 
-    std::shared_ptr<QtNodes::NodeData> dataIn;
+    std::shared_ptr<CalibData> dataIn;
 
 private: //locals
-    dataTypes inDataType = NONE;
-    int index;
+    QString index = "";
 
 private: //UI
 
@@ -94,10 +84,6 @@ private: //UI
     QLabel *statusLabel;
     QLabel *indexLabel;
     QLineEdit* indexInput;
-    QLabel *typeSelectorLabel;
-    QComboBox *typeSelection;
-
-    QRegExpValidator* intPos;
 
 };
 

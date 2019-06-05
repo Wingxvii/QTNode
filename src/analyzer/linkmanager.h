@@ -27,37 +27,37 @@ public:
     }
 
 
-    void sendData(std::shared_ptr<CalibData> data, int index);
-    void sendData(std::shared_ptr<ImageData> data, int index);
-    void sendData(std::shared_ptr<PointData> data, int index);
-    void sendData(std::shared_ptr<PointsData> data, int index);
-    void sendData(std::shared_ptr<VideoGraphData> data, int index);
+    void sendData(std::shared_ptr<CalibData> data, QString name);
+    void sendData(std::shared_ptr<ImageData> data, QString name);
+    void sendData(std::shared_ptr<PointData> data, QString name);
+    void sendData(std::shared_ptr<PointsData> data, QString name);
+    void sendData(std::shared_ptr<VideoGraphData> data, QString name);
 
-    std::shared_ptr<CalibData> getCalibData(int index);
-    std::shared_ptr<ImageData> getImageData(int index);
-    std::shared_ptr<PointData> getPointData(int index);
-    std::shared_ptr<PointsData> getPointsData(int index);
-    std::shared_ptr<VideoGraphData> getVideoData(int index);
+    std::shared_ptr<CalibData> getCalibData(QString name);
+    std::shared_ptr<ImageData> getImageData(QString name);
+    std::shared_ptr<PointData> getPointData(QString name);
+    std::shared_ptr<PointsData> getPointsData(QString name);
+    std::shared_ptr<VideoGraphData> getVideoData(QString name);
 
     void clearAllData();
 
 signals:
-    void calibUpdated(int index);
-    void imageUpdated(int index);
-    void pointUpdated(int index);
-    void pointsUpdated(int index);
-    void videoUpdated(int index);
+    void calibUpdated(QString name);
+    void imageUpdated(QString name);
+    void pointUpdated(QString name);
+    void pointsUpdated(QString name);
+    void videoUpdated(QString name);
 
 private:
 
     LinkManager();
     ~LinkManager(){}
 
-    QList<std::shared_ptr<CalibData>> calibList;
-    QList<std::shared_ptr<ImageData>> imageList;
-    QList<std::shared_ptr<PointData>> pointList;
-    QList<std::shared_ptr<PointsData>> pointsList;
-    QList<std::shared_ptr<VideoGraphData>> videoGraphList;
+    std::map<QString, std::shared_ptr<CalibData>> calibList;
+    std::map<QString, std::shared_ptr<ImageData>> imageList;
+    std::map<QString, std::shared_ptr<PointData>> pointList;
+    std::map<QString, std::shared_ptr<PointsData>> pointsList;
+    std::map<QString, std::shared_ptr<VideoGraphData>> videoGraphList;
 };
 
 #endif // LINKMANAGER_H
