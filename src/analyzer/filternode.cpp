@@ -35,6 +35,7 @@
 #include "nodeeditor/undistort.h"
 #include "nodeeditor/videodisplay.h"
 #include "nodeeditor/imagedisplay.h"
+#include "nodeeditor/linkin.h"
 
 
 
@@ -86,6 +87,8 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<Calibrate>("Calibration");
     final->registerModel<CalibInfo>("Calibration");
     final->registerModel<UnDistort>("Calibration");
+
+    final->registerModel<LinkIn>("Linking");
 
     scene->setRegistry(final);
     layout->addWidget(new FlowView(scene));

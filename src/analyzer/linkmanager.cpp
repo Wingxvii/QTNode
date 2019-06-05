@@ -1,52 +1,68 @@
 #include "linkmanager.h"
 
+LinkManager* LinkManager::m_instance = 0;
 
-void LinkManager::sendData(CalibData data, int index)
+LinkManager::LinkManager()
+{
+    calibList = QList<std::shared_ptr<CalibData>>();
+    imageList = QList<std::shared_ptr<ImageData>>();
+    pointList = QList<std::shared_ptr<PointData>>();
+    pointsList = QList<std::shared_ptr<PointsData>>();
+    videoGraphList = QList<std::shared_ptr<VideoGraphData>>();
+
+}
+
+void LinkManager::sendData(std::shared_ptr<CalibData> data, int index)
 {
     calibList[index] = data;
+    emit calibUpdated(index);
 }
 
-void LinkManager::sendData(ImageData data, int index)
+void LinkManager::sendData(std::shared_ptr<ImageData> data, int index)
 {
     imageList[index] = data;
+    emit imageUpdated(index);
 }
 
-void LinkManager::sendData(PointData data, int index)
+void LinkManager::sendData(std::shared_ptr<PointData> data, int index)
 {
     pointList[index] = data;
+    emit pointUpdated(index);
 }
 
-void LinkManager::sendData(PointsData data, int index)
+void LinkManager::sendData(std::shared_ptr<PointsData> data, int index)
 {
     pointsList[index] = data;
+    emit pointsUpdated(index);
 }
 
-void LinkManager::sendData(VideoGraphData data, int index)
+void LinkManager::sendData(std::shared_ptr<VideoGraphData> data, int index)
 {
     videoGraphList[index] = data;
+    emit videoUpdated(index);
 }
 
-CalibData LinkManager::getCalibData(int index)
+std::shared_ptr<CalibData> LinkManager::getCalibData(int index)
 {
     return calibList[index];
 }
 
-ImageData LinkManager::getImageData(int index)
+std::shared_ptr<ImageData> LinkManager::getImageData(int index)
 {
     return imageList[index];
 }
 
-PointData LinkManager::getPointData(int index)
+std::shared_ptr<PointData> LinkManager::getPointData(int index)
 {
     return pointList[index];
 }
 
-PointsData LinkManager::getPointsData(int index)
+std::shared_ptr<PointsData> LinkManager::getPointsData(int index)
 {
     return pointsList[index];
 }
 
-VideoGraphData LinkManager::getVideoData(int index)
+std::shared_ptr<VideoGraphData> LinkManager::getVideoData(int index)
 {
     return videoGraphList[index];
 }
@@ -59,3 +75,5 @@ void LinkManager::clearAllData()
     pointsList.clear();
     videoGraphList.clear();
 }
+
+
