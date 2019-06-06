@@ -49,9 +49,13 @@ NodeDataType VideoSourceDataModel::dataType(PortType, PortIndex) const
     return VideoGraphData().type();
 }
 
-std::shared_ptr<NodeData> VideoSourceDataModel::outData(PortIndex)
+std::shared_ptr<NodeData> VideoSourceDataModel::outData(PortIndex port)
 {
+    if(_data){
     return _data;
+    }
+    return NULL;
+
 }
 
 void VideoSourceDataModel::processData()

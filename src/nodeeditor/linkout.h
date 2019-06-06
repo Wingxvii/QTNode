@@ -1,5 +1,5 @@
-#ifndef LINKIN_H
-#define LINKIN_H
+#ifndef LINKOUT_H
+#define LINKOUT_H
 
 #include <QtCore/QObject>
 #include <nodes/NodeDataModel>
@@ -28,33 +28,33 @@ using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
 
-class CalibLinkIn : public NodeDataModel{
-Q_OBJECT
+class CalibLinkOut : public NodeDataModel{
+    Q_OBJECT
 
 public:
-    CalibLinkIn();
-    virtual ~CalibLinkIn() {}
+    CalibLinkOut();
+    virtual ~CalibLinkOut(){}
 
     QString caption()const override{
-        return QStringLiteral("Calib Linker Input");
+        return QStringLiteral("Calib Linker Output");
     }
 
     bool captionVisible(){
         return true;
     }
     QString name()const override{
-        return QStringLiteral("Calib Linker Input");
+        return QStringLiteral("Calib Linker Output");
     }
 
 public:
     unsigned int nPorts(PortType portType) const override;
     NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
-    std::shared_ptr<NodeData> outData(PortIndex port) override{return NULL;}
-    void setInData(std::shared_ptr<NodeData>, int) override;
+    std::shared_ptr<NodeData> outData(PortIndex port) override;
+    void setInData(std::shared_ptr<NodeData>, int) override{}
 
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
-    bool resizable() const override {return false;}
+    bool resizable() const override{return false;}
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
@@ -73,7 +73,7 @@ public slots:
 
 private: //ports
 
-    std::shared_ptr<CalibData> dataIn;
+    std::shared_ptr<CalibData> dataOut;
 
 private: //locals
     QString index = "";
@@ -87,4 +87,5 @@ private: //UI
 
 };
 
-#endif // LINKIN_H
+
+#endif // LINKOUT_H

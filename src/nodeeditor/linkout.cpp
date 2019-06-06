@@ -1,7 +1,6 @@
-#include "linkin.h"
+#include "linkout.h"
 
-
-CalibLinkIn::CalibLinkIn()
+CalibLinkOut::CalibLinkOut()
 {
     layout = new QGridLayout;
     window = new QWidget;
@@ -28,84 +27,66 @@ CalibLinkIn::CalibLinkIn()
     preCheck();
 }
 
-unsigned int CalibLinkIn::nPorts(QtNodes::PortType portType) const
+
+unsigned int CalibLinkOut::nPorts(QtNodes::PortType portType) const
 {
     unsigned int result = 1;
     switch(portType){
     case PortType::In:
-        result = 1;
+        result = 0;
         break;
     case PortType::Out:
-        result = 0;
+        result = 1;
         break;
     default:
         break;
 
     }
     return result;
+
 }
 
-QtNodes::NodeDataType CalibLinkIn::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const
+QtNodes::NodeDataType CalibLinkOut::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const
 {
     return CalibData().type();
 }
 
-void CalibLinkIn::setInData(std::shared_ptr<QtNodes::NodeData> data, int location)
+std::shared_ptr<QtNodes::NodeData> CalibLinkOut::outData(QtNodes::PortIndex port)
 {
-    switch(location){
+    switch(port){
     case 0:
-    dataIn = std::dynamic_pointer_cast<CalibData>(data);
-        if(dataIn){
-            modelValidationState = NodeValidationState::Valid;
-            modelValidationError = QString();
-
-            //instantiate output
-            preCheck();
-        }
-       else{
-          modelValidationState = NodeValidationState::Warning;
-          modelValidationError = QStringLiteral("Missing or incorrect inputs");
-        }
-    break;
+    if(dataOut){
+        return dataOut;
+    }
+        break;
+    return NULL;
     }
 }
 
-QtNodes::NodeValidationState CalibLinkIn::validationState() const
+void CalibLinkOut::processData()
 {
-    return modelValidationState;
+    dataOut = LinkManager::instance()->getCalibData(index);
 }
 
-QString CalibLinkIn::validationMessage() const
-{
-    return modelValidationError;
-}
-
-void CalibLinkIn::processData()
-{
-    std::shared_ptr<CalibData> calibOut;
-    calibOut = std::dynamic_pointer_cast<CalibData>(dataIn);
-    LinkManager::instance()->sendData(calibOut ,index);
-}
-
-void CalibLinkIn::preCheck()
+void CalibLinkOut::preCheck()
 {
     index = indexInput->text();
 
     if(LinkManager::instance()->getCalibData(index)){
-        statusLabel->setText("Data Slot In Use");
+        statusLabel->setText("Data Active");
     }else{
         statusLabel->setText("Data Slot Empty");
     }
-
     LOG_JOHN() << "Checkers";
-    if(this->active && dataIn &&dataIn->isReady){
+    if(this->active && LinkManager::instance()->getCalibData(index)){
         LOG_JOHN() << "Thing works";
         processData();
-        statusLabel->setText("Data Slot Updated");
+        emit dataUpdated(0);
     }
+
 }
 
-void CalibLinkIn::ShowContextMenu(const QPoint &pos)
+void CalibLinkOut::ShowContextMenu(const QPoint &pos)
 {
     QMenu contextMenu(tr("Context menu"));
 
@@ -118,5 +99,6 @@ void CalibLinkIn::ShowContextMenu(const QPoint &pos)
     contextMenu.addAction(&deactivateAction);
 
     contextMenu.exec(window->mapToGlobal(pos));
+
 }
 

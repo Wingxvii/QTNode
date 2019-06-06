@@ -14,32 +14,42 @@ LinkManager::LinkManager()
 
 void LinkManager::sendData(std::shared_ptr<CalibData> data, QString name)
 {
-    calibList[name] = data;
-    emit calibUpdated(name);
+    if(name != ""){
+        calibList[name] = data;
+        emit calibUpdated(name);
+    }
 }
 
 void LinkManager::sendData(std::shared_ptr<ImageData> data, QString name)
 {
+        if(name != ""){
     imageList[name] = data;
     emit imageUpdated(name);
+        }
 }
 
 void LinkManager::sendData(std::shared_ptr<PointData> data, QString name)
 {
+        if(name != ""){
     pointList[name] = data;
     emit pointUpdated(name);
+        }
 }
 
 void LinkManager::sendData(std::shared_ptr<PointsData> data, QString name)
 {
+        if(name != ""){
     pointsList[name] = data;
     emit pointsUpdated(name);
+        }
 }
 
 void LinkManager::sendData(std::shared_ptr<VideoGraphData> data, QString name)
 {
+        if(name != ""){
     videoGraphList[name] = data;
     emit videoUpdated(name);
+        }
 }
 
 std::shared_ptr<CalibData> LinkManager::getCalibData(QString name)

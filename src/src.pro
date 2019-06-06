@@ -163,7 +163,8 @@ SOURCES += main.cpp\
     nodeeditor/dynamic_framework/Properties.cpp \
     nodeeditor/dynamic_framework/StyleCollection.cpp \
     analyzer/linkmanager.cpp \
-    nodeeditor/linkin.cpp
+    nodeeditor/linkin.cpp \
+    nodeeditor/linkout.cpp
 
 
 
@@ -339,7 +340,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/dynamic_framework/StyleCollection.hpp \
     nodeeditor/dynamic_framework/TypeConverter.hpp \
     analyzer/linkmanager.h \
-    nodeeditor/linkin.h
+    nodeeditor/linkin.h \
+    nodeeditor/linkout.h
 
 
 
