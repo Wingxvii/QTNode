@@ -91,14 +91,7 @@ QtNodes::NodeDataType AutoFrameIterator::dataType(QtNodes::PortType portType, Qt
 
 std::shared_ptr<NodeData> AutoFrameIterator::outData(PortIndex port)
 {
-    switch(port){
-    case 0:
-        if(imagesOut){
-            return imagesOut;
-        }
-        break;
-    return NULL;
-    }
+    return imagesOut;
 }
 
 void AutoFrameIterator::setInData(std::shared_ptr<QtNodes::NodeData> data, int location)

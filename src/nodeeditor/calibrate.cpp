@@ -40,14 +40,10 @@ unsigned int Calibrate::nPorts(QtNodes::PortType portType)const
 std::shared_ptr<NodeData> Calibrate::outData(PortIndex port){
     switch(port){
     case 0:
-        if(cameraMat){
             return cameraMat;
-        }
         break;
     case 1:
-        if(distanceCoeff){
-            return distanceCoeff;
-        }
+        return distanceCoeff;
         break;
     }
     return NULL;

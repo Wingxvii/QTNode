@@ -42,9 +42,7 @@ unsigned int UnDistort::nPorts(QtNodes::PortType portType)const
 std::shared_ptr<NodeData> UnDistort::outData(PortIndex port){
     switch(port){
     case 0:
-        if(videoOut){
             return videoOut;
-        }
         break;
     }
     return NULL;

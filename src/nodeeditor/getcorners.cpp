@@ -49,9 +49,7 @@ unsigned int GetCorners::nPorts(QtNodes::PortType portType)const
 std::shared_ptr<NodeData> GetCorners::outData(PortIndex port){
     switch(port){
     case 0:
-        if(cornersOut){
             return cornersOut;
-        }
         break;
     }
     return NULL;

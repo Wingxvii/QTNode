@@ -63,9 +63,8 @@ unsigned int FrameIterator::nPorts(QtNodes::PortType portType)const
 std::shared_ptr<NodeData> FrameIterator::outData(PortIndex port){
     switch(port){
     case 0:
-        if(frameOut){
+
             return frameOut;
-        }
         break;
     return NULL;
     }

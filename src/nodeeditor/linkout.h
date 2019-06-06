@@ -52,13 +52,11 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override{}
 
-    NodeValidationState validationState() const override;
-    QString validationMessage() const override;
     bool resizable() const override{return false;}
 
 private:
-    NodeValidationState modelValidationState = NodeValidationState::Warning;
-    QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
 
 
 public slots:
@@ -87,5 +85,232 @@ private: //UI
 
 };
 
+class ImageLinkOut : public NodeDataModel{
+    Q_OBJECT
+
+public:
+    ImageLinkOut();
+    virtual ~ImageLinkOut(){}
+
+    QString caption()const override{
+        return QStringLiteral("Image Linker Output");
+    }
+
+    bool captionVisible(){
+        return true;
+    }
+    QString name()const override{
+        return QStringLiteral("Image Linker Output");
+    }
+
+public:
+    unsigned int nPorts(PortType portType) const override;
+    NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+    std::shared_ptr<NodeData> outData(PortIndex port) override;
+    void setInData(std::shared_ptr<NodeData>, int) override{}
+
+    bool resizable() const override{return false;}
+
+private:
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
+
+public slots:
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
+
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
+
+private: //ports
+
+    std::shared_ptr<ImageData> dataOut;
+
+private: //locals
+    QString index = "";
+
+private: //UI
+
+    QGridLayout *layout;
+    QLabel *statusLabel;
+    QLabel *indexLabel;
+    QLineEdit* indexInput;
+
+};
+
+class PointLinkOut : public NodeDataModel{
+    Q_OBJECT
+
+public:
+    PointLinkOut();
+    virtual ~PointLinkOut(){}
+
+    QString caption()const override{
+        return QStringLiteral("Point Linker Output");
+    }
+
+    bool captionVisible(){
+        return true;
+    }
+    QString name()const override{
+        return QStringLiteral("Point Linker Output");
+    }
+
+public:
+    unsigned int nPorts(PortType portType) const override;
+    NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+    std::shared_ptr<NodeData> outData(PortIndex port) override;
+    void setInData(std::shared_ptr<NodeData>, int) override{}
+
+    bool resizable() const override{return false;}
+
+private:
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
+
+public slots:
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
+
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
+
+private: //ports
+
+    std::shared_ptr<PointData> dataOut;
+
+private: //locals
+    QString index = "";
+
+private: //UI
+
+    QGridLayout *layout;
+    QLabel *statusLabel;
+    QLabel *indexLabel;
+    QLineEdit* indexInput;
+
+};
+
+class PointsLinkOut : public NodeDataModel{
+    Q_OBJECT
+
+public:
+    PointsLinkOut();
+    virtual ~PointsLinkOut(){}
+
+    QString caption()const override{
+        return QStringLiteral("Points Linker Output");
+    }
+
+    bool captionVisible(){
+        return true;
+    }
+    QString name()const override{
+        return QStringLiteral("Points Linker Output");
+    }
+
+public:
+    unsigned int nPorts(PortType portType) const override;
+    NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+    std::shared_ptr<NodeData> outData(PortIndex port) override;
+    void setInData(std::shared_ptr<NodeData>, int) override{}
+
+    bool resizable() const override{return false;}
+
+private:
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
+
+public slots:
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
+
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
+
+private: //ports
+
+    std::shared_ptr<PointsData> dataOut;
+
+private: //locals
+    QString index = "";
+
+private: //UI
+
+    QGridLayout *layout;
+    QLabel *statusLabel;
+    QLabel *indexLabel;
+    QLineEdit* indexInput;
+
+};
+
+class VideoLinkOut : public NodeDataModel{
+    Q_OBJECT
+
+public:
+    VideoLinkOut();
+    virtual ~VideoLinkOut(){}
+
+    QString caption()const override{
+        return QStringLiteral("Video Linker Output");
+    }
+
+    bool captionVisible(){
+        return true;
+    }
+    QString name()const override{
+        return QStringLiteral("Video Linker Output");
+    }
+
+public:
+    unsigned int nPorts(PortType portType) const override;
+    NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+    std::shared_ptr<NodeData> outData(PortIndex port) override;
+    void setInData(std::shared_ptr<NodeData>, int) override{}
+
+    bool resizable() const override{return false;}
+
+private:
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
+
+public slots:
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
+
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
+
+private: //ports
+
+    std::shared_ptr<VideoGraphData> dataOut;
+
+private: //locals
+    QString index = "";
+
+private: //UI
+
+    QGridLayout *layout;
+    QLabel *statusLabel;
+    QLabel *indexLabel;
+    QLineEdit* indexInput;
+
+};
 
 #endif // LINKOUT_H
