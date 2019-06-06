@@ -83,7 +83,8 @@ QJsonObject CalibLinkIn::save() const
 {
     QJsonObject dataJson;
 
-    dataJson["Index"] = index;
+    dataJson["name"] = name();
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 }
@@ -91,7 +92,8 @@ QJsonObject CalibLinkIn::save() const
 void CalibLinkIn::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();
@@ -218,8 +220,9 @@ QString ImageLinkIn::validationMessage() const
 QJsonObject ImageLinkIn::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 }
@@ -227,7 +230,8 @@ QJsonObject ImageLinkIn::save() const
 void ImageLinkIn::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();
@@ -356,8 +360,9 @@ QString PointLinkIn::validationMessage() const
 QJsonObject PointLinkIn::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 }
@@ -365,7 +370,8 @@ QJsonObject PointLinkIn::save() const
 void PointLinkIn::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();
@@ -493,8 +499,9 @@ QString PointsLinkIn::validationMessage() const
 QJsonObject PointsLinkIn::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 }
@@ -502,7 +509,8 @@ QJsonObject PointsLinkIn::save() const
 void PointsLinkIn::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();
@@ -631,8 +639,9 @@ QString VideoLinkIn::validationMessage() const
 QJsonObject VideoLinkIn::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 }
@@ -640,7 +649,8 @@ QJsonObject VideoLinkIn::save() const
 void VideoLinkIn::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();

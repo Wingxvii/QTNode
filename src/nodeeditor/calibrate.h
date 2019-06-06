@@ -8,6 +8,7 @@
 #include "DataTypes/pointsdata.h"
 #include "DataTypes/imagedata.h"
 #include "DataTypes/calibdata.h"
+#include <QtConcurrent/QtConcurrent>
 
 #include <iostream>
 #include <QLabel>
@@ -58,16 +59,22 @@ public slots:
     void processData() override;
     //this is our check function
     void preCheck() override;
-    //this updates our UI
-    void updateUI();
-
-    //faster check for the progress bar
-    void updateProgressBar(int value);
 
     //context menu slots
     void ShowContextMenu(const QPoint &pos) override;
     void activate(){active = true;preCheck();window->setStyleSheet("");}
     void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
+public: //multithread
+
+    void multiThreadedProcess();
+
+    QFuture<void> funct;
+    QFutureWatcher<void> functWatcher;
+    QLabel *progressBar;
+public slots:
+    void multiThreadedFinished();
+
 
 
 private:
@@ -82,7 +89,6 @@ private: //port values
 
 private: //UI
     QGridLayout *layout;
-    QProgressBar *progressBar;
 
 
 

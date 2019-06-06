@@ -59,8 +59,9 @@ std::shared_ptr<QtNodes::NodeData> CalibLinkOut::outData(QtNodes::PortIndex port
 QJsonObject CalibLinkOut::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 
@@ -69,7 +70,8 @@ QJsonObject CalibLinkOut::save() const
 void CalibLinkOut::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();
@@ -173,8 +175,9 @@ std::shared_ptr<QtNodes::NodeData> ImageLinkOut::outData(QtNodes::PortIndex port
 QJsonObject ImageLinkOut::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 
@@ -183,7 +186,8 @@ QJsonObject ImageLinkOut::save() const
 void ImageLinkOut::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();
@@ -286,8 +290,9 @@ std::shared_ptr<QtNodes::NodeData> PointLinkOut::outData(QtNodes::PortIndex port
 QJsonObject PointLinkOut::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 
@@ -296,7 +301,8 @@ QJsonObject PointLinkOut::save() const
 void PointLinkOut::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();
@@ -400,8 +406,9 @@ std::shared_ptr<QtNodes::NodeData> PointsLinkOut::outData(QtNodes::PortIndex por
 QJsonObject PointsLinkOut::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 
@@ -410,7 +417,8 @@ QJsonObject PointsLinkOut::save() const
 void PointsLinkOut::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();
@@ -513,8 +521,9 @@ std::shared_ptr<QtNodes::NodeData> VideoLinkOut::outData(QtNodes::PortIndex port
 QJsonObject VideoLinkOut::save() const
 {
     QJsonObject dataJson;
+    dataJson["name"] = name();
 
-    dataJson["Index"] = index;
+    dataJson["Index"] = index.toUtf8().constData();
 
     return dataJson;
 
@@ -523,7 +532,8 @@ QJsonObject VideoLinkOut::save() const
 void VideoLinkOut::restore(const QJsonObject &json)
 {
     if(json.contains("Index")){
-        indexInput->setText(QString(json["Index"].String));
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
     }
 
     preCheck();

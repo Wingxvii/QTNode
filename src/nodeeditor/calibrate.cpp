@@ -11,10 +11,12 @@ Calibrate::Calibrate(){
     window = new QWidget;
     layout = new QGridLayout;
 
-    progressBar = new QProgressBar();
+    progressBar = new QLabel("Inactive");
 
     layout->addWidget(progressBar);
     window->setLayout(layout);
+
+    connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     buildContextWindow();
 }
@@ -112,6 +114,44 @@ QString Calibrate::validationMessage() const
 
 void Calibrate::processData(){
 
+    //setup progress bar parameters
+    progressBar->setText("Processing...");
+
+    funct = QtConcurrent::run(this, &Calibrate::multiThreadedProcess);
+    functWatcher.setFuture(funct);
+
+}
+
+void Calibrate::preCheck()
+{
+    if(pointsIn && pointsIn->isReady && calibDataIn && calibDataIn->isReady && active){
+        processData();
+        emit dataUpdated(0);
+        emit dataUpdated(1);
+    }else{
+        if(cameraMat){cameraMat->unready();}
+        if(distanceCoeff){distanceCoeff->unready();}
+    }
+}
+
+
+void Calibrate::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}
+
+void Calibrate::multiThreadedProcess()
+{
     std::vector<std::vector<cv::Point3f>> worldSpaceCornerPoints(1);
 
     cameraMat = std::make_shared<ImageData>();
@@ -133,50 +173,16 @@ void Calibrate::processData(){
 
     cv::calibrateCamera(worldSpaceCornerPoints, pointsIn->data(), calibDataIn->sizeData(), cameraMatData, distanceCoeffData, rVectors, tVectors);
 
-    updateProgressBar(100);
-
     cameraMat->_image = cameraMatData;
     distanceCoeff->_image = distanceCoeffData;
     LOG_JOHN() << "Calibrate Sucessful";
 
+}
+
+void Calibrate::multiThreadedFinished()
+{
+    progressBar->setText("Finished");
     cameraMat->ready();
     distanceCoeff->ready();
-
-}
-
-void Calibrate::preCheck()
-{
-    if(pointsIn && pointsIn->isReady && calibDataIn && calibDataIn->isReady && active){
-        processData();
-        emit dataUpdated(0);
-        emit dataUpdated(1);
-    }else{
-        if(cameraMat){cameraMat->unready();}
-        if(distanceCoeff){distanceCoeff->unready();}
-    }
-}
-
-void Calibrate::updateUI()
-{
-    progressBar->setMaximum(1);
-}
-
-void Calibrate::updateProgressBar(int value){
-    progressBar->setValue(value);
-}
-
-void Calibrate::ShowContextMenu(const QPoint &pos)
-{
-    QMenu contextMenu(tr("Context menu"));
-
-    QAction activateAction("Activate", this);
-    QAction deactivateAction("Deactivate", this);
-
-    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
-    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
-    contextMenu.addAction(&activateAction);
-    contextMenu.addAction(&deactivateAction);
-
-    contextMenu.exec(window->mapToGlobal(pos));
 }
 
