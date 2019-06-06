@@ -88,17 +88,18 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<CalibInfo>("Calibration");
     final->registerModel<UnDistort>("Calibration");
 
-    final->registerModel<CalibLinkIn>("Link");
-    final->registerModel<ImageLinkIn>("Link");
-    final->registerModel<PointLinkIn>("Link");
-    final->registerModel<PointsLinkIn>("Link");
-    final->registerModel<VideoLinkIn>("Link");
+    final->registerModel<CalibLinkIn>("Link In");
+    final->registerModel<ImageLinkIn>("Link In");
+    final->registerModel<PointLinkIn>("Link In");
+    final->registerModel<PointsLinkIn>("Link In");
+    final->registerModel<VideoLinkIn>("Link In");
 
-    final->registerModel<CalibLinkOut>("Link");
-    final->registerModel<ImageLinkOut>("Link");
-    final->registerModel<PointLinkOut>("Link");
-    final->registerModel<PointsLinkOut>("Link");
-    final->registerModel<VideoLinkOut>("Link");
+    final->registerModel<CalibLinkOut>("Link Out");
+    final->registerModel<ImageLinkOut>("Link Out");
+    final->registerModel<PointLinkOut>("Link Out");
+    final->registerModel<PointsLinkOut>("Link Out");
+    final->registerModel<VideoLinkOut>("Link Out");
+
 
     scene->setRegistry(final);
     layout->addWidget(new FlowView(scene));
