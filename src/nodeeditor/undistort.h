@@ -6,6 +6,7 @@
 #include "analyzer/graphdataconnector.h"
 #include "DataTypes/videographdata.h"
 #include "DataTypes/imagedata.h"
+#include <QtConcurrent/QtConcurrent>
 
 #include <QGridLayout>
 #include <QProgressBar>
@@ -51,14 +52,24 @@ public:
     QString validationMessage() const override;
     bool resizable() const override {return false;}
 
+public: //multithread
+
+    void multiThreadedProcess();
+
+    QFuture<void> funct;
+    QFutureWatcher<void> functWatcher;
+    QLabel *progressBar;
+public slots:
+    void multiThreadedFinished();
+
 public slots:
     void processData() override;
     void preCheck() override;
-    void updateUI();
 
     void ShowContextMenu(const QPoint &pos) override;
     void activate(){active = true;preCheck();window->setStyleSheet("");}
     void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
 
 
 private:
@@ -73,7 +84,6 @@ private: //port values
 
 private: //UI
     QGridLayout *layout;
-    QProgressBar *progressBar;
 
 
 

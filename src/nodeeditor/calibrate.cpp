@@ -126,8 +126,6 @@ void Calibrate::preCheck()
 {
     if(pointsIn && pointsIn->isReady && calibDataIn && calibDataIn->isReady && active){
         processData();
-        emit dataUpdated(0);
-        emit dataUpdated(1);
     }else{
         if(cameraMat){cameraMat->unready();}
         if(distanceCoeff){distanceCoeff->unready();}
@@ -184,5 +182,7 @@ void Calibrate::multiThreadedFinished()
     progressBar->setText("Finished");
     cameraMat->ready();
     distanceCoeff->ready();
+    emit dataUpdated(0);
+    emit dataUpdated(1);
 }
 

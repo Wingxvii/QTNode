@@ -12,9 +12,11 @@ UnDistort::UnDistort(){
     window = new QWidget;
     layout = new QGridLayout;
 
-    progressBar = new QProgressBar();
+    progressBar = new QLabel("Inactive");
 
     layout->addWidget(progressBar);
+
+    connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     window->setLayout(layout);
     buildContextWindow();
@@ -119,8 +121,8 @@ QString UnDistort::validationMessage() const
     return modelValidationError;
 }
 
-void UnDistort::processData(){
-
+void UnDistort::multiThreadedProcess()
+{
     videoOut = std::make_shared<VideoGraphData>();
     std::vector<cv::Mat> temp;
 
@@ -133,24 +135,36 @@ void UnDistort::processData(){
     videoOut->_video = temp;
     LOG_JOHN() << "Undistort Sucessful";
 
+}
+
+void UnDistort::multiThreadedFinished()
+{
+    progressBar->setText("Finished");
     videoOut->ready();
+    emit dataUpdated(0);
+
+}
+
+void UnDistort::processData(){
+
+    //setup progress bar parameters
+    progressBar->setText("Processing...");
+
+    funct = QtConcurrent::run(this, &UnDistort::multiThreadedProcess);
+    functWatcher.setFuture(funct);
+
+
 }
 
 void UnDistort::preCheck()
 {
     if(videoIn && videoIn->isReady && cameraMatIn && cameraMatIn->isReady && distanceCoeffIn && distanceCoeffIn->isReady && active){
         processData();
-        emit dataUpdated(0);
-        updateUI();
     }else{
         if(videoOut) {videoOut->unready();}
     }
 }
 
-void UnDistort::updateUI()
-{
-    progressBar->setValue(100);
-}
 
 void UnDistort::ShowContextMenu(const QPoint &pos)
 {
