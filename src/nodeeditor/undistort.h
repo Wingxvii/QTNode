@@ -7,9 +7,11 @@
 #include "DataTypes/videographdata.h"
 #include "DataTypes/imagedata.h"
 #include <QtConcurrent/QtConcurrent>
+#include <QFutureIterator>
 
 #include <QGridLayout>
 #include <QProgressBar>
+#include <QList>
 
 #include <iostream>
 #include <QLabel>
@@ -54,11 +56,13 @@ public:
 
 public: //multithread
 
-    void multiThreadedProcess();
+    void multiThreadedProcess(const cv::Mat &in);
 
     QFuture<void> funct;
     QFutureWatcher<void> functWatcher;
     QLabel *progressBar;
+    std::vector<cv::Mat> temp;
+
 public slots:
     void multiThreadedFinished();
 
