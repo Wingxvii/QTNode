@@ -121,11 +121,11 @@ QString UnDistort::validationMessage() const
     return modelValidationError;
 }
 
-void UnDistort::multiThreadedProcess(const cv::Mat &in)
+cv::Mat multiThreadedProcess(const cv::Mat &in)
 {
     cv::Mat output = cv::Mat();
-    cv::undistort(in, output, cameraMatIn->data(), distanceCoeffIn->data());
-    temp.push_back(output);
+    //cv::undistort(in, output, cameraMatIn->data(), distanceCoeffIn->data());
+    return output;
 
 }
 
@@ -153,7 +153,7 @@ void UnDistort::processData(){
     //converts std vector into qvector into qlist
     QList<cv::Mat> videoList = QList<cv::Mat>::fromVector(QVector<cv::Mat>::fromStdVector(videoIn->data()));
 
-    funct = QtConcurrent::map(videoList, &UnDistort::multiThreadedProcess);
+    funct = QtConcurrent::mapped(videoList, multiThreadedProcess);
 
     functWatcher.setFuture(funct);
 

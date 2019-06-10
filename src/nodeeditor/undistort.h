@@ -56,9 +56,9 @@ public:
 
 public: //multithread
 
-    void multiThreadedProcess(const cv::Mat &in);
+    //void multiThreadedProcess(const cv::Mat &in);
 
-    QFuture<void> funct;
+    QFuture<cv::Mat> funct;
     QFutureWatcher<void> functWatcher;
     QLabel *progressBar;
     std::vector<cv::Mat> temp;
