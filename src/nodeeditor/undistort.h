@@ -4,8 +4,8 @@
 
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
-#include "DataTypes/videographdata.h"
-#include "DataTypes/imagedata.h"
+#include "analyzer/linkmanager.h"
+
 #include <QtConcurrent/QtConcurrent>
 #include <QFutureIterator>
 
@@ -56,15 +56,15 @@ public:
 
 public: //multithread
 
-    //void multiThreadedProcess(const cv::Mat &in);
-
     QFuture<cv::Mat> funct;
     QFutureWatcher<void> functWatcher;
-    QLabel *progressBar;
-    std::vector<cv::Mat> temp;
+    QLabel *progressText;
+    QProgressBar *progressBar;
+
 
 public slots:
     void multiThreadedFinished();
+    void multiThreadedUpdate();
 
 public slots:
     void processData() override;

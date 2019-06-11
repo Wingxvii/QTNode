@@ -5,10 +5,12 @@
 
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
-#include "DataTypes/pointsdata.h"
-#include "DataTypes/videographdata.h"
-#include "DataTypes/calibdata.h"
+#include "analyzer/linkmanager.h"
 
+#include <QtConcurrent/QtConcurrent>
+#include <QFutureIterator>
+
+#include <QProgressBar>
 #include <iostream>
 #include <QLabel>
 #include <QPushButton>
@@ -53,10 +55,23 @@ public:
     QString validationMessage() const override;
     bool resizable() const override {return false;}
 
+
+public: //multithread
+
+    QFuture<std::vector<cv::Point2f>> funct;
+    QFutureWatcher<void> functWatcher;
+    QLabel *progressText;
+    QProgressBar *progressBar;
+    //locals
+
+
+public slots:
+    void multiThreadedFinished();
+    void multiThreadedUpdate();
+
 public slots:
     void processData() override;
     void preCheck() override;
-    void updateUI();
 
     void ShowContextMenu(const QPoint &pos) override;
 
@@ -68,8 +83,6 @@ private:
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
 
 private: //local variables
-    int successes = 0;
-    int failures = 0;
     int minimumSuccesses = 10;
 
 private: //port values

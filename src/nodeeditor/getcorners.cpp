@@ -11,17 +11,25 @@ GetCorners::GetCorners(){
     window =  new QWidget;
     layout = new QGridLayout;
 
-    successDisplay = new QLabel(QString::number(successes));
+    progressText = new QLabel("Inactive");
+    progressBar = new QProgressBar();
+
+    successDisplay = new QLabel("0");
     successLabel = new QLabel("Succeeded: ");
-    failDisplay = new QLabel(QString::number(failures));
+    failDisplay = new QLabel("0");
     failLabel = new QLabel("Failures: ");
 
     layout->addWidget(successLabel,1,1);
     layout->addWidget(successDisplay,1,2);
     layout->addWidget(failLabel,2,1);
     layout->addWidget(failDisplay,2,2);
+    layout->addWidget(progressBar,3,1);
+    layout->addWidget(progressText,4,1);
 
     cornersOut = std::make_shared<PointsData>();
+
+    connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
+    connect(&functWatcher, SIGNAL(progressValueChanged(int)), this, SLOT(multiThreadedUpdate()));
 
     window->setLayout(layout);
     buildContextWindow();
@@ -114,49 +122,92 @@ QString GetCorners::validationMessage() const
     return modelValidationError;
 }
 
-void GetCorners::processData(){
-
-    cornersOut->data().clear();
+void GetCorners::multiThreadedFinished()
+{
     std::vector<std::vector<cv::Point2f>> pointsBuffer;
 
-    //these also need to be multithreaded @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    for(int counter = 0; counter < imagesIn->data().size(); counter++){
-        std::vector<cv::Point2f> pointBuffer;
-        //finds actual corners in each image
-        bool found = cv::findChessboardCorners(imagesIn->data().at(counter), dataIn->sizeData(), pointBuffer, cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE);
+    QFutureIterator<std::vector<cv::Point2f>> i(funct);
 
-        //pushes into found list if found
-        if (found) {
-            pointsBuffer.push_back(pointBuffer);
-            LOG_JOHN() << "Corners found";
-            ++successes;
-        }else{
-            LOG_JOHN() << "No Corners found";
-            ++failures;
+    while(i.hasNext()){
+        pointsBuffer.push_back(i.next());
+
+        //makes sure there are only good in our list
+        if(pointsBuffer.back().empty()){
+            pointsBuffer.pop_back();
         }
-        updateUI();
     }
-    //trigger next node
-    if(successes > minimumSuccesses){
-        cornersOut->pointList = pointsBuffer;
+
+    cornersOut->pointList = pointsBuffer;
+
+    if(LinkManager::instance()->getIntData("PRIVATEsuccesses") > minimumSuccesses){
         cornersOut->ready();
     }
+
+    progressBar->setValue(functWatcher.progressMaximum());
+
+    progressText->setText("Finished");
+    emit dataUpdated(0);
+
 }
+
+void GetCorners::multiThreadedUpdate()
+{
+    progressText->setText(QString::number(functWatcher.progressValue()) + " Of " + QString::number(functWatcher.progressMaximum()) + " Processing...");
+    progressBar->setValue(functWatcher.progressValue());
+
+    successDisplay->setText(QString::number(LinkManager::instance()->getIntData("PRIVATEsuccesses")));
+    failDisplay->setText(QString::number(LinkManager::instance()->getIntData("PRIVATEfailures")));
+
+}
+
+std::vector<cv::Point2f> multiThreadedGetCorners(const cv::Mat &in)
+{
+    std::vector<cv::Point2f> pointBuffer;
+    //finds actual corners in each image
+    bool found = cv::findChessboardCorners(in, LinkManager::instance()->getCalibData("PRIVATEgetcorners1")->sizeData(), pointBuffer, cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE);
+
+    //pushes into found list if found
+    if (found) {
+        LOG_JOHN() << "Corners found";
+        LinkManager::instance()->sendData(LinkManager::instance()->getIntData("PRIVATEsuccesses") + 1,"PRIVATEsuccesses");
+        return pointBuffer;
+    }else{
+        LOG_JOHN() << "No Corners found";
+        LinkManager::instance()->sendData(LinkManager::instance()->getIntData("PRIVATEfailures") + 1,"PRIVATEfailures");
+    }
+    return {};
+}
+
+void GetCorners::processData(){
+
+    //setup progress bar parameters
+    progressText->setText("Processing...");
+
+    cornersOut->data().clear();
+
+    //init some variables in linkmanager instance
+    LinkManager::instance()->sendData(0,"PRIVATEsuccesses");
+    LinkManager::instance()->sendData(0,"PRIVATEfailures");
+    LinkManager::instance()->sendData(dataIn, "PRIVATEgetcorners1");
+
+    QList<cv::Mat> images = QList<cv::Mat>::fromVector(QVector<cv::Mat>::fromStdVector(imagesIn->data()));
+
+
+    funct = QtConcurrent::mapped(images, multiThreadedGetCorners);
+    functWatcher.setFuture(funct);
+    progressBar->setMaximum(functWatcher.progressMaximum());
+    progressBar->setValue(0);
+
+}
+
 
 void GetCorners::preCheck(){
     if(imagesIn && imagesIn->isReady && dataIn && dataIn->isReady && imagesIn->data().size() && active){
     processData();
-    emit dataUpdated(0);
     }else{
         if(cornersOut){cornersOut->unready();}
 
     }
-}
-
-void GetCorners::updateUI(){
-    successDisplay->setText(QString::number(successes));
-    failDisplay->setText(QString::number(failures));
-
 }
 
 void GetCorners::ShowContextMenu(const QPoint &pos)

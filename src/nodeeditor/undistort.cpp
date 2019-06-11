@@ -12,11 +12,14 @@ UnDistort::UnDistort(){
     window = new QWidget;
     layout = new QGridLayout;
 
-    progressBar = new QLabel("Inactive");
+    progressText = new QLabel("Inactive");
+    progressBar = new QProgressBar();
 
-    layout->addWidget(progressBar);
+    layout->addWidget(progressBar,1,0);
+    layout->addWidget(progressText,2,0);
 
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
+    connect(&functWatcher, SIGNAL(progressValueChanged(int)), this, SLOT(multiThreadedUpdate()));
 
     window->setLayout(layout);
     buildContextWindow();
@@ -121,10 +124,10 @@ QString UnDistort::validationMessage() const
     return modelValidationError;
 }
 
-cv::Mat multiThreadedProcess(const cv::Mat &in)
+cv::Mat multiThreadedUndistort(const cv::Mat &in)
 {
     cv::Mat output = cv::Mat();
-    //cv::undistort(in, output, cameraMatIn->data(), distanceCoeffIn->data());
+    cv::undistort(in, output, LinkManager::instance()->getImageData("PRIVATEundistort1")->data(), LinkManager::instance()->getImageData("PRIVATEundistort2")->data());
     return output;
 
 }
@@ -132,31 +135,50 @@ cv::Mat multiThreadedProcess(const cv::Mat &in)
 void UnDistort::multiThreadedFinished()
 {
 
+    std::vector<cv::Mat> temp;
+
+    QFutureIterator<cv::Mat> i(funct);
+
+    while(i.hasNext()){
+        temp.push_back(i.next());
+    }
+
     videoOut->_video = temp;
     LOG_JOHN() << "Undistort Sucessful";
 
-    progressBar->setText("Finished");
+    progressBar->setValue(functWatcher.progressMaximum());
+    progressText->setText("Finished");
     videoOut->ready();
     emit dataUpdated(0);
+
+}
+
+void UnDistort::multiThreadedUpdate()
+{
+    progressText->setText(QString::number(functWatcher.progressValue()) + " Of " + QString::number(functWatcher.progressMaximum()) + " Processing...");
+    LOG_JOHN() << "UPDATING";
+    progressBar->setValue(functWatcher.progressValue());
 
 }
 
 void UnDistort::processData(){
 
     //setup progress bar parameters
-    progressBar->setText("Processing...");
+    progressText->setText("Processing...");
 
     videoOut = std::make_shared<VideoGraphData>();
-
-    temp.clear();
 
     //converts std vector into qvector into qlist
     QList<cv::Mat> videoList = QList<cv::Mat>::fromVector(QVector<cv::Mat>::fromStdVector(videoIn->data()));
 
-    funct = QtConcurrent::mapped(videoList, multiThreadedProcess);
+    LinkManager::instance()->sendData(cameraMatIn, "PRIVATEundistort1");
+    LinkManager::instance()->sendData(distanceCoeffIn, "PRIVATEundistort2");
+
+    funct = QtConcurrent::mapped(videoList, multiThreadedUndistort);
 
     functWatcher.setFuture(funct);
-
+    progressBar->setMaximum(functWatcher.progressMaximum());
+    progressBar->setValue(0);
 
 }
 

@@ -32,14 +32,19 @@ public:
     void sendData(std::shared_ptr<PointData> data, QString name);
     void sendData(std::shared_ptr<PointsData> data, QString name);
     void sendData(std::shared_ptr<VideoGraphData> data, QString name);
+    void sendData(int data, QString name);
+    void sendData(QString data, QString name);
 
     std::shared_ptr<CalibData> getCalibData(QString name);
     std::shared_ptr<ImageData> getImageData(QString name);
     std::shared_ptr<PointData> getPointData(QString name);
     std::shared_ptr<PointsData> getPointsData(QString name);
     std::shared_ptr<VideoGraphData> getVideoData(QString name);
+    int getIntData(QString name);
+    QString getNameData(QString name);
 
     void clearAllData();
+    void privateClear();
 
 signals:
     void calibUpdated(QString name);
@@ -58,6 +63,17 @@ private:
     std::map<QString, std::shared_ptr<PointData>> pointList;
     std::map<QString, std::shared_ptr<PointsData>> pointsList;
     std::map<QString, std::shared_ptr<VideoGraphData>> videoGraphList;
+
+    //secondary data dump for internal use
+    std::map<QString, std::shared_ptr<CalibData>> calibListPrivate;
+    std::map<QString, std::shared_ptr<ImageData>> imageListPrivate;
+    std::map<QString, std::shared_ptr<PointData>> pointListPrivate;
+    std::map<QString, std::shared_ptr<PointsData>> pointsListPrivate;
+    std::map<QString, std::shared_ptr<VideoGraphData>> videoGraphListPrivate;
+    std::map<QString, int> intListPrivate;
+    std::map<QString, QString> stringListPrivate;
+
+
 };
 
 #endif // LINKMANAGER_H
