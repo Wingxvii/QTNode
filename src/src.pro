@@ -341,7 +341,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/dynamic_framework/TypeConverter.hpp \
     analyzer/linkmanager.h \
     nodeeditor/linkin.h \
-    nodeeditor/linkout.h
+    nodeeditor/linkout.h \
+    scripter.h
 
 
 

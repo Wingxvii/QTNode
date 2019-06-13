@@ -12,18 +12,19 @@ SensorWindow::SensorWindow(QWidget *parent) :
 
     ui->setupUi(this);
     //ui->titles->addWidget(new QLabel("testing"));
-    ui->MainLayout->addWidget(nodeEditorWindow);
+    ui->MainLayout->addWidget(nodeEditorWindow,1,1);
+
+    setupConsole();
+
 
     createActions();
 
-    //connections
+
 
 
     //setup
     //ui->MainLayout->setSizeConstraint(QLayout::SetFixedSize);
     refreshSize = 200;
-
-
 
 }
 
@@ -80,6 +81,12 @@ void SensorWindow::createActions()
     fileCloseAction->setStatusTip("Close selected file without saving");
     connect(fileCloseAction, SIGNAL(triggered()), this, SLOT(closeSlot()));
 
+    windowConsoleAction = new QAction(tr("&Console"), this);
+    windowConsoleAction->setStatusTip("Open/Close Console Window");
+    windowConsoleAction->setCheckable(true);
+    connect(windowConsoleAction, SIGNAL(triggered()), this, SLOT(consoleSlot()));
+
+
     createMenus();
 }
 
@@ -92,6 +99,33 @@ void SensorWindow::createMenus()
     ui->menuFIle->addAction(fileClearAction);
     ui->menuFIle->addAction(fileCloseAction);
     ui->menuFIle->addSeparator();
+
+    ui->menuOptions_2->addAction(windowConsoleAction);
+    ui->menuOptions_2->addSeparator();
+
+}
+
+void SensorWindow::setupConsole()
+{
+    consoleWindow = new QWidget();
+    consoleWindowLayout = new QGridLayout();
+    consoleWindow->setLayout(consoleWindowLayout);
+
+    consoleInput = new QLineEdit();
+    consoleOutput = new QTextEdit(("<h3>JS Console </h3>"));
+
+    consoleWindowLayout->addWidget(consoleOutput);
+    consoleWindowLayout->addWidget(consoleInput);
+
+    consoleInput->setAlignment(Qt::AlignRight);
+    consoleInput->setPlaceholderText("Instruction >>");
+    consoleOutput->setReadOnly(true);
+
+    connect(consoleInput, SIGNAL(returnPressed()), this,SLOT(consoleEnterSlot()) );
+
+    ui->MainLayout->addWidget(consoleWindow,2,1);
+    consoleWindow->setVisible(false);
+
 }
 
 void SensorWindow::newSlot()
@@ -161,4 +195,22 @@ void SensorWindow::closeSlot()
 {
     nodeEditorWindow->removeTab(nodeEditorWindow->currentIndex());
     nodeWindowList.removeAt(nodeEditorWindow->currentIndex());
+}
+
+void SensorWindow::consoleSlot()
+{
+    if(windowConsoleAction->isChecked()){
+        consoleWindow->setVisible(true);
+    }else{
+        consoleWindow->setVisible(false);
+
+    }
+}
+
+void SensorWindow::consoleEnterSlot()
+{
+    consoleOutput->append(QString("<font color='red'>></font> %1").arg(consoleInput->text()));
+    auto result = engine.evaluate(consoleInput->text());
+    consoleOutput->append(QString("<i>%1</i><br>").arg(result.toString()));
+    consoleInput->clear();
 }

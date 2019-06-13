@@ -28,7 +28,7 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="MainLayout"/>
+     <layout class="QGridLayout" name="MainLayout"/>
     </item>
    </layout>
   </widget>
@@ -46,7 +46,7 @@
      <string>FIle</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuOptions">
+   <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
     </property>
@@ -62,7 +62,7 @@
     </property>
    </widget>
    <addaction name="menuFIle"/>
-   <addaction name="menuOptions"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuWindow"/>
    <addaction name="menuOptions_2"/>
   </widget>

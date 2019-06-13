@@ -62,7 +62,6 @@ public: //multithread
     QFutureWatcher<void> functWatcher;
     QLabel *progressText;
     QProgressBar *progressBar;
-    //locals
 
 
 public slots:

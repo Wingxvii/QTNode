@@ -10,6 +10,9 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QInputDialog>
+#include <QTextEdit>
+#include <QLineEdit>
+#include <QJSEngine>
 
 
 namespace Ui {
@@ -48,7 +51,6 @@ private:
     void createMenus();
 
     QActionGroup *alignmentGroup;
-    QMenu* fileMenu;
 
     QAction* fileNewAction;
     QAction* fileOpenAction;
@@ -57,13 +59,24 @@ private:
     QAction* fileClearAction;
     QAction* fileCloseAction;
 
-private: //replace sensormanager
+    QAction* windowConsoleAction;
 
+
+
+private: //windows
+
+    //node editor data
     QTabWidget* nodeEditorWindow;
     QList<NodeEditorContainer> nodeWindowList;
 
-    QWidget* leftDataWindow;
-    QBoxLayout* leftDataWindowLayout;
+    //console window data
+    QWidget* consoleWindow;
+    QGridLayout* consoleWindowLayout;
+    void setupConsole();
+    QTextEdit *consoleOutput;
+    QLineEdit *consoleInput;
+    QJSEngine engine;
+
 
 public slots:
     void newSlot();
@@ -73,7 +86,8 @@ public slots:
     void clearSlot();
     void closeSlot();
 
-
+    void consoleSlot();
+    void consoleEnterSlot();
 };
 
 #endif // SENSORWINDOW_H
