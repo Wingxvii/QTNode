@@ -16,11 +16,7 @@ SensorWindow::SensorWindow(QWidget *parent) :
 
     setupConsole();
 
-
     createActions();
-
-
-
 
     //setup
     //ui->MainLayout->setSizeConstraint(QLayout::SetFixedSize);
@@ -100,8 +96,8 @@ void SensorWindow::createMenus()
     ui->menuFIle->addAction(fileCloseAction);
     ui->menuFIle->addSeparator();
 
-    ui->menuOptions_2->addAction(windowConsoleAction);
-    ui->menuOptions_2->addSeparator();
+    ui->menuWindow->addAction(windowConsoleAction);
+    ui->menuWindow->addSeparator();
 
 }
 
@@ -117,8 +113,8 @@ void SensorWindow::setupConsole()
     consoleWindowLayout->addWidget(consoleOutput);
     consoleWindowLayout->addWidget(consoleInput);
 
-    consoleInput->setAlignment(Qt::AlignRight);
-    consoleInput->setPlaceholderText("Instruction >>");
+    consoleInput->setAlignment(Qt::AlignLeft);
+    consoleInput->setPlaceholderText("<< Instruction");
     consoleOutput->setReadOnly(true);
 
     connect(consoleInput, SIGNAL(returnPressed()), this,SLOT(consoleEnterSlot()) );
