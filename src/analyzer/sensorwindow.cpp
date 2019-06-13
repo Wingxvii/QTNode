@@ -7,22 +7,24 @@ SensorWindow::SensorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::SensorWindow)
 {
-    //ui
-    nodeEditorWindow = new QTabWidget();
-
-    ui->setupUi(this);
-    //ui->titles->addWidget(new QLabel("testing"));
-    ui->MainLayout->addWidget(nodeEditorWindow,1,1);
-
-    setupConsole();
-
-
-    createActions();
-
-
+    //setup border flow structure layout
+    MainLayout = new BorderLayout();
+    ui->mainWindow->setLayout(MainLayout);
 
 
     //setup
+    ui->setupUi(this);
+    //setup node editor
+    //ui
+    nodeEditorWindow = new QTabWidget();
+    MainLayout->addWidget(nodeEditorWindow,BorderLayout::Center);
+
+    //window setups
+    setupConsole();
+
+    //link actions to selection options
+    createActions();
+
     //ui->MainLayout->setSizeConstraint(QLayout::SetFixedSize);
     refreshSize = 200;
 
@@ -100,8 +102,8 @@ void SensorWindow::createMenus()
     ui->menuFIle->addAction(fileCloseAction);
     ui->menuFIle->addSeparator();
 
-    ui->menuOptions_2->addAction(windowConsoleAction);
-    ui->menuOptions_2->addSeparator();
+    ui->menuWindow->addAction(windowConsoleAction);
+    ui->menuWindow->addSeparator();
 
 }
 
@@ -117,13 +119,13 @@ void SensorWindow::setupConsole()
     consoleWindowLayout->addWidget(consoleOutput);
     consoleWindowLayout->addWidget(consoleInput);
 
-    consoleInput->setAlignment(Qt::AlignRight);
-    consoleInput->setPlaceholderText("Instruction >>");
+    consoleInput->setAlignment(Qt::AlignLeft);
+    consoleInput->setPlaceholderText("<< Instruction");
     consoleOutput->setReadOnly(true);
 
     connect(consoleInput, SIGNAL(returnPressed()), this,SLOT(consoleEnterSlot()) );
 
-    ui->MainLayout->addWidget(consoleWindow,2,1);
+    MainLayout->addWidget(consoleWindow, BorderLayout::South);
     consoleWindow->setVisible(false);
 
 }

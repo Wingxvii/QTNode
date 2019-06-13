@@ -164,7 +164,8 @@ SOURCES += main.cpp\
     nodeeditor/dynamic_framework/StyleCollection.cpp \
     analyzer/linkmanager.cpp \
     nodeeditor/linkin.cpp \
-    nodeeditor/linkout.cpp
+    nodeeditor/linkout.cpp \
+    borderlayout.cpp
 
 
 
@@ -342,7 +343,8 @@ HEADERS  += mainwindow.h \
     analyzer/linkmanager.h \
     nodeeditor/linkin.h \
     nodeeditor/linkout.h \
-    scripter.h
+    scripter.h \
+    borderlayout.h
 
 
 

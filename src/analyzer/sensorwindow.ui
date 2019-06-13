@@ -13,8 +13,8 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
+  <widget class="QWidget" name="mainWindow">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -27,9 +27,6 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item>
-     <layout class="QGridLayout" name="MainLayout"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -51,20 +48,20 @@
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuWindow">
+   <widget class="QMenu" name="menuData">
     <property name="title">
-     <string>Link</string>
+     <string>Data</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuOptions_2">
+   <widget class="QMenu" name="menuWindow">
     <property name="title">
      <string>Window</string>
     </property>
    </widget>
    <addaction name="menuFIle"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuData"/>
    <addaction name="menuWindow"/>
-   <addaction name="menuOptions_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionHelp">

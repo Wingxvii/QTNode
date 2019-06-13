@@ -13,7 +13,7 @@
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QJSEngine>
-
+#include "borderlayout.h"
 
 namespace Ui {
 class SensorWindow;
@@ -42,6 +42,8 @@ public:
 private:
 
     Ui::SensorWindow* ui;
+    BorderLayout *MainLayout;
+
     QSize currentSize;
     int refreshSize;
 
