@@ -290,7 +290,7 @@ void SensorWindow::linkerUpdateSlot(int dataIndex, QString name)
 
     linkerData->clear();
     for(QString const& result : displayData){
-        linkerData->append(QString("<font color='blue'>></font><br>").arg(result));
+        linkerData->append(QString("<font color='lightblue'><b>%1</b></font> ").arg(result));
     }
 }
 
