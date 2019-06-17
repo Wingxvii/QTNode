@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>947</width>
-    <height>724</height>
+    <width>1191</width>
+    <height>841</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>947</width>
+     <width>1191</width>
      <height>21</height>
     </rect>
    </property>
@@ -51,20 +51,20 @@
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuWindow">
+   <widget class="QMenu" name="menuLink">
     <property name="title">
      <string>Link</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuOptions_2">
+   <widget class="QMenu" name="menuWindow">
     <property name="title">
      <string>Window</string>
     </property>
    </widget>
    <addaction name="menuFIle"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuLink"/>
    <addaction name="menuWindow"/>
-   <addaction name="menuOptions_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionHelp">

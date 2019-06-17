@@ -13,6 +13,8 @@
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QJSEngine>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 
 namespace Ui {
@@ -59,24 +61,35 @@ private:
     QAction* fileClearAction;
     QAction* fileCloseAction;
 
-    QAction* windowConsoleAction;
-
-
+    //cardinal layouts
+    QWidget* northWidget, *southWidget, *westWidget, *eastWidget, *centerWidget;
+    QHBoxLayout* northLayout,* southLayout, *centerLayout;
+    QVBoxLayout* westLayout, *eastLayout;
+    void setupLayout();
 
 private: //windows
 
     //node editor data
     QTabWidget* nodeEditorWindow;
     QList<NodeEditorContainer> nodeWindowList;
+    void setupEditor();
 
     //console window data
+    QAction* windowConsoleAction;
     QWidget* consoleWindow;
     QGridLayout* consoleWindowLayout;
-    void setupConsole();
     QTextEdit *consoleOutput;
     QLineEdit *consoleInput;
     QJSEngine engine;
+    void setupConsole();
 
+    //linker window data
+    QWidget* linkerWindow;
+    QGridLayout* linkerWindowLayout;
+    QAction* windowLinkerAction;
+    QTextEdit *linkerData;
+    QPushButton *testbutton;
+    void setupLinker();
 
 public slots:
     void newSlot();
@@ -88,6 +101,8 @@ public slots:
 
     void consoleSlot();
     void consoleEnterSlot();
+
+    void linkerSlot();
 };
 
 #endif // SENSORWINDOW_H

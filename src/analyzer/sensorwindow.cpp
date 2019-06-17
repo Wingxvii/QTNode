@@ -2,24 +2,22 @@
 #include "ui_sensorwindow.h"
 #include <Logger.h>
 #include <QResizeEvent>
+#include "linkmanager.h"
 
 SensorWindow::SensorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::SensorWindow)
 {
     //ui
-    nodeEditorWindow = new QTabWidget();
-
     ui->setupUi(this);
-    //ui->titles->addWidget(new QLabel("testing"));
-    ui->MainLayout->addWidget(nodeEditorWindow,1,1);
+    setupLayout();
 
+    setupEditor();
     setupConsole();
+    setupLinker();
 
     createActions();
 
-    //setup
-    //ui->MainLayout->setSizeConstraint(QLayout::SetFixedSize);
     refreshSize = 200;
 
 }
@@ -82,12 +80,17 @@ void SensorWindow::createActions()
     windowConsoleAction->setCheckable(true);
     connect(windowConsoleAction, SIGNAL(triggered()), this, SLOT(consoleSlot()));
 
+    windowLinkerAction = new QAction(tr("&Linker"), this);
+    windowLinkerAction->setStatusTip("Open/Close Linker Window");
+    windowLinkerAction->setCheckable(true);
+    connect(windowLinkerAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
 
     createMenus();
 }
 
 void SensorWindow::createMenus()
 {
+
     ui->menuFIle->addAction(fileNewAction);
     ui->menuFIle->addAction(fileOpenAction);
     ui->menuFIle->addAction(filePlaceAction);
@@ -97,7 +100,49 @@ void SensorWindow::createMenus()
     ui->menuFIle->addSeparator();
 
     ui->menuWindow->addAction(windowConsoleAction);
+    ui->menuWindow->addAction(windowLinkerAction);
     ui->menuWindow->addSeparator();
+
+}
+
+void SensorWindow::setupLayout()
+{
+    northWidget = new QWidget;
+    northLayout = new QHBoxLayout();
+    northWidget->setLayout(northLayout);
+    northWidget->setVisible(false);
+
+    southWidget = new QWidget;
+    southLayout = new QHBoxLayout();
+    southWidget->setLayout(southLayout);
+    southWidget->setVisible(false);
+
+    eastWidget = new QWidget;
+    eastLayout = new QVBoxLayout();
+    eastWidget->setLayout(eastLayout);
+    eastWidget->setVisible(false);
+
+    westWidget = new QWidget;
+    westLayout = new QVBoxLayout();
+    westWidget->setLayout(westLayout);
+    westWidget->setVisible(false);
+
+    centerWidget = new QWidget;
+    centerLayout = new QHBoxLayout();
+    centerWidget->setLayout(centerLayout);
+
+    ui->MainLayout->addWidget(northWidget,1,1,1,4);
+    ui->MainLayout->addWidget(southWidget,4,1,1,4);
+    ui->MainLayout->addWidget(westWidget,2,1,2,1);
+    ui->MainLayout->addWidget(eastWidget,2,4,2,1);
+    ui->MainLayout->addWidget(centerWidget,2,2,2,2);
+
+}
+
+void SensorWindow::setupEditor()
+{
+    nodeEditorWindow = new QTabWidget();
+    centerLayout->addWidget(nodeEditorWindow);
 
 }
 
@@ -119,8 +164,26 @@ void SensorWindow::setupConsole()
 
     connect(consoleInput, SIGNAL(returnPressed()), this,SLOT(consoleEnterSlot()) );
 
-    ui->MainLayout->addWidget(consoleWindow,2,1);
+    southLayout->addWidget(consoleWindow);
     consoleWindow->setVisible(false);
+
+}
+
+void SensorWindow::setupLinker()
+{
+    linkerWindow = new QWidget;
+    linkerWindowLayout = new QGridLayout;
+    testbutton = new QPushButton("Push Me");
+
+    linkerData = new QTextEdit(("<h3>Data Cashe</h3>"));
+    linkerData->setReadOnly(true);
+
+    linkerWindowLayout->addWidget(linkerData);
+    linkerWindowLayout->addWidget(testbutton);
+
+    linkerWindow->setLayout(linkerWindowLayout);
+    westLayout->addWidget(linkerWindow);
+    linkerWindow->setVisible(false);
 
 }
 
@@ -209,4 +272,14 @@ void SensorWindow::consoleEnterSlot()
     auto result = engine.evaluate(consoleInput->text());
     consoleOutput->append(QString("<i>%1</i><br>").arg(result.toString()));
     consoleInput->clear();
+}
+
+void SensorWindow::linkerSlot()
+{
+    if(windowLinkerAction->isChecked()){
+        linkerWindow->setVisible(true);
+    }else{
+        linkerWindow->setVisible(false);
+
+    }
 }
