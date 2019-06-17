@@ -45,13 +45,10 @@ public:
 
     void clearAllData();
     void privateClear();
+    std::vector<QString> getAllData();
 
 signals:
-    void calibUpdated(QString name);
-    void imageUpdated(QString name);
-    void pointUpdated(QString name);
-    void pointsUpdated(QString name);
-    void videoUpdated(QString name);
+    void updated(int dataIndex, QString name);
 
 private:
 

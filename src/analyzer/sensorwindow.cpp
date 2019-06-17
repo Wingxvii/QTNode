@@ -12,9 +12,18 @@ SensorWindow::SensorWindow(QWidget *parent) :
     ui->setupUi(this);
     setupLayout();
 
-    setupEditor();
-    setupConsole();
+    //West
     setupLinker();
+
+    //Central
+    setupEditor();
+
+    //East
+
+    //South
+    setupConsole();
+
+    //North
 
     createActions();
 
@@ -110,32 +119,18 @@ void SensorWindow::setupLayout()
     northWidget = new QWidget;
     northLayout = new QHBoxLayout();
     northWidget->setLayout(northLayout);
-    northWidget->setVisible(false);
 
     southWidget = new QWidget;
     southLayout = new QHBoxLayout();
     southWidget->setLayout(southLayout);
-    southWidget->setVisible(false);
-
-    eastWidget = new QWidget;
-    eastLayout = new QVBoxLayout();
-    eastWidget->setLayout(eastLayout);
-    eastWidget->setVisible(false);
-
-    westWidget = new QWidget;
-    westLayout = new QVBoxLayout();
-    westWidget->setLayout(westLayout);
-    westWidget->setVisible(false);
 
     centerWidget = new QWidget;
     centerLayout = new QHBoxLayout();
     centerWidget->setLayout(centerLayout);
 
-    ui->MainLayout->addWidget(northWidget,1,1,1,4);
-    ui->MainLayout->addWidget(southWidget,4,1,1,4);
-    ui->MainLayout->addWidget(westWidget,2,1,2,1);
-    ui->MainLayout->addWidget(eastWidget,2,4,2,1);
-    ui->MainLayout->addWidget(centerWidget,2,2,2,2);
+    ui->MainLayout->addWidget(northWidget,1,1);
+    ui->MainLayout->addWidget(southWidget,3,1);
+    ui->MainLayout->addWidget(centerWidget,2,1);
 
 }
 
@@ -171,9 +166,10 @@ void SensorWindow::setupConsole()
 
 void SensorWindow::setupLinker()
 {
+    //UI
     linkerWindow = new QWidget;
     linkerWindowLayout = new QGridLayout;
-    testbutton = new QPushButton("Push Me");
+    testbutton = new QPushButton("Clear Data");
 
     linkerData = new QTextEdit(("<h3>Data Cashe</h3>"));
     linkerData->setReadOnly(true);
@@ -182,8 +178,13 @@ void SensorWindow::setupLinker()
     linkerWindowLayout->addWidget(testbutton);
 
     linkerWindow->setLayout(linkerWindowLayout);
-    westLayout->addWidget(linkerWindow);
+    centerLayout->addWidget(linkerWindow);
     linkerWindow->setVisible(false);
+
+    //functionality
+
+    connect(testbutton, SIGNAL(clicked(bool)), this, SLOT(linkerClearTriggered()));
+    connect(LinkManager::instance(), SIGNAL(updated(int, QString)), this, SLOT(linkerUpdateSlot(int, QString)));
 
 }
 
@@ -280,6 +281,21 @@ void SensorWindow::linkerSlot()
         linkerWindow->setVisible(true);
     }else{
         linkerWindow->setVisible(false);
-
     }
+}
+
+void SensorWindow::linkerUpdateSlot(int dataIndex, QString name)
+{
+    std::vector<QString> displayData = LinkManager::instance()->getAllData();
+
+    linkerData->clear();
+    for(QString const& result : displayData){
+        linkerData->append(QString("<font color='blue'>></font><br>").arg(result));
+    }
+}
+
+void SensorWindow::linkerClearTriggered()
+{
+    LinkManager::instance()->clearAllData();
+    linkerUpdateSlot(0,"");
 }

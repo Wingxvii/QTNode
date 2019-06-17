@@ -13,6 +13,7 @@
 #include <QLabel>
 #include <QRegExpValidator>
 #include <QComboBox>
+#include <QPushButton>
 
 #include "nodeeditor/DataTypes/calibdata.h"
 #include "nodeeditor/DataTypes/imagedata.h"
@@ -86,7 +87,7 @@ private: //UI
     QLabel *statusLabel;
     QLabel *indexLabel;
     QLineEdit* indexInput;
-
+    QPushButton* send;
 };
 
 
@@ -149,6 +150,7 @@ private: //UI
     QLabel *statusLabel;
     QLabel *indexLabel;
     QLineEdit* indexInput;
+    QPushButton* send;
 
 };
 
@@ -212,6 +214,7 @@ private: //UI
     QLabel *statusLabel;
     QLabel *indexLabel;
     QLineEdit* indexInput;
+    QPushButton* send;
 
 };
 
@@ -275,6 +278,7 @@ private: //UI
     QLabel *statusLabel;
     QLabel *indexLabel;
     QLineEdit* indexInput;
+    QPushButton* send;
 
 };
 
@@ -338,6 +342,7 @@ private: //UI
     QLabel *statusLabel;
     QLabel *indexLabel;
     QLineEdit* indexInput;
+    QPushButton* send;
 
 };
 

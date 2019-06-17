@@ -20,7 +20,7 @@ void LinkManager::sendData(std::shared_ptr<CalibData> data, QString name)
 
     if(name != ""){
         calibList[name] = data;
-        emit calibUpdated(name);
+        emit updated(0,name);
     }
 }
 
@@ -32,7 +32,7 @@ void LinkManager::sendData(std::shared_ptr<ImageData> data, QString name)
 
     if(name != ""){
         imageList[name] = data;
-        emit imageUpdated(name);
+        emit updated(1,name);
     }
 }
 
@@ -43,7 +43,7 @@ void LinkManager::sendData(std::shared_ptr<PointData> data, QString name)
     }
     if(name != ""){
         pointList[name] = data;
-        emit pointUpdated(name);
+        emit updated(2,name);
     }
 }
 
@@ -54,7 +54,7 @@ void LinkManager::sendData(std::shared_ptr<PointsData> data, QString name)
     }
         if(name != ""){
     pointsList[name] = data;
-    emit pointsUpdated(name);
+    emit updated(3,name);
         }
 }
 
@@ -65,7 +65,7 @@ void LinkManager::sendData(std::shared_ptr<VideoGraphData> data, QString name)
     }
         if(name != ""){
     videoGraphList[name] = data;
-    emit videoUpdated(name);
+    emit updated(4,name);
         }
 }
 
@@ -172,6 +172,49 @@ void LinkManager::privateClear()
     videoGraphListPrivate.clear();
     intListPrivate.clear();
     stringListPrivate.clear();
+}
+
+std::vector<QString> LinkManager::getAllData()
+{
+    std::vector<QString> out = std::vector<QString>();
+
+    for(auto const& data : calibList){
+        QString newString = "Calib Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+    for(auto const& data : imageList){
+        QString newString = "Image Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+    for(auto const& data : pointList){
+        QString newString = "Point Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+    for(auto const& data : pointsList){
+        QString newString = "Points Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+    for(auto const& data : videoGraphList){
+        QString newString = "Video Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+    return out;
+
 }
 
 

@@ -62,9 +62,8 @@ private:
     QAction* fileCloseAction;
 
     //cardinal layouts
-    QWidget* northWidget, *southWidget, *westWidget, *eastWidget, *centerWidget;
+    QWidget* northWidget, *southWidget, *centerWidget;
     QHBoxLayout* northLayout,* southLayout, *centerLayout;
-    QVBoxLayout* westLayout, *eastLayout;
     void setupLayout();
 
 private: //windows
@@ -91,6 +90,7 @@ private: //windows
     QPushButton *testbutton;
     void setupLinker();
 
+
 public slots:
     void newSlot();
     void openSlot();
@@ -103,6 +103,9 @@ public slots:
     void consoleEnterSlot();
 
     void linkerSlot();
+    void linkerUpdateSlot(int, QString);
+    void linkerClearTriggered();
+
 };
 
 #endif // SENSORWINDOW_H

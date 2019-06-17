@@ -11,20 +11,23 @@ CalibLinkIn::CalibLinkIn()
     statusLabel = new QLabel();
     indexLabel = new QLabel("Select Data Index: ");
     indexInput = new QLineEdit();
+    send = new QPushButton("Send Data");
     indexInput->setText("0");
 
 
     //connect
-    connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    //connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(send, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
 
     layout->addWidget(indexLabel, 1,1);
     layout->addWidget(indexInput, 1,2);
     layout->addWidget(statusLabel,2,1);
+    layout->addWidget(send, 3,1);
     window->setLayout(layout);
 
 
     buildContextWindow();
-    preCheck();
+    //preCheck();
 }
 
 unsigned int CalibLinkIn::nPorts(QtNodes::PortType portType) const
@@ -59,7 +62,7 @@ void CalibLinkIn::setInData(std::shared_ptr<QtNodes::NodeData> data, int locatio
             modelValidationError = QString();
 
             //instantiate output
-            preCheck();
+            //preCheck();
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -96,7 +99,7 @@ void CalibLinkIn::restore(const QJsonObject &json)
         indexInput->setText(temp);
     }
 
-    preCheck();
+    //preCheck();
 
 }
 
@@ -152,17 +155,20 @@ ImageLinkIn::ImageLinkIn()
     indexLabel = new QLabel("Select Data Index: ");
     indexInput = new QLineEdit();
     indexInput->setText("0");
+    send = new QPushButton("Send Data");
 
 
     //connect
-    connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    //connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(send, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
 
     layout->addWidget(indexLabel, 1,1);
     layout->addWidget(indexInput, 1,2);
     layout->addWidget(statusLabel,2,1);
+    layout->addWidget(send, 3,1);
     window->setLayout(layout);
     buildContextWindow();
-    preCheck();
+    //preCheck();
 }
 
 unsigned int ImageLinkIn::nPorts(QtNodes::PortType portType) const
@@ -197,7 +203,7 @@ void ImageLinkIn::setInData(std::shared_ptr<QtNodes::NodeData> data, int locatio
             modelValidationError = QString();
 
             //instantiate output
-            preCheck();
+            //preCheck();
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -234,7 +240,7 @@ void ImageLinkIn::restore(const QJsonObject &json)
         indexInput->setText(temp);
     }
 
-    preCheck();
+    //preCheck();
 
 }
 
@@ -291,18 +297,21 @@ PointLinkIn::PointLinkIn()
     indexLabel = new QLabel("Select Data Index: ");
     indexInput = new QLineEdit();
     indexInput->setText("0");
+    send = new QPushButton("Send Data");
 
 
     //connect
-    connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    //connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(send, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
 
     layout->addWidget(indexLabel, 1,1);
     layout->addWidget(indexInput, 1,2);
     layout->addWidget(statusLabel,2,1);
+    layout->addWidget(send, 3,1);
     window->setLayout(layout);
 
     buildContextWindow();
-    preCheck();
+    //preCheck();
 }
 
 unsigned int PointLinkIn::nPorts(QtNodes::PortType portType) const
@@ -337,7 +346,7 @@ void PointLinkIn::setInData(std::shared_ptr<QtNodes::NodeData> data, int locatio
             modelValidationError = QString();
 
             //instantiate output
-            preCheck();
+            //preCheck();
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -374,7 +383,7 @@ void PointLinkIn::restore(const QJsonObject &json)
         indexInput->setText(temp);
     }
 
-    preCheck();
+    //preCheck();
 
 }
 
@@ -430,18 +439,21 @@ PointsLinkIn::PointsLinkIn()
     indexLabel = new QLabel("Select Data Index: ");
     indexInput = new QLineEdit();
     indexInput->setText("0");
+    send = new QPushButton("Send Data");
 
 
     //connect
-    connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    //connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(send, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
 
     layout->addWidget(indexLabel, 1,1);
     layout->addWidget(indexInput, 1,2);
     layout->addWidget(statusLabel,2,1);
+    layout->addWidget(send, 3,1);
     window->setLayout(layout);
 
     buildContextWindow();
-    preCheck();
+    //preCheck();
 }
 
 unsigned int PointsLinkIn::nPorts(QtNodes::PortType portType) const
@@ -476,7 +488,7 @@ void PointsLinkIn::setInData(std::shared_ptr<QtNodes::NodeData> data, int locati
             modelValidationError = QString();
 
             //instantiate output
-            preCheck();
+            //preCheck();
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -513,7 +525,7 @@ void PointsLinkIn::restore(const QJsonObject &json)
         indexInput->setText(temp);
     }
 
-    preCheck();
+    //preCheck();
 
 }
 
@@ -570,18 +582,21 @@ VideoLinkIn::VideoLinkIn()
     indexLabel = new QLabel("Select Data Index: ");
     indexInput = new QLineEdit();
     indexInput->setText("0");
+    send = new QPushButton("Send Data");
 
 
     //connect
-    connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    //connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(send, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
 
     layout->addWidget(indexLabel, 1,1);
     layout->addWidget(indexInput, 1,2);
     layout->addWidget(statusLabel,2,1);
+    layout->addWidget(send, 3,1);
     window->setLayout(layout);
 
     buildContextWindow();
-    preCheck();
+    //preCheck();
 }
 
 unsigned int VideoLinkIn::nPorts(QtNodes::PortType portType) const
@@ -616,7 +631,7 @@ void VideoLinkIn::setInData(std::shared_ptr<QtNodes::NodeData> data, int locatio
             modelValidationError = QString();
 
             //instantiate output
-            preCheck();
+            //preCheck();
         }
        else{
           modelValidationState = NodeValidationState::Warning;
@@ -653,7 +668,7 @@ void VideoLinkIn::restore(const QJsonObject &json)
         indexInput->setText(temp);
     }
 
-    preCheck();
+    //preCheck();
 
 }
 
