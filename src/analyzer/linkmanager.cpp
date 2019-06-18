@@ -16,9 +16,7 @@ void LinkManager::sendData(std::shared_ptr<CalibData> data, QString name)
 {
     if(name.contains("PRIVATE")){
         calibListPrivate[name] = data;
-    }
-
-    if(name != ""){
+    }else if(name != ""){
         calibList[name] = data;
         emit updated(0,name);
     }
@@ -28,9 +26,7 @@ void LinkManager::sendData(std::shared_ptr<ImageData> data, QString name)
 {
     if(name.contains("PRIVATE")){
         imageListPrivate[name] = data;
-    }
-
-    if(name != ""){
+    }else if(name != ""){
         imageList[name] = data;
         emit updated(1,name);
     }
@@ -40,8 +36,7 @@ void LinkManager::sendData(std::shared_ptr<PointData> data, QString name)
 {
     if(name.contains("PRIVATE")){
         pointListPrivate[name] = data;
-    }
-    if(name != ""){
+    }else if(name != ""){
         pointList[name] = data;
         emit updated(2,name);
     }
@@ -51,22 +46,20 @@ void LinkManager::sendData(std::shared_ptr<PointsData> data, QString name)
 {
     if(name.contains("PRIVATE")){
         pointsListPrivate[name] = data;
+    }else if(name != ""){
+        pointsList[name] = data;
+        emit updated(3,name);
     }
-        if(name != ""){
-    pointsList[name] = data;
-    emit updated(3,name);
-        }
 }
 
 void LinkManager::sendData(std::shared_ptr<VideoGraphData> data, QString name)
 {
     if(name.contains("PRIVATE")){
         videoGraphListPrivate[name] = data;
+    }else if(name != ""){
+        videoGraphList[name] = data;
+        emit updated(4,name);
     }
-        if(name != ""){
-    videoGraphList[name] = data;
-    emit updated(4,name);
-        }
 }
 
 void LinkManager::sendData(int data, QString name)

@@ -182,7 +182,6 @@ void SensorWindow::setupLinker()
     linkerWindow->setVisible(false);
 
     //functionality
-
     connect(testbutton, SIGNAL(clicked(bool)), this, SLOT(linkerClearTriggered()));
     connect(LinkManager::instance(), SIGNAL(updated(int, QString)), this, SLOT(linkerUpdateSlot(int, QString)));
 
@@ -263,7 +262,6 @@ void SensorWindow::consoleSlot()
         consoleWindow->setVisible(true);
     }else{
         consoleWindow->setVisible(false);
-
     }
 }
 

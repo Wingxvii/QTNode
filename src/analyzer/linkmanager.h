@@ -43,8 +43,13 @@ public:
     int getIntData(QString name);
     QString getNameData(QString name);
 
+    //clears public data
     void clearAllData();
+
+    //clears private data
     void privateClear();
+
+    //returns a string vector for data display
     std::vector<QString> getAllData();
 
 signals:
