@@ -25,7 +25,7 @@ FrameIterator::FrameIterator(){
 
     connect(forward, SIGNAL(clicked(bool)), this, SLOT(iterateForward()));
     connect(backward, SIGNAL(clicked(bool)), this, SLOT(iterateBackward()));
-    connect(frameTo, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
+    connect(frameTo, SIGNAL(clicked(bool)), this, SLOT(gotoFrame()));
 
     layout->addWidget(totalFramesLabel, 1,1);
     layout->addWidget(totalFramesDisplay, 1,2);
@@ -120,6 +120,12 @@ void FrameIterator::iterateBackward(){
     ++currFrame;
     preCheck();
 }
+
+void FrameIterator::gotoFrame()
+{
+    currFrame = frameSelector->text().toInt();
+    preCheck();
+}
 void FrameIterator::processData(){
 
     frameOut->_image = videoIn->data().at(currFrame);
@@ -134,15 +140,14 @@ void FrameIterator::preCheck()
         //exception handeling for frame size
         if(currFrame > videoIn->data().size()){
             currFrame = videoIn->data().size();
-            updateUI();
         }
+
+        updateUI();
     }
 
-    if(active && videoIn){
-        if(videoIn->isReady){
-            processData();
-            emit dataUpdated(0);
-        }
+    if(active && videoIn && videoIn->isReady){
+        processData();
+        emit dataUpdated(0);
     }else{
         frameOut->unready();
     }

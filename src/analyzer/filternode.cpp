@@ -37,7 +37,7 @@
 #include "nodeeditor/imagedisplay.h"
 #include "nodeeditor/linkin.h"
 #include "nodeeditor/linkout.h"
-
+#include "nodeeditor/debuggetcorners.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -63,7 +63,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 //    final->registerModel<GraphDisplayDataModel>("zLegacy"); //Displays
 //    final->registerModel<OutputDisplayModel>("zLegacy");//output
 //    final->registerModel<VideoOutputModel>("zLegacy");//output
-//    final->registerModel<DebugGetCorners>("zLegacy");
+//
 //    final->registerModel<CheckerboardPointsBuffer>("Calibration");
 //    final->registerModel<VideoThreshold>("Tracking");
 //    final->registerModel<ErodeImage>("Tracking");
@@ -99,6 +99,8 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<PointLinkOut>("Link Out");
     final->registerModel<PointsLinkOut>("Link Out");
     final->registerModel<VideoLinkOut>("Link Out");
+
+    final->registerModel<DebugGetCorners>("Debug");
 
 
     scene->setRegistry(final);
