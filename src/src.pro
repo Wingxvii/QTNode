@@ -165,7 +165,8 @@ SOURCES += main.cpp\
     analyzer/linkmanager.cpp \
     nodeeditor/linkin.cpp \
     nodeeditor/linkout.cpp \
-    nodeeditor/debuggetcorners.cpp
+    nodeeditor/debuggetcorners.cpp \
+    jsbuilder.cpp
 
 
 
@@ -344,7 +345,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/linkin.h \
     nodeeditor/linkout.h \
     scripter.h \
-    nodeeditor/debuggetcorners.h
+    nodeeditor/debuggetcorners.h \
+    analyzer/jsbuilder.h
 
 
 

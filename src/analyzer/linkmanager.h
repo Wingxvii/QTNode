@@ -1,3 +1,18 @@
+/*
+Singleton class used to store data useful to the nodeeditor
+The data stored here can be accessed freely by multiple parts of the code,
+and can be interfaced with by the user.
+
+Used by:
+@linkin
+@linkout
+@linkerdisplay
+@jsbuilder
+@multithreading
+
+*/
+
+
 #ifndef LINKMANAGER_H
 #define LINKMANAGER_H
 

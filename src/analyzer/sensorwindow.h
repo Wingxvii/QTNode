@@ -12,7 +12,8 @@
 #include <QInputDialog>
 #include <QTextEdit>
 #include <QLineEdit>
-#include <QJSEngine>
+#include <QQmlEngine>
+#include <QQmlContext>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
@@ -79,7 +80,7 @@ private: //windows
     QGridLayout* consoleWindowLayout;
     QTextEdit *consoleOutput;
     QLineEdit *consoleInput;
-    QJSEngine engine;
+    QQmlEngine engine;
     void setupConsole();
 
     //linker window data

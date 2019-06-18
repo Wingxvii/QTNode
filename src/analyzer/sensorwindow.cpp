@@ -3,6 +3,7 @@
 #include <Logger.h>
 #include <QResizeEvent>
 #include "linkmanager.h"
+#include "jsbuilder.h"
 
 SensorWindow::SensorWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -25,9 +26,11 @@ SensorWindow::SensorWindow(QWidget *parent) :
 
     //North
 
+
     createActions();
 
     refreshSize = 200;
+
 
 }
 
@@ -162,6 +165,8 @@ void SensorWindow::setupConsole()
     southLayout->addWidget(consoleWindow);
     consoleWindow->setVisible(false);
 
+    engine.rootContext()->setContextProperty("EditorData", JSBuilder::instance());
+
 }
 
 void SensorWindow::setupLinker()
@@ -271,6 +276,7 @@ void SensorWindow::consoleEnterSlot()
     auto result = engine.evaluate(consoleInput->text());
     consoleOutput->append(QString("<i>%1</i><br>").arg(result.toString()));
     consoleInput->clear();
+
 }
 
 void SensorWindow::linkerSlot()
