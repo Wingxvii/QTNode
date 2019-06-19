@@ -12,11 +12,17 @@
 #include <QInputDialog>
 #include <QTextEdit>
 #include <QLineEdit>
+
+#include <QJSEngine>
+#include <QJSValue>
+
 #include <QQmlEngine>
 #include <QQmlContext>
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+#include "jsbuilder.h"
 
 namespace Ui {
 class SensorWindow;
@@ -80,7 +86,8 @@ private: //windows
     QGridLayout* consoleWindowLayout;
     QTextEdit *consoleOutput;
     QLineEdit *consoleInput;
-    QQmlEngine engine;
+    QJSEngine engine;
+    JSBuilder* builder;
     void setupConsole();
 
     //linker window data

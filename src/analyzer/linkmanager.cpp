@@ -9,6 +9,10 @@ LinkManager::LinkManager()
     pointList = std::map<QString, std::shared_ptr<PointData>>();
     pointsList = std::map<QString, std::shared_ptr<PointsData>>();
     videoGraphList = std::map<QString, std::shared_ptr<VideoGraphData>>();
+    intList = std::map<QString, int>();
+    floatList = std::map<QString, float>();
+    stringList = std::map<QString, QString>();
+    boolList = std::map<QString, bool>();
 
 }
 
@@ -66,6 +70,19 @@ void LinkManager::sendData(int data, QString name)
 {
     if(name.contains("PRIVATE")){
         intListPrivate[name] = data;
+    }else if(name != ""){
+        intList[name] = data;
+        emit updated(5,name);
+    }
+}
+
+void LinkManager::sendData(float data, QString name)
+{
+    if(name.contains("PRIVATE")){
+        floatListPrivate[name] = data;
+    }else if(name != ""){
+        floatList[name] = data;
+        emit updated(6,name);
     }
 }
 
@@ -73,6 +90,19 @@ void LinkManager::sendData(QString data, QString name)
 {
     if(name.contains("PRIVATE")){
         stringListPrivate[name] = data;
+    }else if(name != ""){
+        stringList[name] = data;
+        emit updated(7,name);
+    }
+}
+
+void LinkManager::sendData(bool data, QString name)
+{
+    if(name.contains("PRIVATE")){
+        boolListPrivate[name] = data;
+    }else if(name != ""){
+        boolList[name] = data;
+        emit updated(8,name);
     }
 }
 
@@ -136,15 +166,46 @@ int LinkManager::getIntData(QString name)
     if(name.contains("PRIVATE")){
         return intListPrivate[name];
     }
+    if(intList.find(name) == intList.end()){
+        return NULL;
+    }
+    return intList[name];
 
 }
 
-QString LinkManager::getNameData(QString name)
+float LinkManager::getFloatData(QString name)
+{
+    if(name.contains("PRIVATE")){
+        return floatListPrivate[name];
+    }
+    if(floatList.find(name) == floatList.end()){
+        return NULL;
+    }
+    return floatList[name];
+
+}
+
+QString LinkManager::getStringData(QString name)
 {
     if(name.contains("PRIVATE")){
         return stringListPrivate[name];
     }
+    if(stringList.find(name) == stringList.end()){
+        return NULL;
+    }
+    return stringList[name];
 
+}
+
+bool LinkManager::getBoolData(QString name)
+{
+    if(name.contains("PRIVATE")){
+        return boolListPrivate[name];
+    }
+    if(boolList.find(name) == boolList.end()){
+        return NULL;
+    }
+    return boolList[name];
 }
 
 void LinkManager::clearAllData()
@@ -154,6 +215,10 @@ void LinkManager::clearAllData()
     pointList.clear();
     pointsList.clear();
     videoGraphList.clear();
+    intList.clear();
+    floatList.clear();
+    stringList.clear();
+    boolList.clear();
 }
 
 void LinkManager::privateClear()
@@ -164,7 +229,9 @@ void LinkManager::privateClear()
     pointsListPrivate.clear();
     videoGraphListPrivate.clear();
     intListPrivate.clear();
+    floatListPrivate.clear();
     stringListPrivate.clear();
+    boolListPrivate.clear();
 }
 
 std::vector<QString> LinkManager::getAllData()
@@ -205,6 +272,36 @@ std::vector<QString> LinkManager::getAllData()
         newString.append("]");
         out.push_back(newString);
     }
+
+    for(auto const& data : intList){
+        QString newString = "Int Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+    for(auto const& data : floatList){
+        QString newString = "Float Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+    for(auto const& data : stringList){
+        QString newString = "String Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+    for(auto const& data : boolList){
+        QString newString = "Bool Data at [";
+        newString.append(data.first);
+        newString.append("]");
+        out.push_back(newString);
+    }
+
+
 
     return out;
 

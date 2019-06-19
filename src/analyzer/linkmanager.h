@@ -48,7 +48,9 @@ public:
     void sendData(std::shared_ptr<PointsData> data, QString name);
     void sendData(std::shared_ptr<VideoGraphData> data, QString name);
     void sendData(int data, QString name);
+    void sendData(float data, QString name);
     void sendData(QString data, QString name);
+    void sendData(bool data, QString name);
 
     std::shared_ptr<CalibData> getCalibData(QString name);
     std::shared_ptr<ImageData> getImageData(QString name);
@@ -56,7 +58,9 @@ public:
     std::shared_ptr<PointsData> getPointsData(QString name);
     std::shared_ptr<VideoGraphData> getVideoData(QString name);
     int getIntData(QString name);
-    QString getNameData(QString name);
+    float getFloatData(QString name);
+    QString getStringData(QString name);
+    bool getBoolData(QString name);
 
     //clears public data
     void clearAllData();
@@ -80,6 +84,11 @@ private:
     std::map<QString, std::shared_ptr<PointData>> pointList;
     std::map<QString, std::shared_ptr<PointsData>> pointsList;
     std::map<QString, std::shared_ptr<VideoGraphData>> videoGraphList;
+    std::map<QString, int> intList;
+    std::map<QString, float> floatList;
+    std::map<QString, QString> stringList;
+    std::map<QString, bool> boolList;
+
 
     //secondary data dump for internal use
     std::map<QString, std::shared_ptr<CalibData>> calibListPrivate;
@@ -88,7 +97,9 @@ private:
     std::map<QString, std::shared_ptr<PointsData>> pointsListPrivate;
     std::map<QString, std::shared_ptr<VideoGraphData>> videoGraphListPrivate;
     std::map<QString, int> intListPrivate;
+    std::map<QString, float> floatListPrivate;
     std::map<QString, QString> stringListPrivate;
+    std::map<QString, bool> boolListPrivate;
 
 
 };

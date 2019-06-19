@@ -3,7 +3,6 @@
 #include <Logger.h>
 #include <QResizeEvent>
 #include "linkmanager.h"
-#include "jsbuilder.h"
 
 SensorWindow::SensorWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -165,7 +164,10 @@ void SensorWindow::setupConsole()
     southLayout->addWidget(consoleWindow);
     consoleWindow->setVisible(false);
 
-    engine.rootContext()->setContextProperty("EditorData", JSBuilder::instance());
+    builder = new JSBuilder();
+    QJSValue scriptBuilder = engine.newQObject(builder);
+
+    engine.globalObject().setProperty("builder", scriptBuilder);
 
 }
 
