@@ -96,6 +96,11 @@ void SensorWindow::createActions()
     windowLinkerAction->setCheckable(true);
     connect(windowLinkerAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
 
+    dataSaver = new SaveData();
+    saveDataAction = new QAction(tr("&Save Cashed Data"), this);
+    saveDataAction->setStatusTip("Open Data Saving Window");
+    connect(saveDataAction, SIGNAL(triggered()), dataSaver, SLOT(openSaveWindow()));
+
     createMenus();
 }
 
@@ -113,6 +118,8 @@ void SensorWindow::createMenus()
     ui->menuWindow->addAction(windowConsoleAction);
     ui->menuWindow->addAction(windowLinkerAction);
     ui->menuWindow->addSeparator();
+
+    ui->menuLink->addAction(saveDataAction);
 
 }
 
@@ -178,8 +185,7 @@ void SensorWindow::setupLinker()
     linkerWindowLayout = new QGridLayout;
     testbutton = new QPushButton("Clear Data");
 
-    linkerData = new QTextEdit(("<h3>Data Cashe</h3>"));
-    linkerData->setReadOnly(true);
+    linkerData = new QListWidget();
 
     linkerWindowLayout->addWidget(linkerData);
     linkerWindowLayout->addWidget(testbutton);
@@ -296,7 +302,7 @@ void SensorWindow::linkerUpdateSlot(int dataIndex, QString name)
 
     linkerData->clear();
     for(QString const& result : displayData){
-        linkerData->append(QString("<font color='lightblue'><b>%1</b></font> ").arg(result));
+        linkerData->addItem(result);
     }
 }
 

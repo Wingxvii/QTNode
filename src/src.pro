@@ -166,7 +166,8 @@ SOURCES += main.cpp\
     nodeeditor/linkin.cpp \
     nodeeditor/linkout.cpp \
     nodeeditor/debuggetcorners.cpp \
-    jsbuilder.cpp
+    jsbuilder.cpp \
+    analyzer/savedata.cpp
 
 
 
@@ -287,7 +288,6 @@ HEADERS  += mainwindow.h \
     analyzer/graphcontoller.h \
     analyzer/sensorwindow.h \
     analyzer/filternode.h \
-    analyzer/sensormanager.h \
     analyzer/graphdata.h \
     analyzer/graphdataconnector.h \
     analyzer/linegraph.h \
@@ -346,7 +346,9 @@ HEADERS  += mainwindow.h \
     nodeeditor/linkout.h \
     scripter.h \
     nodeeditor/debuggetcorners.h \
-    analyzer/jsbuilder.h
+    analyzer/jsbuilder.h \
+    analyzer/sensormanager.h \
+    analyzer/savedata.h
 
 
 

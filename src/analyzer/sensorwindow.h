@@ -12,6 +12,7 @@
 #include <QInputDialog>
 #include <QTextEdit>
 #include <QLineEdit>
+#include <QListWidget>
 
 #include <QJSEngine>
 #include <QJSValue>
@@ -23,6 +24,7 @@
 #include <QVBoxLayout>
 
 #include "jsbuilder.h"
+#include "savedata.h"
 
 namespace Ui {
 class SensorWindow;
@@ -68,6 +70,9 @@ private:
     QAction* fileClearAction;
     QAction* fileCloseAction;
 
+    QAction* saveDataAction;
+    SaveData* dataSaver;
+
     //cardinal layouts
     QWidget* northWidget, *southWidget, *centerWidget;
     QHBoxLayout* northLayout,* southLayout, *centerLayout;
@@ -94,9 +99,10 @@ private: //windows
     QWidget* linkerWindow;
     QGridLayout* linkerWindowLayout;
     QAction* windowLinkerAction;
-    QTextEdit *linkerData;
+    QListWidget *linkerData;
     QPushButton *testbutton;
     void setupLinker();
+
 
 
 public slots:
