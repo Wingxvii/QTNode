@@ -167,7 +167,7 @@ void SensorWindow::setupConsole()
     builder = new JSBuilder();
     QJSValue scriptBuilder = engine.newQObject(builder);
 
-    engine.globalObject().setProperty("builder", scriptBuilder);
+    engine.globalObject().setProperty("cashe", scriptBuilder);
 
 }
 
