@@ -63,7 +63,6 @@ unsigned int FrameIterator::nPorts(QtNodes::PortType portType)const
 std::shared_ptr<NodeData> FrameIterator::outData(PortIndex port){
     switch(port){
     case 0:
-
             return frameOut;
         break;
     return NULL;
@@ -113,11 +112,11 @@ QString FrameIterator::validationMessage() const
 }
 
 void FrameIterator::iterateForward(){
-    --currFrame;
+    ++currFrame;
     preCheck();
 }
 void FrameIterator::iterateBackward(){
-    ++currFrame;
+    --currFrame;
     preCheck();
 }
 

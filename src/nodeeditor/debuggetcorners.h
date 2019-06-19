@@ -9,8 +9,8 @@
 
 #include <iostream>
 #include <QLabel>
-#include <QPushButton>
 #include <QLineEdit>
+#include <QGridLayout>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -47,7 +47,7 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override;
 
-    QWidget* embeddedWidget() override {return button;}
+    QWidget* embeddedWidget() override {return window;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
@@ -55,6 +55,7 @@ public:
 public slots:
     void processData() override;
     void preCheck() override;
+    void updateUI();
 
     void ShowContextMenu(const QPoint &pos) override;
 
@@ -70,9 +71,12 @@ private: //port values
     std::shared_ptr<ImageData> imageOut;
     std::shared_ptr<PointData> cornersOut;
     std::shared_ptr<CalibData> dataIn;
-    QPushButton* button;
 
+private: //ui
 
+    QGridLayout* layout;
+    QLabel* cornersFoundLabel;
+    bool cornersFound;
 
 };
 

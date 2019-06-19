@@ -8,10 +8,17 @@
 #include "opencv2\calib3d.hpp"
 
 DebugGetCorners::DebugGetCorners(){
-    button = new QPushButton("Find Corners");
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(findCorners()));
     imageOut = std::make_shared<ImageData>();
     cornersOut = std::make_shared<PointData>();
+
+    layout = new QGridLayout;
+    window = new QWidget;
+    cornersFoundLabel = new QLabel("No Corners Found");
+
+    layout->addWidget(cornersFoundLabel);
+
+    window->setLayout(layout);
+
 
 }
 
@@ -117,9 +124,10 @@ void DebugGetCorners::processData(){
             cornersOut->setData(pointBuffer);
             cornersOut->ready();
             LOG_JOHN() << "Corners found";
+            cornersFound = true;
         }else{
             LOG_JOHN() << "No Corners found";
-
+            cornersFound = false;
         }
         //create a copy image of imagein, and send that instead #URGENT
         cv::Mat temp = cv::Mat(imageIn->data().clone());
@@ -129,18 +137,29 @@ void DebugGetCorners::processData(){
         imageOut->ready();
         emit dataUpdated(0);
         emit dataUpdated(1);
-
 }
 
 void DebugGetCorners::preCheck()
 {
     if(active && imageIn && dataIn && imageIn->isReady && dataIn->isReady){
         processData();
+    }else{
+        if(cornersOut){cornersOut->unready();updateUI(); cornersFound = false;}
+        if(imageOut){imageOut->unready();updateUI();cornersFound = false;}
+    }
+    updateUI();
+}
+
+void DebugGetCorners::updateUI()
+{
+    if(cornersFound){
+        cornersFoundLabel->setText("Corners Found!");
 
     }else{
-        if(cornersOut){cornersOut->unready();}
-        if(imageOut){imageOut->unready();}
+        cornersFoundLabel->setText("No Corners Found");
+
     }
+
 }
 
 void DebugGetCorners::ShowContextMenu(const QPoint &pos)
