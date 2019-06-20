@@ -62,6 +62,10 @@ public:
     QString getStringData(QString name);
     bool getBoolData(QString name);
 
+    void saveImageData(QString name);
+    void saveVideoData(QString name);
+    void saveStringData(QString name);
+
     //clears public data
     void clearAllData();
 

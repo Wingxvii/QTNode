@@ -46,4 +46,20 @@ bool JSBuilder::getBoolData(const QString index)
     return LinkManager::instance()->getBoolData(index);
 }
 
+void JSBuilder::saveImageData(const QString index)
+{
+    LinkManager::instance()->saveImageData(index);
+}
+
+void JSBuilder::saveVideoData(const QString index)
+{
+    LinkManager::instance()->saveVideoData(index);
+}
+
+void JSBuilder::saveStringData(const QString index)
+{
+    LinkManager::instance()->saveStringData(index);
+
+}
+
 

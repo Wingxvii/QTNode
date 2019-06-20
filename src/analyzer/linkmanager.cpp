@@ -208,6 +208,35 @@ bool LinkManager::getBoolData(QString name)
     return boolList[name];
 }
 
+void LinkManager::saveImageData(QString name)
+{
+    QString fileName = QFileDialog::getSaveFileName();
+
+}
+
+void LinkManager::saveVideoData(QString name)
+{
+    if(videoGraphList[name]){
+        QString fileName = QFileDialog::getSaveFileName();
+
+        //cv::VideoWriter videoOutput(fileName,CV_FOURCC('M','J','P','G'));
+
+        for(cv::Mat const& img : videoGraphList[name]->_video){
+            videoOutput << img;
+        }
+
+    }
+
+
+}
+
+void LinkManager::saveStringData(QString name)
+{
+    QString fileName = QFileDialog::getSaveFileName();
+
+}
+
+
 void LinkManager::clearAllData()
 {
     calibList.clear();

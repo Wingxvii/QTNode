@@ -25,6 +25,11 @@ public slots:
     Q_INVOKABLE QString getStringData(const QString index);
     Q_INVOKABLE bool getBoolData(const QString index);
 
+    Q_INVOKABLE void saveImageData(const QString index);
+    Q_INVOKABLE void saveVideoData(const QString index);
+    Q_INVOKABLE void saveStringData(const QString index);
+
+
 };
 
 #endif // JSBUILDER_H
