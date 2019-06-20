@@ -234,70 +234,70 @@ void LinkManager::privateClear()
     boolListPrivate.clear();
 }
 
-std::vector<QString> LinkManager::getAllData()
+std::vector<QString> LinkManager::getAllData(int x)
 {
     std::vector<QString> out = std::vector<QString>();
 
     for(auto const& data : calibList){
-        QString newString = "Calib Data at [";
+        QString newString = "Calib Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
     for(auto const& data : imageList){
-        QString newString = "Image Data at [";
+        QString newString = "Image Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
     for(auto const& data : pointList){
-        QString newString = "Point Data at [";
+        QString newString = "Point Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
     for(auto const& data : pointsList){
-        QString newString = "Points Data at [";
+        QString newString = "Points Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
     for(auto const& data : videoGraphList){
-        QString newString = "Video Data at [";
+        QString newString = "Video Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
     for(auto const& data : intList){
-        QString newString = "Int Data at [";
+        QString newString = "Int Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
     for(auto const& data : floatList){
-        QString newString = "Float Data at [";
+        QString newString = "Float Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
     for(auto const& data : stringList){
-        QString newString = "String Data at [";
+        QString newString = "String Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
     for(auto const& data : boolList){
-        QString newString = "Bool Data at [";
+        QString newString = "Bool Data at [:";
         newString.append(data.first);
-        newString.append("]");
+        newString.append(":]");
         out.push_back(newString);
     }
 
@@ -306,5 +306,4 @@ std::vector<QString> LinkManager::getAllData()
     return out;
 
 }
-
 

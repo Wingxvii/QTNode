@@ -19,6 +19,7 @@ SensorWindow::SensorWindow(QWidget *parent) :
     setupEditor();
 
     //East
+    setUpImageDisplay();
 
     //South
     setupConsole();
@@ -96,8 +97,13 @@ void SensorWindow::createActions()
     windowLinkerAction->setCheckable(true);
     connect(windowLinkerAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
 
+    imageDisplayAction = new QAction(tr("&Image Display"), this);
+    imageDisplayAction->setStatusTip("Open/Close Image Display Window");
+    imageDisplayAction->setCheckable(true);
+    connect(imageDisplayAction, SIGNAL(triggered()), this, SLOT(imageDisplaySlot()));
+
     dataSaver = new SaveData();
-    saveDataAction = new QAction(tr("&Save Cashed Data"), this);
+    saveDataAction = new QAction(tr("&Save Cached Data"), this);
     saveDataAction->setStatusTip("Open Data Saving Window");
     connect(saveDataAction, SIGNAL(triggered()), dataSaver, SLOT(openSaveWindow()));
 
@@ -117,6 +123,7 @@ void SensorWindow::createMenus()
 
     ui->menuWindow->addAction(windowConsoleAction);
     ui->menuWindow->addAction(windowLinkerAction);
+    ui->menuWindow->addAction(imageDisplayAction);
     ui->menuWindow->addSeparator();
 
     ui->menuLink->addAction(saveDataAction);
@@ -174,9 +181,10 @@ void SensorWindow::setupConsole()
     builder = new JSBuilder();
     QJSValue scriptBuilder = engine.newQObject(builder);
 
-    engine.globalObject().setProperty("cashe", scriptBuilder);
+    engine.globalObject().setProperty("cache", scriptBuilder);
 
 }
+
 
 void SensorWindow::setupLinker()
 {
@@ -197,7 +205,29 @@ void SensorWindow::setupLinker()
     //functionality
     connect(testbutton, SIGNAL(clicked(bool)), this, SLOT(linkerClearTriggered()));
     connect(LinkManager::instance(), SIGNAL(updated(int, QString)), this, SLOT(linkerUpdateSlot(int, QString)));
+    connect(linkerData, SIGNAL(itemActivated(QListWidgetItem *)), this, SLOT(itemActivate(QListWidgetItem *)));
 
+}
+
+void SensorWindow::setUpImageDisplay()
+{
+    //UI
+    imageWindow = new QWidget;
+    imageWindowLayout = new QGridLayout;
+    selectImageIndex = new QLineEdit();
+    selectImageIndex->setPlaceholderText("Input Image Index");
+    imageShow = new QLabel;
+    confirmImageSelection = new QPushButton("Confirm Selection");
+
+    imageWindowLayout->addWidget(imageShow,1,1,2,1);
+    imageWindowLayout->addWidget(selectImageIndex,2,1);
+    imageWindowLayout->addWidget(confirmImageSelection,2,2);
+
+    imageWindow->setLayout(imageWindowLayout);
+    centerLayout->addWidget(imageWindow);
+    imageWindow->setVisible(false);
+
+    connect(confirmImageSelection, SIGNAL(clicked(bool)), this, SLOT(showImage()));
 }
 
 void SensorWindow::newSlot()
@@ -311,3 +341,42 @@ void SensorWindow::linkerClearTriggered()
     LinkManager::instance()->clearAllData();
     linkerUpdateSlot(0,"");
 }
+
+void SensorWindow::itemActivate(QListWidgetItem *item)
+{
+    //saves selected data piece ot disc
+    QRegExp rx("(\:)");
+    QString itemIndex = item->text();
+    QStringList list = itemIndex.split(rx,QString::SkipEmptyParts);
+
+    LOG_JOHN() << list.at(1);
+
+}
+
+void SensorWindow::showImage()
+{
+    cv::Mat img;
+
+    if(LinkManager::instance()->getImageData(selectImageIndex->text())){
+        img = LinkManager::instance()->getImageData(selectImageIndex->text())->_image;
+        cv::cvtColor(img,img,CV_BGR2RGB);
+        imageShow->setPixmap(QPixmap::fromImage((QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888))));
+
+    }else{
+        LOG_JOHN() << "No Data Found";
+        QPixmap img("C:/projects/Shotcut/src/shotcut/IMAGES/nothing.png");
+        imageShow->setPixmap(img);
+    }
+
+
+}
+
+void SensorWindow::imageDisplaySlot()
+{
+    if(imageDisplayAction->isChecked()){
+        imageWindow->setVisible(true);
+    }else{
+        imageWindow->setVisible(false);
+    }
+}
+

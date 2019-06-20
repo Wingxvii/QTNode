@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGridLayout>
 #include "analyzer\filternode.h"
+#include "logger.h"
 
 #include <QList>
 #include <QTabWidget>
@@ -103,7 +104,14 @@ private: //windows
     QPushButton *testbutton;
     void setupLinker();
 
-
+    //image display data
+    QWidget* imageWindow;
+    QGridLayout* imageWindowLayout;
+    QAction* imageDisplayAction;
+    QLineEdit* selectImageIndex;
+    QLabel* imageShow;
+    QPushButton* confirmImageSelection;
+    void setUpImageDisplay();
 
 public slots:
     void newSlot();
@@ -119,6 +127,10 @@ public slots:
     void linkerSlot();
     void linkerUpdateSlot(int, QString);
     void linkerClearTriggered();
+    void itemActivate(QListWidgetItem * item);
+
+    void showImage();
+    void imageDisplaySlot();
 
 };
 

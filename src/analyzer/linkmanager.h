@@ -69,7 +69,9 @@ public:
     void privateClear();
 
     //returns a string vector for data display
-    std::vector<QString> getAllData();
+    std::vector<QString> getAllData(int x = -1);
+
+
 
 signals:
     void updated(int dataIndex, QString name);
