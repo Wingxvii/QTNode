@@ -167,7 +167,8 @@ SOURCES += main.cpp\
     nodeeditor/linkout.cpp \
     nodeeditor/debuggetcorners.cpp \
     jsbuilder.cpp \
-    analyzer/savedata.cpp
+    analyzer/savedata.cpp \
+    analyzer/consolewindow.cpp
 
 
 
@@ -348,7 +349,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/debuggetcorners.h \
     analyzer/jsbuilder.h \
     analyzer/sensormanager.h \
-    analyzer/savedata.h
+    analyzer/savedata.h \
+    analyzer/consolewindow.h
 
 
 

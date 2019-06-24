@@ -27,6 +27,7 @@
 #include "jsbuilder.h"
 #include "savedata.h"
 
+#include "consolewindow.h"
 namespace Ui {
 class SensorWindow;
 }
@@ -86,14 +87,7 @@ private: //windows
     QList<NodeEditorContainer> nodeWindowList;
     void setupEditor();
 
-    //console window data
-    QAction* windowConsoleAction;
-    QWidget* consoleWindow;
-    QGridLayout* consoleWindowLayout;
-    QTextEdit *consoleOutput;
-    QLineEdit *consoleInput;
-    QJSEngine engine;
-    JSBuilder* builder;
+    ConsoleWindow *console;
     void setupConsole();
 
     //linker window data
@@ -122,7 +116,6 @@ public slots:
     void closeSlot();
 
     void consoleSlot();
-    void consoleEnterSlot();
 
     void linkerSlot();
     void linkerUpdateSlot(int, QString);

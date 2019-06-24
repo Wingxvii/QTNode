@@ -87,10 +87,7 @@ void SensorWindow::createActions()
     fileCloseAction->setStatusTip("Close selected file without saving");
     connect(fileCloseAction, SIGNAL(triggered()), this, SLOT(closeSlot()));
 
-    windowConsoleAction = new QAction(tr("&Console"), this);
-    windowConsoleAction->setStatusTip("Open/Close Console Window");
-    windowConsoleAction->setCheckable(true);
-    connect(windowConsoleAction, SIGNAL(triggered()), this, SLOT(consoleSlot()));
+    connect(console->openAction, SIGNAL(triggered()), this, SLOT(consoleSlot()));
 
     windowLinkerAction = new QAction(tr("&Linker"), this);
     windowLinkerAction->setStatusTip("Open/Close Linker Window");
@@ -121,7 +118,7 @@ void SensorWindow::createMenus()
     ui->menuFIle->addAction(fileCloseAction);
     ui->menuFIle->addSeparator();
 
-    ui->menuWindow->addAction(windowConsoleAction);
+    ui->menuWindow->addAction(console->openAction);
     ui->menuWindow->addAction(windowLinkerAction);
     ui->menuWindow->addAction(imageDisplayAction);
     ui->menuWindow->addSeparator();
@@ -159,30 +156,8 @@ void SensorWindow::setupEditor()
 
 void SensorWindow::setupConsole()
 {
-    consoleWindow = new QWidget();
-    consoleWindowLayout = new QGridLayout();
-    consoleWindow->setLayout(consoleWindowLayout);
-
-    consoleInput = new QLineEdit();
-    consoleOutput = new QTextEdit(("<h3>JS Console </h3>"));
-
-    consoleWindowLayout->addWidget(consoleOutput);
-    consoleWindowLayout->addWidget(consoleInput);
-
-    consoleInput->setAlignment(Qt::AlignLeft);
-    consoleInput->setPlaceholderText("<< Instruction");
-    consoleOutput->setReadOnly(true);
-
-    connect(consoleInput, SIGNAL(returnPressed()), this,SLOT(consoleEnterSlot()) );
-
-    southLayout->addWidget(consoleWindow);
-    consoleWindow->setVisible(false);
-
-    builder = new JSBuilder();
-    QJSValue scriptBuilder = engine.newQObject(builder);
-
-    engine.globalObject().setProperty("cache", scriptBuilder);
-
+    console = new ConsoleWindow();
+    southLayout->addWidget(console->window);
 }
 
 
@@ -303,21 +278,13 @@ void SensorWindow::closeSlot()
 
 void SensorWindow::consoleSlot()
 {
-    if(windowConsoleAction->isChecked()){
-        consoleWindow->setVisible(true);
+    if(console->openAction->isChecked()){
+        console->window->setVisible(true);
     }else{
-        consoleWindow->setVisible(false);
+        console->window->setVisible(false);
     }
 }
 
-void SensorWindow::consoleEnterSlot()
-{
-    consoleOutput->append(QString("<font color='red'>></font> %1").arg(consoleInput->text()));
-    auto result = engine.evaluate(consoleInput->text());
-    consoleOutput->append(QString("<i>%1</i><br>").arg(result.toString()));
-    consoleInput->clear();
-
-}
 
 void SensorWindow::linkerSlot()
 {
