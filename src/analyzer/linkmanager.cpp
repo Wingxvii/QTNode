@@ -251,7 +251,14 @@ void LinkManager::saveVideoData(QString name)
 
 void LinkManager::saveStringData(QString name)
 {
-    QString fileName = QFileDialog::getSaveFileName();
+    QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Text"), QString(), tr("Text (*.txt)"));
+    QFile out(fileName);
+
+    out.open(QIODevice::WriteOnly);
+    QTextStream stream(&out);
+    stream << stringList[name];
+    out.close();
+
 }
 
 

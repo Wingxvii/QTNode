@@ -21,6 +21,7 @@ Used by:
 #include <QtConcurrent/QtConcurrent>
 #include <QProgressBar>
 #include <QLabel>
+#include <iostream>
 
 #include "nodeeditor/DataTypes/calibdata.h"
 #include "nodeeditor/DataTypes/imagedata.h"
