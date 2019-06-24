@@ -89,10 +89,7 @@ void SensorWindow::createActions()
 
     connect(console->openAction, SIGNAL(triggered()), this, SLOT(consoleSlot()));
 
-    windowLinkerAction = new QAction(tr("&Linker"), this);
-    windowLinkerAction->setStatusTip("Open/Close Linker Window");
-    windowLinkerAction->setCheckable(true);
-    connect(windowLinkerAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
+    connect(linker->openAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
 
     imageDisplayAction = new QAction(tr("&Image Display"), this);
     imageDisplayAction->setStatusTip("Open/Close Image Display Window");
@@ -119,7 +116,7 @@ void SensorWindow::createMenus()
     ui->menuFIle->addSeparator();
 
     ui->menuWindow->addAction(console->openAction);
-    ui->menuWindow->addAction(windowLinkerAction);
+    ui->menuWindow->addAction(linker->openAction);
     ui->menuWindow->addAction(imageDisplayAction);
     ui->menuWindow->addSeparator();
 
@@ -163,27 +160,10 @@ void SensorWindow::setupConsole()
 
 void SensorWindow::setupLinker()
 {
-    //UI
-    linkerWindow = new QWidget;
-    linkerWindowLayout = new QGridLayout;
-    testbutton = new QPushButton("Clear Data");
-
-    linkerData = new QListWidget();
-
-    linkerWindowLayout->addWidget(linkerData);
-    linkerWindowLayout->addWidget(testbutton);
-
-    linkerWindow->setLayout(linkerWindowLayout);
-    centerLayout->addWidget(linkerWindow);
-    linkerWindow->setVisible(false);
-
-    linkerWindow->setContextMenuPolicy(Qt::CustomContextMenu);
+    linker = new LinkerWindow();
+    centerLayout->addWidget(linker->window);
 
 
-    //functionality
-    connect(testbutton, SIGNAL(clicked(bool)), this, SLOT(linkerClearTriggered()));
-    connect(LinkManager::instance(), SIGNAL(updated(int, QString)), this, SLOT(linkerUpdateSlot(int, QString)));
-    connect(linkerData, SIGNAL(itemActivated(QListWidgetItem *)), this, SLOT(itemActivate(QListWidgetItem *)));
 }
 
 void SensorWindow::setUpImageDisplay()
@@ -288,40 +268,11 @@ void SensorWindow::consoleSlot()
 
 void SensorWindow::linkerSlot()
 {
-    if(windowLinkerAction->isChecked()){
-        linkerWindow->setVisible(true);
+    if(linker->openAction->isChecked()){
+        linker->window->setVisible(true);
     }else{
-        linkerWindow->setVisible(false);
+        linker->window->setVisible(false);
     }
-}
-
-void SensorWindow::linkerUpdateSlot(int dataIndex, QString name)
-{
-    std::map<QString, int> displayData = LinkManager::instance()->getAllData();
-
-    linkerData->clear();
-    for(std::pair<QString, int> const& result : displayData){
-        QListWidgetItem* newItem = new QListWidgetItem(result.first,Q_NULLPTR, result.second);
-        linkerData->addItem(newItem);
-
-    }
-}
-
-void SensorWindow::linkerClearTriggered()
-{
-    LinkManager::instance()->clearAllData();
-    linkerUpdateSlot(0,"");
-}
-
-void SensorWindow::itemActivate(QListWidgetItem *item)
-{
-    //saves selected data piece ot disc
-    QRegExp rx("(\:)");
-    QString itemIndex = item->text();
-    QStringList list = itemIndex.split(rx,QString::SkipEmptyParts);
-
-    LOG_JOHN() << list.at(1);
-    //display this data depending on the data
 }
 
 void SensorWindow::showImage()

@@ -13,7 +13,6 @@
 #include <QInputDialog>
 #include <QTextEdit>
 #include <QLineEdit>
-#include <QListWidget>
 
 #include <QJSEngine>
 #include <QJSValue>
@@ -28,6 +27,8 @@
 #include "savedata.h"
 
 #include "consolewindow.h"
+#include "linkerwindow.h"
+
 namespace Ui {
 class SensorWindow;
 }
@@ -89,13 +90,7 @@ private: //windows
 
     ConsoleWindow *console;
     void setupConsole();
-
-    //linker window data
-    QWidget* linkerWindow;
-    QGridLayout* linkerWindowLayout;
-    QAction* windowLinkerAction;
-    QListWidget *linkerData;
-    QPushButton *testbutton;
+    LinkerWindow *linker;
     void setupLinker();
 
     //image display data
@@ -116,11 +111,7 @@ public slots:
     void closeSlot();
 
     void consoleSlot();
-
     void linkerSlot();
-    void linkerUpdateSlot(int, QString);
-    void linkerClearTriggered();
-    void itemActivate(QListWidgetItem * item);
 
     void showImage();
     void imageDisplaySlot();
