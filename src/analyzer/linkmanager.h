@@ -77,7 +77,7 @@ public:
     void privateClear();
 
     //returns a string vector for data display
-    std::vector<QString> getAllData(int x = -1);
+    std::map<QString, int> getAllData(int x = -1);
 
 
 

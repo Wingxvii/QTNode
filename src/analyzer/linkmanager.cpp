@@ -288,71 +288,71 @@ void LinkManager::privateClear()
     boolListPrivate.clear();
 }
 
-std::vector<QString> LinkManager::getAllData(int x)
+std::map<QString, int> LinkManager::getAllData(int x)
 {
-    std::vector<QString> out = std::vector<QString>();
+    std::map<QString, int> out = std::map<QString, int>();
 
     for(auto const& data : calibList){
         QString newString = "Calib Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 0));
     }
 
     for(auto const& data : imageList){
         QString newString = "Image Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 1));
     }
 
     for(auto const& data : pointList){
         QString newString = "Point Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 2));
     }
 
     for(auto const& data : pointsList){
         QString newString = "Points Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 3));
     }
 
     for(auto const& data : videoGraphList){
         QString newString = "Video Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 4));
     }
 
     for(auto const& data : intList){
         QString newString = "Int Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 5));
     }
 
     for(auto const& data : floatList){
         QString newString = "Float Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 6));
     }
 
     for(auto const& data : stringList){
         QString newString = "String Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 7));
     }
 
     for(auto const& data : boolList){
         QString newString = "Bool Data at [:";
         newString.append(data.first);
         newString.append(":]");
-        out.push_back(newString);
+        out.insert(std::pair<QString, int>(newString, 8));
     }
 
 
