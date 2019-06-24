@@ -10,25 +10,6 @@
 #include <QTabWidget>
 #include <QList>
 
-/*
-#include <QBoxLayout>
-#include <QLabel>
-#include <QInputDialog>
-#include <QTextEdit>
-#include <QLineEdit>
-
-#include <QJSEngine>
-#include <QJSValue>
-
-#include <QQmlEngine>
-#include <QQmlContext>
-
-#include <QVBoxLayout>
-
-#include "jsbuilder.h"
-*/
-
-
 #include "savedata.h"
 #include "consolewindow.h"
 #include "linkerwindow.h"
@@ -71,6 +52,7 @@ private:
 
     QActionGroup *alignmentGroup;
 
+    //file menu actions
     QAction* fileNewAction;
     QAction* fileOpenAction;
     QAction* fileSaveAction;
@@ -78,8 +60,6 @@ private:
     QAction* fileClearAction;
     QAction* fileCloseAction;
 
-    QAction* saveDataAction;
-    SaveData* dataSaver;
 
     //cardinal layouts
     QWidget* northWidget, *southWidget, *centerWidget;
@@ -99,6 +79,9 @@ private: //windows
     void setupLinker();
     ImageWindow *imageDisplay;
     void setUpImageDisplay();
+    SaveData* saveWindow;
+    void setUpDataSaver();
+
 
 public slots:
     void newSlot();

@@ -2,14 +2,19 @@
 #define SAVEDATA_H
 
 #include "linkmanager.h"
-#include "Logger.h"
 
 class SaveData : public QObject{
     Q_OBJECT
 
 public:
-    SaveData(){}
+    SaveData();
     ~SaveData(){}
+
+    //main widget
+    QWidget* window;
+    //open action
+    QAction* openAction;
+
 
 public slots:
     void openSaveWindow();

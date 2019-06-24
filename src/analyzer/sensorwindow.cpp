@@ -26,6 +26,8 @@ SensorWindow::SensorWindow(QWidget *parent) :
 
     //North
 
+    //Not Aligned
+    setUpDataSaver();
 
     createActions();
 
@@ -92,17 +94,13 @@ void SensorWindow::createActions()
     connect(linker->openAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
     connect(imageDisplay->openAction, SIGNAL(triggered()), this, SLOT(imageDisplaySlot()));
 
-    dataSaver = new SaveData();
-    saveDataAction = new QAction(tr("&Save Cached Data"), this);
-    saveDataAction->setStatusTip("Open Data Saving Window");
-    connect(saveDataAction, SIGNAL(triggered()), dataSaver, SLOT(openSaveWindow()));
-
     createMenus();
 }
 
 void SensorWindow::createMenus()
 {
 
+    //file actions
     ui->menuFIle->addAction(fileNewAction);
     ui->menuFIle->addAction(fileOpenAction);
     ui->menuFIle->addAction(filePlaceAction);
@@ -117,7 +115,8 @@ void SensorWindow::createMenus()
     ui->menuWindow->addAction(imageDisplay->openAction);
     ui->menuWindow->addSeparator();
 
-    ui->menuLink->addAction(saveDataAction);
+    //linker actions
+    ui->menuLink->addAction(saveWindow->openAction);
 
 }
 
@@ -164,6 +163,12 @@ void SensorWindow::setUpImageDisplay()
 {
     imageDisplay = new ImageWindow();
     centerLayout->addWidget(imageDisplay->window);
+}
+
+void SensorWindow::setUpDataSaver()
+{
+    saveWindow = new SaveData();
+
 }
 
 void SensorWindow::newSlot()
