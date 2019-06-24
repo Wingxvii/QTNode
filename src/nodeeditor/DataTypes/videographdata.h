@@ -74,7 +74,7 @@ public:
 
 private:
     QString _text;
-    double _framerate;
+    double _framerate = 0;
 
 };
 

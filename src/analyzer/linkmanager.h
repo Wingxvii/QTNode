@@ -18,6 +18,9 @@ Used by:
 
 #include <QtCore/QList>
 #include <QObject>
+#include <QtConcurrent/QtConcurrent>
+#include <QProgressBar>
+#include <QLabel>
 
 #include "nodeeditor/DataTypes/calibdata.h"
 #include "nodeeditor/DataTypes/imagedata.h"
@@ -108,6 +111,10 @@ private:
     std::map<QString, bool> boolListPrivate;
 
 
+//multithreading
+public:
+    void multiThreadVideoSave();
+    QFuture<void> functVidSave;
 };
 
 #endif // LINKMANAGER_H

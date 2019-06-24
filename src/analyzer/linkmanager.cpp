@@ -16,6 +16,28 @@ LinkManager::LinkManager()
 
 }
 
+void LinkManager::multiThreadVideoSave()
+{
+
+
+    cv::String fileNameCV = stringListPrivate["PRIVATEfilesave"].toStdString();
+
+    int fps = videoGraphList[stringListPrivate["PRIVATEsave"]]->getFrameRate();
+    if(fps == 0){ fps = 30; }
+
+    int width = videoGraphList[stringListPrivate["PRIVATEsave"]]->_video[1].size().width;
+    int height = videoGraphList[stringListPrivate["PRIVATEsave"]]->_video[1].size().height;
+
+    cv::VideoWriter videoOutput(fileNameCV,CV_FOURCC('M','J','P','G'), fps, cv::Size(width, height));
+
+    for(cv::Mat const& img : videoGraphList[stringListPrivate["PRIVATEsave"]]->_video){
+        videoOutput.write(img);
+    }
+
+    videoOutput.release();
+
+}
+
 void LinkManager::sendData(std::shared_ptr<CalibData> data, QString name)
 {
     if(name.contains("PRIVATE")){
@@ -211,23 +233,18 @@ bool LinkManager::getBoolData(QString name)
 void LinkManager::saveImageData(QString name)
 {
     QString fileName = QFileDialog::getSaveFileName();
-
 }
 
 void LinkManager::saveVideoData(QString name)
 {
+    //need to multithread
     if(videoGraphList[name]){
-        QString fileName = QFileDialog::getSaveFileName();
+        QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Video"), QString(), tr("Videos (*.avi)"));
 
-        //cv::VideoWriter videoOutput(fileName,CV_FOURCC('M','J','P','G'));
-
-        for(cv::Mat const& img : videoGraphList[name]->_video){
-            videoOutput << img;
-        }
-
+        sendData(fileName, "PRIVATEfilesave");
+        sendData(name, "PRIVATEsave");
+        functVidSave = QtConcurrent::run(this, &LinkManager::multiThreadVideoSave);
     }
-
-
 }
 
 void LinkManager::saveStringData(QString name)
