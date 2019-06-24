@@ -18,8 +18,6 @@ LinkManager::LinkManager()
 
 void LinkManager::multiThreadVideoSave()
 {
-
-
     cv::String fileNameCV = stringListPrivate["PRIVATEfilesave"].toStdString();
 
     int fps = videoGraphList[stringListPrivate["PRIVATEsave"]]->getFrameRate();
@@ -232,7 +230,11 @@ bool LinkManager::getBoolData(QString name)
 
 void LinkManager::saveImageData(QString name)
 {
-    QString fileName = QFileDialog::getSaveFileName();
+    if(imageList[name]){
+        QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Image"), QString(), tr("Images (*.png *.jpg)"));
+        cv::String fileNameCV = fileName.toStdString();
+        cv::imwrite(fileNameCV,imageList[name]->_image);
+    }
 }
 
 void LinkManager::saveVideoData(QString name)
@@ -250,7 +252,6 @@ void LinkManager::saveVideoData(QString name)
 void LinkManager::saveStringData(QString name)
 {
     QString fileName = QFileDialog::getSaveFileName();
-
 }
 
 
