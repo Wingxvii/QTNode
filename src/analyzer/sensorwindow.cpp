@@ -87,14 +87,10 @@ void SensorWindow::createActions()
     fileCloseAction->setStatusTip("Close selected file without saving");
     connect(fileCloseAction, SIGNAL(triggered()), this, SLOT(closeSlot()));
 
+    //setup Window open actions
     connect(console->openAction, SIGNAL(triggered()), this, SLOT(consoleSlot()));
-
     connect(linker->openAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
-
-    imageDisplayAction = new QAction(tr("&Image Display"), this);
-    imageDisplayAction->setStatusTip("Open/Close Image Display Window");
-    imageDisplayAction->setCheckable(true);
-    connect(imageDisplayAction, SIGNAL(triggered()), this, SLOT(imageDisplaySlot()));
+    connect(imageDisplay->openAction, SIGNAL(triggered()), this, SLOT(imageDisplaySlot()));
 
     dataSaver = new SaveData();
     saveDataAction = new QAction(tr("&Save Cached Data"), this);
@@ -115,9 +111,10 @@ void SensorWindow::createMenus()
     ui->menuFIle->addAction(fileCloseAction);
     ui->menuFIle->addSeparator();
 
+    //window open/close
     ui->menuWindow->addAction(console->openAction);
     ui->menuWindow->addAction(linker->openAction);
-    ui->menuWindow->addAction(imageDisplayAction);
+    ui->menuWindow->addAction(imageDisplay->openAction);
     ui->menuWindow->addSeparator();
 
     ui->menuLink->addAction(saveDataAction);
@@ -157,34 +154,16 @@ void SensorWindow::setupConsole()
     southLayout->addWidget(console->window);
 }
 
-
 void SensorWindow::setupLinker()
 {
     linker = new LinkerWindow();
     centerLayout->addWidget(linker->window);
-
-
 }
 
 void SensorWindow::setUpImageDisplay()
 {
-    //UI
-    imageWindow = new QWidget;
-    imageWindowLayout = new QGridLayout;
-    selectImageIndex = new QLineEdit();
-    selectImageIndex->setPlaceholderText("Input Image Index");
-    imageShow = new QLabel;
-    confirmImageSelection = new QPushButton("Confirm Selection");
-
-    imageWindowLayout->addWidget(imageShow,1,1,2,1);
-    imageWindowLayout->addWidget(selectImageIndex,2,1);
-    imageWindowLayout->addWidget(confirmImageSelection,2,2);
-
-    imageWindow->setLayout(imageWindowLayout);
-    centerLayout->addWidget(imageWindow);
-    imageWindow->setVisible(false);
-
-    connect(confirmImageSelection, SIGNAL(clicked(bool)), this, SLOT(showImage()));
+    imageDisplay = new ImageWindow();
+    centerLayout->addWidget(imageDisplay->window);
 }
 
 void SensorWindow::newSlot()
@@ -275,30 +254,12 @@ void SensorWindow::linkerSlot()
     }
 }
 
-void SensorWindow::showImage()
-{
-    cv::Mat img;
-
-    if(LinkManager::instance()->getImageData(selectImageIndex->text())){
-        img = LinkManager::instance()->getImageData(selectImageIndex->text())->_image;
-        cv::cvtColor(img,img,CV_BGR2RGB);
-        imageShow->setPixmap(QPixmap::fromImage((QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888))));
-
-    }else{
-        LOG_JOHN() << "No Data Found";
-        QPixmap img("C:/projects/Shotcut/src/shotcut/IMAGES/nothing.png");
-        imageShow->setPixmap(img);
-    }
-
-
-}
-
 void SensorWindow::imageDisplaySlot()
 {
-    if(imageDisplayAction->isChecked()){
-        imageWindow->setVisible(true);
+    if(imageDisplay->openAction->isChecked()){
+        imageDisplay->window->setVisible(true);
     }else{
-        imageWindow->setVisible(false);
+        imageDisplay->window->setVisible(false);
     }
 }
 

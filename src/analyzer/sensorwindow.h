@@ -2,12 +2,15 @@
 #define SENSORWINDOW_H
 
 #include <QMainWindow>
-#include <QGridLayout>
 #include "analyzer\filternode.h"
 #include "logger.h"
 
-#include <QList>
+#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QTabWidget>
+#include <QList>
+
+/*
 #include <QBoxLayout>
 #include <QLabel>
 #include <QInputDialog>
@@ -20,14 +23,16 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 #include "jsbuilder.h"
-#include "savedata.h"
+*/
 
+
+#include "savedata.h"
 #include "consolewindow.h"
 #include "linkerwindow.h"
+#include "imagewindow.h"
 
 namespace Ui {
 class SensorWindow;
@@ -92,14 +97,7 @@ private: //windows
     void setupConsole();
     LinkerWindow *linker;
     void setupLinker();
-
-    //image display data
-    QWidget* imageWindow;
-    QGridLayout* imageWindowLayout;
-    QAction* imageDisplayAction;
-    QLineEdit* selectImageIndex;
-    QLabel* imageShow;
-    QPushButton* confirmImageSelection;
+    ImageWindow *imageDisplay;
     void setUpImageDisplay();
 
 public slots:
@@ -112,8 +110,6 @@ public slots:
 
     void consoleSlot();
     void linkerSlot();
-
-    void showImage();
     void imageDisplaySlot();
 
 };
