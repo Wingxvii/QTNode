@@ -12,7 +12,7 @@ SaveData::SaveData()
     cloneButton = new QPushButton("Clone Data");
     displayButton = new QPushButton("Display Data");
 
-    nameIndexInput = new QLineEdit("Name Index: ");
+    nameIndexInput = new QLineEdit("");
     typeIndexInput = new QComboBox();
     setUpTypes();
 
@@ -58,6 +58,7 @@ void SaveData::openSaveWindow()
 {
     typeIndex = -1;
     nameIndex = "";
+    updateLabel();
 
     nameIndexInput->setVisible(true);
     typeIndexInput->setVisible(true);
@@ -84,18 +85,27 @@ void SaveData::openSaveWindow(QString nameIndexIn, int typeIndexIn)
 void SaveData::onDelete()
 {
     LOG_JOHN() << "Delete pressed";
+    LinkManager::instance()->deleteData(nameIndex, typeIndex);
+
+    //clear data
+    typeIndex = -1;
+    nameIndex = "";
+
+    window->setVisible(false);
 }
 
 void SaveData::onSave()
 {
     LOG_JOHN() << "Save pressed";
     LinkManager::instance()->saveData(nameIndex, typeIndex);
+    window->setVisible(false);
 }
 
 void SaveData::onClone()
 {
     LOG_JOHN() << "Clone pressed";
-
+    LinkManager::instance()->cloneData(nameIndex, typeIndex);
+    window->setVisible(false);
 }
 
 void SaveData::onDisplay()

@@ -67,4 +67,120 @@ void JSBuilder::saveStringData(const QString index)
 
 }
 
+void JSBuilder::deleteData(const QString index, const int indexType)
+{
+    LinkManager::instance()->deleteData(index, indexType);
+}
+
+void JSBuilder::deleteCalibData(QString name)
+{
+    LinkManager::instance()->deleteCalibData(name);
+}
+
+void JSBuilder::deleteImageData(QString name)
+{
+    LinkManager::instance()->deleteImageData(name);
+
+}
+
+void JSBuilder::deletePointData(QString name)
+{
+    LinkManager::instance()->deletePointData(name);
+
+}
+
+void JSBuilder::deletePointsData(QString name)
+{
+    LinkManager::instance()->deletePointsData(name);
+
+}
+
+void JSBuilder::deleteVideoData(QString name)
+{
+    LinkManager::instance()->deleteVideoData(name);
+
+}
+
+void JSBuilder::deleteIntData(QString name)
+{
+    LinkManager::instance()->deleteIntData(name);
+
+}
+
+void JSBuilder::deleteFloatData(QString name)
+{
+    LinkManager::instance()->deleteFloatData(name);
+
+}
+
+void JSBuilder::deleteStringData(QString name)
+{
+    LinkManager::instance()->deleteStringData(name);
+
+}
+
+void JSBuilder::deleteBoolData(QString name)
+{
+    LinkManager::instance()->deleteBoolData(name);
+
+}
+void JSBuilder::cloneData(const QString index, const int indexType)
+{
+    LinkManager::instance()->cloneData(index, indexType);
+}
+
+void JSBuilder::cloneCalibData(QString name)
+{
+    LinkManager::instance()->cloneCalibData(name);
+}
+
+void JSBuilder::cloneImageData(QString name)
+{
+    LinkManager::instance()->cloneImageData(name);
+
+}
+
+void JSBuilder::clonePointData(QString name)
+{
+    LinkManager::instance()->clonePointData(name);
+
+}
+
+void JSBuilder::clonePointsData(QString name)
+{
+    LinkManager::instance()->clonePointsData(name);
+
+}
+
+void JSBuilder::cloneVideoData(QString name)
+{
+    LinkManager::instance()->cloneVideoData(name);
+
+}
+
+void JSBuilder::cloneIntData(QString name)
+{
+    LinkManager::instance()->cloneIntData(name);
+
+}
+
+void JSBuilder::cloneFloatData(QString name)
+{
+    LinkManager::instance()->cloneFloatData(name);
+
+}
+
+void JSBuilder::cloneStringData(QString name)
+{
+    LinkManager::instance()->cloneStringData(name);
+
+}
+
+void JSBuilder::cloneBoolData(QString name)
+{
+    LinkManager::instance()->cloneBoolData(name);
+
+}
+
+
 

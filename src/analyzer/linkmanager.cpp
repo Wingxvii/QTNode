@@ -316,6 +316,320 @@ void LinkManager::saveStringData(QString name)
 
 }
 
+void LinkManager::deleteData(QString name, int type)
+{
+    switch(type){
+    case 0:
+        //calib
+        deleteCalibData(name);
+        break;
+    case 1:
+        //image
+        deleteImageData(name);
+        break;
+    case 2:
+        //point
+        deletePointData(name);
+        break;
+    case 3:
+        //points
+        deletePointsData(name);
+        break;
+    case 4:
+        //video
+        deleteVideoData(name);
+        break;
+    case 5:
+        //int
+        deleteIntData(name);
+        break;
+    case 6:
+        //float
+        deleteFloatData(name);
+        break;
+    case 7:
+        //string
+    deleteStringData(name);
+        break;
+    case 8:
+        //bool
+    deleteBoolData(name);
+        break;
+    default:
+        //no type
+        LOG_JOHN() << "Type does not exist";
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    }
+
+}
+
+void LinkManager::deleteCalibData(QString name)
+{
+    if(calibList[name]){
+        calibList.erase(name);
+        LOG_JOHN() << "Deleted Calib Data";
+        emit updated(0, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
+void LinkManager::deleteImageData(QString name)
+{
+    if(imageList[name]){
+        imageList.erase(name);
+        LOG_JOHN() << "Deleted Image Data";
+        emit updated(1, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::deletePointData(QString name)
+{
+    if(pointList[name]){
+        pointList.erase(name);
+        LOG_JOHN() << "Deleted Point Data";
+        emit updated(2, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::deletePointsData(QString name)
+{
+    if(pointsList[name]){
+        pointsList.erase(name);
+        LOG_JOHN() << "Deleted Points Data";
+        emit updated(3, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::deleteVideoData(QString name)
+{
+    if(videoGraphList[name]){
+        videoGraphList.erase(name);
+        LOG_JOHN() << "Deleted Video Data";
+        emit updated(4, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::deleteIntData(QString name)
+{
+    if(intList[name]){
+        intList.erase(name);
+        LOG_JOHN() << "Deleted Int Data";
+        emit updated(5, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::deleteFloatData(QString name)
+{
+    if(floatList[name]){
+        floatList.erase(name);
+        LOG_JOHN() << "Deleted Float Data";
+        emit updated(6, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::deleteStringData(QString name)
+{
+    if(stringList[name] != NULL){
+        stringList.erase(name);
+        LOG_JOHN() << "Deleted String Data";
+        emit updated(7, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
+void LinkManager::deleteBoolData(QString name)
+{
+    if(boolList[name]){
+        boolList.erase(name);
+        LOG_JOHN() << "Deleted Bool Data";
+        emit updated(8, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
+void LinkManager::cloneData(QString name, int type)
+{
+    switch(type){
+    case 0:
+        //calib
+        cloneCalibData(name);
+        break;
+    case 1:
+        //image
+        cloneImageData(name);
+        break;
+    case 2:
+        //point
+        clonePointData(name);
+        break;
+    case 3:
+        //points
+        clonePointsData(name);
+        break;
+    case 4:
+        //video
+        cloneVideoData(name);
+        break;
+    case 5:
+        //int
+        cloneIntData(name);
+        break;
+    case 6:
+        //float
+        cloneFloatData(name);
+        break;
+    case 7:
+        //string
+    cloneStringData(name);
+        break;
+    case 8:
+        //bool
+    cloneBoolData(name);
+        break;
+    default:
+        //no type
+        LOG_JOHN() << "Type does not exist";
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    }
+
+}
+
+void LinkManager::cloneCalibData(QString name)
+{
+    if(calibList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(calibList[name],newName);
+        LOG_JOHN() << "cloned Calib Data";
+        emit updated(0, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
+void LinkManager::cloneImageData(QString name)
+{
+    if(imageList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(imageList[name],newName);
+        LOG_JOHN() << "cloned Image Data";
+        emit updated(1, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::clonePointData(QString name)
+{
+    if(pointList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(pointList[name],newName);
+        LOG_JOHN() << "cloned Point Data";
+        emit updated(2, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::clonePointsData(QString name)
+{
+    if(pointsList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(pointsList[name],newName);
+        LOG_JOHN() << "cloned Points Data";
+        emit updated(3, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::cloneVideoData(QString name)
+{
+    if(videoGraphList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(videoGraphList[name],newName);
+        LOG_JOHN() << "cloned Video Data";
+        emit updated(4, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::cloneIntData(QString name)
+{
+    if(intList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(intList[name],newName);
+        LOG_JOHN() << "cloned Int Data";
+        emit updated(5, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::cloneFloatData(QString name)
+{
+    if(floatList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(floatList[name],newName);
+        LOG_JOHN() << "cloned Float Data";
+        emit updated(6, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::cloneStringData(QString name)
+{
+    if(stringList[name] != NULL){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(stringList[name],newName);
+        LOG_JOHN() << "cloned String Data";
+        emit updated(7, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
+void LinkManager::cloneBoolData(QString name)
+{
+    if(boolList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(boolList[name],newName);
+        LOG_JOHN() << "cloned Bool Data";
+        emit updated(8, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
 
 void LinkManager::clearAllData()
 {

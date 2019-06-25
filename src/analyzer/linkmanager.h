@@ -22,6 +22,7 @@ Used by:
 #include <QProgressBar>
 #include <QLabel>
 #include <iostream>
+#include <QInputDialog>
 
 #include "nodeeditor/DataTypes/calibdata.h"
 #include "nodeeditor/DataTypes/imagedata.h"
@@ -70,6 +71,28 @@ public:
     void saveImageData(QString name);
     void saveVideoData(QString name);
     void saveStringData(QString name);
+
+    void deleteData(QString name, int type);
+    void deleteCalibData(QString name);
+    void deleteImageData(QString name);
+    void deletePointData(QString name);
+    void deletePointsData(QString name);
+    void deleteVideoData(QString name);
+    void deleteIntData(QString name);
+    void deleteFloatData(QString name);
+    void deleteStringData(QString name);
+    void deleteBoolData(QString name);
+
+    void cloneData(QString name, int type);
+    void cloneCalibData(QString name);
+    void cloneImageData(QString name);
+    void clonePointData(QString name);
+    void clonePointsData(QString name);
+    void cloneVideoData(QString name);
+    void cloneIntData(QString name);
+    void cloneFloatData(QString name);
+    void cloneStringData(QString name);
+    void cloneBoolData(QString name);
 
 
     //clears public data

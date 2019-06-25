@@ -29,6 +29,29 @@ public slots:
     Q_INVOKABLE void saveImageData(const QString index);
     Q_INVOKABLE void saveVideoData(const QString index);
     Q_INVOKABLE void saveStringData(const QString index);
+    //rest will not be able to be saved
+
+    Q_INVOKABLE void deleteData(const QString index, const int indexType);
+    Q_INVOKABLE void deleteCalibData(QString name);
+    Q_INVOKABLE void deleteImageData(QString name);
+    Q_INVOKABLE void deletePointData(QString name);
+    Q_INVOKABLE void deletePointsData(QString name);
+    Q_INVOKABLE void deleteVideoData(QString name);
+    Q_INVOKABLE void deleteIntData(QString name);
+    Q_INVOKABLE void deleteFloatData(QString name);
+    Q_INVOKABLE void deleteStringData(QString name);
+    Q_INVOKABLE void deleteBoolData(QString name);
+
+    Q_INVOKABLE void cloneData(QString name, int type);
+    Q_INVOKABLE void cloneCalibData(QString name);
+    Q_INVOKABLE void cloneImageData(QString name);
+    Q_INVOKABLE void clonePointData(QString name);
+    Q_INVOKABLE void clonePointsData(QString name);
+    Q_INVOKABLE void cloneVideoData(QString name);
+    Q_INVOKABLE void cloneIntData(QString name);
+    Q_INVOKABLE void cloneFloatData(QString name);
+    Q_INVOKABLE void cloneStringData(QString name);
+    Q_INVOKABLE void cloneBoolData(QString name);
 
 
 };
