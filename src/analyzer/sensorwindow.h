@@ -14,6 +14,7 @@
 #include "consolewindow.h"
 #include "linkerwindow.h"
 #include "imagewindow.h"
+#include "videowindow.h"
 
 namespace Ui {
 class SensorWindow;
@@ -79,6 +80,8 @@ public: //windows
     void setupLinker();
     ImageWindow *imageDisplay;
     void setUpImageDisplay();
+    VideoWindow *videoWindow;
+    void setUpVideo();
     SaveData* saveWindow;
     void setUpDataSaver();
 

@@ -85,7 +85,7 @@ void VideoDisplay::processData()
 
    for (int it = 0; it < frames.size(); it++)
    {
-       LOG_DEBUG() << QString::number(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE));
+       //LOG_DEBUG() << QString::number(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE));
 
        cv::imshow("Display", frames[it]);
        cv::waitKey( 1000 / frameRate );

@@ -20,6 +20,7 @@ SensorWindow::SensorWindow(QWidget *parent) :
 
     //East
     setUpImageDisplay();
+    setUpVideo();
 
     //South
     setupConsole();
@@ -93,7 +94,7 @@ void SensorWindow::createActions()
     connect(console->openAction, SIGNAL(triggered()), this, SLOT(consoleSlot()));
     connect(linker->openAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
     connect(imageDisplay->openAction, SIGNAL(triggered()), this, SLOT(imageDisplaySlot()));
-
+    connect(videoWindow->openAction, SIGNAL(triggered()), this, SLOT(videoDisplaySlot()));
     //connect functionality from different childs
     connect(linker, SIGNAL(onActivate(QString, int)), saveWindow, SLOT(openSaveWindow(QString , int)));
 
@@ -116,6 +117,7 @@ void SensorWindow::createMenus()
     ui->menuWindow->addAction(console->openAction);
     ui->menuWindow->addAction(linker->openAction);
     ui->menuWindow->addAction(imageDisplay->openAction);
+    ui->menuWindow->addAction(videoWindow->openAction);
     ui->menuWindow->addSeparator();
 
     //linker actions
@@ -166,6 +168,12 @@ void SensorWindow::setUpImageDisplay()
 {
     imageDisplay = new ImageWindow();
     centerLayout->addWidget(imageDisplay->window);
+}
+
+void SensorWindow::setUpVideo()
+{
+    videoWindow = new VideoWindow();
+    centerLayout->addWidget(videoWindow->window);
 }
 
 void SensorWindow::setUpDataSaver()
@@ -269,5 +277,15 @@ void SensorWindow::imageDisplaySlot()
     }else{
         imageDisplay->window->setVisible(false);
     }
+}
+
+void SensorWindow::videoDisplaySlot()
+{
+    if(videoWindow->openAction->isChecked()){
+        videoWindow->window->setVisible(true);
+    }else{
+        videoWindow->window->setVisible(false);
+    }
+
 }
 

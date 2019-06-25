@@ -170,7 +170,8 @@ SOURCES += main.cpp\
     analyzer/savedata.cpp \
     analyzer/consolewindow.cpp \
     analyzer/linkerwindow.cpp \
-    analyzer/imagewindow.cpp
+    analyzer/imagewindow.cpp \
+    analyzer/videowindow.cpp
 
 
 
@@ -354,7 +355,8 @@ HEADERS  += mainwindow.h \
     analyzer/savedata.h \
     analyzer/consolewindow.h \
     analyzer/linkerwindow.h \
-    analyzer/imagewindow.h
+    analyzer/imagewindow.h \
+    analyzer/videowindow.h
 
 
 
