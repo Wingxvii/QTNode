@@ -83,12 +83,15 @@ void VideoDisplay::processData()
 
    cv::namedWindow("Display");
 
-   //NEED TO ADD A BREAK
    for (int it = 0; it < frames.size(); it++)
    {
-       if(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE) >= 0){
+       LOG_DEBUG() << QString::number(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE));
+
        cv::imshow("Display", frames[it]);
        cv::waitKey( 1000 / frameRate );
+       if(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE) == 0){
+           //cv::destroyWindow("Display");
+           break;
        }
    }
    cv::destroyWindow("Display");

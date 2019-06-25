@@ -702,6 +702,11 @@ void LinkManager::displayImageData(QString name)
 {
     if(imageList[name]){
         LOG_JOHN() << "display Image Data";
+
+        cv::namedWindow("Display");
+        cv::imshow("Display Image", imageList[name]->_image);
+        cv::waitKey(0);
+
     }else{
         LOG_JOHN() << "Data Not Found";
     }
@@ -712,6 +717,8 @@ void LinkManager::displayPointData(QString name)
 {
     if(pointList[name]){
         LOG_JOHN() << "display Point Data";
+        LOG_JOHN() << "Feature does not exist";
+
     }else{
         LOG_JOHN() << "Data Not Found";
     }
@@ -722,6 +729,8 @@ void LinkManager::displayPointsData(QString name)
 {
     if(pointsList[name]){
         LOG_JOHN() << "display Points Data";
+        LOG_JOHN() << "Feature does not exist";
+
     }else{
         LOG_JOHN() << "Data Not Found";
     }
@@ -732,6 +741,32 @@ void LinkManager::displayVideoData(QString name)
 {
     if(videoGraphList[name]){
         LOG_JOHN() << "display Video Data";
+        cv::namedWindow("Display");
+
+        int frameRate = videoGraphList[name]->getFrameRate();
+
+        if (frameRate == 0)
+        {
+            frameRate = 30;
+        }
+
+
+        //NEED TO ADD A BREAK
+        auto frames = videoGraphList[name]->data();
+
+        for (int it = 0; it < frames.size(); it++)
+        {
+            LOG_DEBUG() << QString::number(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE));
+
+            cv::imshow("Display", frames[it]);
+            cv::waitKey( 1000 / frameRate );
+            if(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE) == 0){
+                //cv::destroyWindow("Display");
+                break;
+            }
+        }
+        cv::destroyWindow("Display");
+
     }else{
         LOG_JOHN() << "Data Not Found";
     }
