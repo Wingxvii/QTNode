@@ -46,6 +46,11 @@ bool JSBuilder::getBoolData(const QString index)
     return LinkManager::instance()->getBoolData(index);
 }
 
+void JSBuilder::saveData(const QString index, const int indexType)
+{
+    LinkManager::instance()->saveData(index, indexType);
+}
+
 void JSBuilder::saveImageData(const QString index)
 {
     LinkManager::instance()->saveImageData(index);

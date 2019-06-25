@@ -89,39 +89,7 @@ void SaveData::onDelete()
 void SaveData::onSave()
 {
     LOG_JOHN() << "Save pressed";
-
-    switch(typeIndex){
-    case 0:
-        //calib
-        break;
-    case 1:
-        //image
-        break;
-    case 2:
-        //point
-        break;
-    case 3:
-        //points
-        break;
-    case 4:
-        //video
-        break;
-    case 5:
-        //int
-        break;
-    case 6:
-        //float
-        break;
-    case 7:
-        //string
-        break;
-    case 8:
-        //bool
-        break;
-    default:
-        //no type
-        break;
-    }
+    LinkManager::instance()->saveData(nameIndex, typeIndex);
 }
 
 void SaveData::onClone()

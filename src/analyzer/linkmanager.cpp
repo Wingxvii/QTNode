@@ -228,29 +228,81 @@ bool LinkManager::getBoolData(QString name)
     return boolList[name];
 }
 
+void LinkManager::saveData(QString name, int type)
+{
+    switch(type){
+    case 0:
+        //calib
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    case 1:
+        //image
+        saveImageData(name);
+        break;
+    case 2:
+        //point
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    case 3:
+        //points
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    case 4:
+        //video
+        saveVideoData(name);
+        break;
+    case 5:
+        //int
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    case 6:
+        //float
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    case 7:
+        //string
+        saveStringData(name);
+        break;
+    case 8:
+        //bool
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    default:
+        //no type
+        LOG_JOHN() << "Type does not exist";
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    }
+
+}
+
 void LinkManager::saveImageData(QString name)
 {
     if(imageList[name]){
         QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Image"), QString(), tr("Images (*.png *.jpg)"));
         cv::String fileNameCV = fileName.toStdString();
         cv::imwrite(fileNameCV,imageList[name]->_image);
+    }else{
+        LOG_JOHN() << "DATA NOT FOUND";
     }
 }
 
 void LinkManager::saveVideoData(QString name)
 {
-    //need to multithread
     if(videoGraphList[name]){
         QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Video"), QString(), tr("Videos (*.avi)"));
 
         sendData(fileName, "PRIVATEfilesave");
         sendData(name, "PRIVATEsave");
         functVidSave = QtConcurrent::run(this, &LinkManager::multiThreadVideoSave);
+    }else{
+        LOG_JOHN() << "DATA NOT FOUND";
     }
 }
 
 void LinkManager::saveStringData(QString name)
 {
+    if(stringList[name] != NULL){
     QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Text"), QString(), tr("Text (*.txt)"));
     QFile out(fileName);
 
@@ -258,6 +310,9 @@ void LinkManager::saveStringData(QString name)
     QTextStream stream(&out);
     stream << stringList[name];
     out.close();
+    }else{
+        LOG_JOHN() << "DATA NOT FOUND";
+    }
 
 }
 
