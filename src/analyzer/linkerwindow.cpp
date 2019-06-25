@@ -36,9 +36,7 @@ void LinkerWindow::linkerUpdateSlot(int, QString)
     for(std::pair<QString, int> const& result : displayData){
         QListWidgetItem* newItem = new QListWidgetItem(result.first,Q_NULLPTR, result.second);
         linkerData->addItem(newItem);
-
     }
-
 }
 
 void LinkerWindow::linkerClearTriggered()
@@ -54,6 +52,8 @@ void LinkerWindow::itemActivate(QListWidgetItem *item)
     QRegExp rx("(\:)");
     QString itemIndex = item->text();
     QStringList list = itemIndex.split(rx,QString::SkipEmptyParts);
+
+    emit onActivate(list.at(1), item->type());
 
     LOG_JOHN() << list.at(1);
     //display this data depending on the data

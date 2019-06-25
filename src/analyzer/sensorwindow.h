@@ -66,7 +66,7 @@ private:
     QHBoxLayout* northLayout,* southLayout, *centerLayout;
     void setupLayout();
 
-private: //windows
+public: //windows
 
     //node editor data
     QTabWidget* nodeEditorWindow;

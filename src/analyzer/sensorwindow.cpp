@@ -94,6 +94,9 @@ void SensorWindow::createActions()
     connect(linker->openAction, SIGNAL(triggered()), this, SLOT(linkerSlot()));
     connect(imageDisplay->openAction, SIGNAL(triggered()), this, SLOT(imageDisplaySlot()));
 
+    //connect functionality from different childs
+    connect(linker, SIGNAL(onActivate(QString, int)), saveWindow, SLOT(openSaveWindow(QString , int)));
+
     createMenus();
 }
 

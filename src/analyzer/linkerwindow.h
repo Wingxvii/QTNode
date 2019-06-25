@@ -6,11 +6,11 @@
 #include <QListWidget>
 #include <QPushButton>
 
-class LinkerWindow : QObject{
+class LinkerWindow : public QObject{
     Q_OBJECT
 public:
     LinkerWindow();
-    ~LinkerWindow(){};
+    ~LinkerWindow(){}
 
     //main widget
     QWidget* window;
@@ -27,7 +27,8 @@ public slots:
     void linkerUpdateSlot(int, QString);
     void linkerClearTriggered();
     void itemActivate(QListWidgetItem * item);
-
+signals:
+    void onActivate(QString, int);
 
 };
 
