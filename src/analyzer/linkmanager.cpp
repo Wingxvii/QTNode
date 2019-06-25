@@ -684,14 +684,14 @@ void LinkManager::displayCalibData(QString name)
     if(calibList[name]){
         LOG_JOHN() << "display Calib Data";
 
-        QString calibDisplay = "Calib Data: \nLength: ";
-        calibDisplay.append(QString::number(calibList[name]->lengthData()));
-        calibDisplay.append("\nSize: ");
-        calibDisplay.append(QString::number(calibList[name]->sizeData().width));
-        calibDisplay.append(" by ");
-        calibDisplay.append(QString::number(calibList[name]->sizeData().height));
+        QString display = "Calib Data: \nLength: ";
+        display.append(QString::number(calibList[name]->lengthData()));
+        display.append("\nSize: ");
+        display.append(QString::number(calibList[name]->sizeData().width));
+        display.append(" by ");
+        display.append(QString::number(calibList[name]->sizeData().height));
 
-        QMessageBox::information(Q_NULLPTR, "Calib Display",calibDisplay);
+        QMessageBox::information(Q_NULLPTR, "Calib Display",display);
 
     }else{
         LOG_JOHN() << "Data Not Found";
@@ -741,7 +741,7 @@ void LinkManager::displayVideoData(QString name)
 {
     if(videoGraphList[name]){
         LOG_JOHN() << "display Video Data";
-        cv::namedWindow("Display");
+        cv::namedWindow("DisplayLink");
 
         int frameRate = videoGraphList[name]->getFrameRate();
 
@@ -750,13 +750,11 @@ void LinkManager::displayVideoData(QString name)
             frameRate = 30;
         }
 
-
-        //NEED TO ADD A BREAK
         auto frames = videoGraphList[name]->data();
 
         for (int it = 0; it < frames.size(); it++)
         {
-            LOG_DEBUG() << QString::number(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE));
+            //LOG_DEBUG() << QString::number(cv::getWindowProperty("Display", cv::WND_PROP_VISIBLE));
 
             cv::imshow("Display", frames[it]);
             cv::waitKey( 1000 / frameRate );
@@ -777,6 +775,11 @@ void LinkManager::displayIntData(QString name)
 {
     if(intList[name]){
         LOG_JOHN() << "display Int Data";
+        QString display = "Int Data: \nLength: ";
+        display.append(QString::number(intList[name]));
+
+        QMessageBox::information(Q_NULLPTR, "Int Display",display);
+
     }else{
         LOG_JOHN() << "Data Not Found";
     }
@@ -787,6 +790,11 @@ void LinkManager::displayFloatData(QString name)
 {
     if(floatList[name]){
         LOG_JOHN() << "display Float Data";
+        QString display = "Float Data: \nLength: ";
+        display.append(QString::number(intList[name]));
+
+        QMessageBox::information(Q_NULLPTR, "Int Display",display);
+
     }else{
         LOG_JOHN() << "Data Not Found";
     }
@@ -797,6 +805,11 @@ void LinkManager::displayStringData(QString name)
 {
     if(stringList[name] != NULL){
         LOG_JOHN() << "display String Data";
+        QString display = "String Data: \nLength: ";
+        display.append(stringList[name]);
+
+        QMessageBox::information(Q_NULLPTR, "Int Display",display);
+
     }else{
         LOG_JOHN() << "Data Not Found";
     }
@@ -806,6 +819,16 @@ void LinkManager::displayBoolData(QString name)
 {
     if(boolList[name]){
         LOG_JOHN() << "display Bool Data";
+        QString display;
+        if(boolList[name]){
+            display.append("True");
+        }else{
+            display.append("False");
+
+        }
+
+        QMessageBox::information(Q_NULLPTR, "Int Display",display);
+
     }else{
         LOG_JOHN() << "Data Not Found";
     }
