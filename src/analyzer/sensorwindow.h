@@ -97,6 +97,7 @@ public slots:
     void consoleSlot();
     void linkerSlot();
     void imageDisplaySlot();
+    void videoDisplaySlot();
 
 };
 
