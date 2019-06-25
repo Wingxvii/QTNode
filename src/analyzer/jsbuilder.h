@@ -53,6 +53,17 @@ public slots:
     Q_INVOKABLE void cloneStringData(QString name);
     Q_INVOKABLE void cloneBoolData(QString name);
 
+    Q_INVOKABLE void displayData(QString name, int type);
+    Q_INVOKABLE void displayCalibData(QString name);
+    Q_INVOKABLE void displayImageData(QString name);
+    Q_INVOKABLE void displayPointData(QString name);
+    Q_INVOKABLE void displayPointsData(QString name);
+    Q_INVOKABLE void displayVideoData(QString name);
+    Q_INVOKABLE void displayIntData(QString name);
+    Q_INVOKABLE void displayFloatData(QString name);
+    Q_INVOKABLE void displayStringData(QString name);
+    Q_INVOKABLE void displayBoolData(QString name);
+
 
 };
 

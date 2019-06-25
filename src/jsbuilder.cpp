@@ -182,5 +182,64 @@ void JSBuilder::cloneBoolData(QString name)
 
 }
 
+void JSBuilder::displayData(const QString index, const int indexType)
+{
+    LinkManager::instance()->displayData(index, indexType);
+}
+
+void JSBuilder::displayCalibData(QString name)
+{
+    LinkManager::instance()->displayCalibData(name);
+}
+
+void JSBuilder::displayImageData(QString name)
+{
+    LinkManager::instance()->displayImageData(name);
+
+}
+
+void JSBuilder::displayPointData(QString name)
+{
+    LinkManager::instance()->displayPointData(name);
+
+}
+
+void JSBuilder::displayPointsData(QString name)
+{
+    LinkManager::instance()->displayPointsData(name);
+
+}
+
+void JSBuilder::displayVideoData(QString name)
+{
+    LinkManager::instance()->displayVideoData(name);
+
+}
+
+void JSBuilder::displayIntData(QString name)
+{
+    LinkManager::instance()->displayIntData(name);
+
+}
+
+void JSBuilder::displayFloatData(QString name)
+{
+    LinkManager::instance()->displayFloatData(name);
+
+}
+
+void JSBuilder::displayStringData(QString name)
+{
+    LinkManager::instance()->displayStringData(name);
+
+}
+
+void JSBuilder::displayBoolData(QString name)
+{
+    LinkManager::instance()->displayBoolData(name);
+
+}
+
+
 
 

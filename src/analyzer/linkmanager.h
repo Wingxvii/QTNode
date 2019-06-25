@@ -23,6 +23,7 @@ Used by:
 #include <QLabel>
 #include <iostream>
 #include <QInputDialog>
+#include <QMessageBox>
 
 #include "nodeeditor/DataTypes/calibdata.h"
 #include "nodeeditor/DataTypes/imagedata.h"
@@ -94,6 +95,16 @@ public:
     void cloneStringData(QString name);
     void cloneBoolData(QString name);
 
+    void displayData(QString name, int type);
+    void displayCalibData(QString name);
+    void displayImageData(QString name);
+    void displayPointData(QString name);
+    void displayPointsData(QString name);
+    void displayVideoData(QString name);
+    void displayIntData(QString name);
+    void displayFloatData(QString name);
+    void displayStringData(QString name);
+    void displayBoolData(QString name);
 
     //clears public data
     void clearAllData();

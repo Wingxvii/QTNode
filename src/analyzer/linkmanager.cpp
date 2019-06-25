@@ -631,6 +631,152 @@ void LinkManager::cloneBoolData(QString name)
     }
 }
 
+void LinkManager::displayData(QString name, int type)
+{
+    switch(type){
+    case 0:
+        //calib
+        displayCalibData(name);
+        break;
+    case 1:
+        //image
+        displayImageData(name);
+        break;
+    case 2:
+        //point
+        displayPointData(name);
+        break;
+    case 3:
+        //points
+        displayPointsData(name);
+        break;
+    case 4:
+        //video
+        displayVideoData(name);
+        break;
+    case 5:
+        //int
+        displayIntData(name);
+        break;
+    case 6:
+        //float
+        displayFloatData(name);
+        break;
+    case 7:
+        //string
+        displayStringData(name);
+        break;
+    case 8:
+        //bool
+        displayBoolData(name);
+        break;
+    default:
+        //no type
+        LOG_JOHN() << "Type does not exist";
+        LOG_JOHN() << "Feature does not exist";
+        break;
+    }
+
+}
+
+void LinkManager::displayCalibData(QString name)
+{
+    if(calibList[name]){
+        LOG_JOHN() << "display Calib Data";
+
+        QString calibDisplay = "Calib Data: \nLength: ";
+        calibDisplay.append(QString::number(calibList[name]->lengthData()));
+        calibDisplay.append("\nSize: ");
+        calibDisplay.append(QString::number(calibList[name]->sizeData().width));
+        calibDisplay.append(" by ");
+        calibDisplay.append(QString::number(calibList[name]->sizeData().height));
+
+        QMessageBox::information(Q_NULLPTR, "Calib Display",calibDisplay);
+
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
+void LinkManager::displayImageData(QString name)
+{
+    if(imageList[name]){
+        LOG_JOHN() << "display Image Data";
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::displayPointData(QString name)
+{
+    if(pointList[name]){
+        LOG_JOHN() << "display Point Data";
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::displayPointsData(QString name)
+{
+    if(pointsList[name]){
+        LOG_JOHN() << "display Points Data";
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::displayVideoData(QString name)
+{
+    if(videoGraphList[name]){
+        LOG_JOHN() << "display Video Data";
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::displayIntData(QString name)
+{
+    if(intList[name]){
+        LOG_JOHN() << "display Int Data";
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::displayFloatData(QString name)
+{
+    if(floatList[name]){
+        LOG_JOHN() << "display Float Data";
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::displayStringData(QString name)
+{
+    if(stringList[name] != NULL){
+        LOG_JOHN() << "display String Data";
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
+void LinkManager::displayBoolData(QString name)
+{
+    if(boolList[name]){
+        LOG_JOHN() << "display Bool Data";
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
+
 void LinkManager::clearAllData()
 {
     calibList.clear();
@@ -723,8 +869,6 @@ std::map<QString, int> LinkManager::getAllData(int x)
         newString.append(":]");
         out.insert(std::pair<QString, int>(newString, 8));
     }
-
-
 
     return out;
 

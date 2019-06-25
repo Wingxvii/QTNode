@@ -111,6 +111,7 @@ void SaveData::onClone()
 void SaveData::onDisplay()
 {
     LOG_JOHN() << "Display pressed";
+    LinkManager::instance()->displayData(nameIndex, typeIndex);
 
 }
 
