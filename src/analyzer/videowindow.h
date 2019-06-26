@@ -5,6 +5,9 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QFileDialog>
+#include <QMessageBox>
+#include "cvPlayer.h"
 
 class VideoWindow : public QObject{
     Q_OBJECT
@@ -21,12 +24,16 @@ public:
 private:
     QGridLayout* layout;
     QAction* displayAction;
-    QLineEdit* selectVideoIndex;
-    QPushButton* confirmVideoSelection;
-
+    CVPlayer* myPlayer;
+    QLabel* displayLabel;
+    QPushButton* playButton;
+    QPushButton* loadButton;
 
 public slots:
-    void showVideo();
+    void updatePlayerUI(QImage img);
+    void onLoad();
+    void onPlay();
+
 };
 
 #endif // VIDEOWINDOW_H

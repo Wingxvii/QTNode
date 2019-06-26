@@ -162,6 +162,7 @@ SOURCES += main.cpp\
     nodeeditor/dynamic_framework/NodeStyle.cpp \
     nodeeditor/dynamic_framework/Properties.cpp \
     nodeeditor/dynamic_framework/StyleCollection.cpp \
+    analyzer/cvplayer.cpp \
     analyzer/linkmanager.cpp \
     nodeeditor/linkin.cpp \
     nodeeditor/linkout.cpp \
@@ -171,7 +172,7 @@ SOURCES += main.cpp\
     analyzer/consolewindow.cpp \
     analyzer/linkerwindow.cpp \
     analyzer/imagewindow.cpp \
-    analyzer/videowindow.cpp
+    analyzer/videowindow.cpp \
 
 
 
@@ -345,6 +346,7 @@ HEADERS  += mainwindow.h \
     nodeeditor/dynamic_framework/Style.hpp \
     nodeeditor/dynamic_framework/StyleCollection.hpp \
     nodeeditor/dynamic_framework/TypeConverter.hpp \
+    analyzer/cvPlayer.h \
     analyzer/linkmanager.h \
     nodeeditor/linkin.h \
     nodeeditor/linkout.h \
@@ -356,7 +358,7 @@ HEADERS  += mainwindow.h \
     analyzer/consolewindow.h \
     analyzer/linkerwindow.h \
     analyzer/imagewindow.h \
-    analyzer/videowindow.h
+    analyzer/videowindow.h \
 
 
 
