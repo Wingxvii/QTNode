@@ -19,14 +19,18 @@ class CVPlayer : public QThread
     QWaitCondition condition;
     Mat frame;
     double frameRate;
-    VideoCapture capture;
+    VideoCapture* capture;
     Mat RGBframe;
     QImage img;
+    std::vector<cv::Mat> _video;
+
  signals:
  //Signal to output frame to be displayed
       void processedImage(const QImage &image);
  protected:
      void run();
+
+
  public:
     //Constructor
     CVPlayer(QObject *parent = 0);
@@ -34,6 +38,10 @@ class CVPlayer : public QThread
     ~CVPlayer();
     //Load a video from memory
     bool loadVideo(QString filename);
+    //Load a video from memory
+    bool loadVideo(std::shared_ptr<VideoGraphData> videoData);
+
+
     //Play the video
     void Play();
     //Stop the video

@@ -9,20 +9,26 @@ VideoWindow::VideoWindow()
     myPlayer = new CVPlayer();
     displayLabel = new QLabel();
     playButton = new QPushButton("Play");
-    loadButton = new QPushButton("Load");
+    loadButton = new QPushButton("Load from File...");
+    infoLabel = new QLabel("Video Info");
 
-    layout->addWidget(displayLabel,1,1,1,2);
-    layout->addWidget(playButton,2,1);
-    layout->addWidget(loadButton,2,2);
+    selectVideoIndex = new QLineEdit();
+    confirmVideoSelection = new QPushButton("Load from Cache");
+
+    layout->addWidget(infoLabel,1,1);
+    layout->addWidget(displayLabel,2,1,1,3);
+    layout->addWidget(selectVideoIndex,3,1);
+    layout->addWidget(confirmVideoSelection,3,2);
+    layout->addWidget(loadButton,3,3);
+    layout->addWidget(playButton,4,1);
 
     window->setLayout(layout);
     window->setVisible(false);
 
-
-
     connect(myPlayer, SIGNAL(processedImage(QImage)), this, SLOT(updatePlayerUI(QImage)));
     connect(playButton, SIGNAL(clicked(bool)), this, SLOT(onPlay()));
     connect(loadButton, SIGNAL(clicked(bool)), this, SLOT(onLoad()));
+    connect(confirmVideoSelection, SIGNAL(clicked(bool)), this, SLOT(getVideo()));
 
     openAction = new QAction(tr("&Video Display"), this);
     openAction->setStatusTip("/Close Video Display Window");
@@ -43,6 +49,7 @@ void VideoWindow::onLoad()
     QString filename = QFileDialog::getOpenFileName(Q_NULLPTR,
                                           tr("Open Video"), ".",
                                           tr("Video Files (*.avi *.mpg *.mp4)"));
+    infoLabel->setText("Video Loaded from Memory");
     if (!filename.isEmpty()){
         if (!myPlayer->loadVideo(filename.toLatin1().data()))
         {
@@ -59,9 +66,20 @@ void VideoWindow::onPlay()
     {
         myPlayer->Play();
         playButton->setText(tr("Stop"));
+
     }else
     {
         myPlayer->Stop();
         playButton->setText(tr("Play"));
+    }
+}
+
+void VideoWindow::getVideo()
+{
+    if(LinkManager::instance()->getVideoData(selectVideoIndex->text())){
+        myPlayer->loadVideo(LinkManager::instance()->getVideoData(selectVideoIndex->text()));
+        infoLabel->setText("Video Loaded from cache");
+    }else{
+        infoLabel->setText("Video Not Found");
     }
 }

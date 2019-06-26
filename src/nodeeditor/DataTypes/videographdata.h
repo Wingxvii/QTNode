@@ -71,7 +71,6 @@ public:
     std::vector<cv::Mat> _video;
 
 
-
 private:
     QString _text;
     double _framerate = 0;

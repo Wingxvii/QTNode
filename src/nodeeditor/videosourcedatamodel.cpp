@@ -59,6 +59,7 @@ void VideoSourceDataModel::processData()
     QString fileName = QFileDialog::getOpenFileName(button, tr("Choose Video"), "");
     cv::VideoCapture capture(fileName.toStdString());
 
+
     progressBar->setText("Processing...");
 
     funct = QtConcurrent::run(this, &VideoSourceDataModel::multiThreadedProcess, capture);
@@ -104,8 +105,8 @@ void VideoSourceDataModel::multiThreadedProcess(cv::VideoCapture capture)
     }
 
     double fps = capture.get(cv::CAP_PROP_FPS);
-
     _data = std::make_shared<VideoGraphData>(frames);
+
     if(_data->data().size() > 0){
         _data->ready();
     }
