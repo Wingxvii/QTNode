@@ -12,17 +12,27 @@ VideoWindow::VideoWindow()
     loadButton = new QPushButton("Load from File...");
     infoLabel = new QLabel("Video Info");
     slider = new QSlider(Qt::Horizontal);
+    playbackSpeed = new QComboBox();
 
     selectVideoIndex = new QLineEdit();
     confirmVideoSelection = new QPushButton("Load from Cache");
 
-    layout->addWidget(infoLabel,1,1);
-    layout->addWidget(displayLabel,2,1,1,3);
+    layout->addWidget(infoLabel,2,1,1,3);
+    layout->addWidget(displayLabel,1,1,1,3);
     layout->addWidget(selectVideoIndex,3,1);
     layout->addWidget(confirmVideoSelection,3,2);
     layout->addWidget(loadButton,3,3);
     layout->addWidget(slider,4,1);
-    layout->addWidget(playButton,4,2,1,2);
+    layout->addWidget(playButton,4,2);
+    layout->addWidget(playbackSpeed,4,3);
+
+    playbackSpeed->addItem("0.25");
+    playbackSpeed->addItem("0.5");
+    playbackSpeed->addItem("1");
+    playbackSpeed->addItem("1.5");
+    playbackSpeed->addItem("2");
+    playbackSpeed->addItem("5");
+
 
     window->setLayout(layout);
     window->setVisible(false);
@@ -36,7 +46,7 @@ VideoWindow::VideoWindow()
 
     connect(slider, SIGNAL(sliderMoved(int)), this, SLOT(sliderOut()));
     connect(myPlayer, SIGNAL(framePosition(int)), this, SLOT(sliderIn(int)));
-
+    connect(playbackSpeed, SIGNAL(activated(int)), this, SLOT(updatePlayBack(int)));
     openAction = new QAction(tr("&Video Display"), this);
     openAction->setStatusTip("/Close Video Display Window");
     openAction->setCheckable(true);
@@ -131,4 +141,28 @@ void VideoWindow::sliderOut()
     }
 
     myPlayer->currFrame = slider->value();
+}
+
+void VideoWindow::updatePlayBack(int index)
+{
+    switch(index){
+    case 0:
+        myPlayer->frameMultiplier = 0.25;
+        break;
+    case 1:
+        myPlayer->frameMultiplier = 0.5;
+        break;
+    case 2:
+        myPlayer->frameMultiplier = 1.0;
+        break;
+    case 3:
+        myPlayer->frameMultiplier = 1.5;
+        break;
+    case 4:
+        myPlayer->frameMultiplier = 2;
+        break;
+    case 5:
+        myPlayer->frameMultiplier = 5;
+        break;
+    }
 }

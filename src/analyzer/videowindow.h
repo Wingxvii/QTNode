@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include "cvPlayer.h"
 #include <QSlider>
+#include <QComboBox>
 
 class VideoWindow : public QObject{
     Q_OBJECT
@@ -30,6 +31,7 @@ private:
     QPushButton* playButton;
     QPushButton* loadButton;
     QSlider* slider;
+    QComboBox* playbackSpeed;
 
     QLineEdit* selectVideoIndex;
     QPushButton* confirmVideoSelection;
@@ -45,6 +47,7 @@ public slots:
 
     void sliderIn(int index);
     void sliderOut();
+    void updatePlayBack(int index);
 
 };
 

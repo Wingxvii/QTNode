@@ -25,6 +25,7 @@ class CVPlayer : public QThread
 
 public:
     std::vector<cv::Mat> _video;
+    double frameMultiplier = 1;
 
     unsigned int currFrame = 1;
     unsigned int maxFrame;
