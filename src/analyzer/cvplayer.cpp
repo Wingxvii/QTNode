@@ -67,9 +67,7 @@ void CVPlayer::run()
             stop = true;
             emit endReached();
         }
-
-
-
+        emit framePosition(currFrame);
 
         if (frame.channels()== 3){
             //LOG_JOHN() << "Converting..." << _video.size();

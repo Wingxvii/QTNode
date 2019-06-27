@@ -29,7 +29,7 @@ private:
     QLabel* displayLabel;
     QPushButton* playButton;
     QPushButton* loadButton;
-
+    QSlider* slider;
 
     QLineEdit* selectVideoIndex;
     QPushButton* confirmVideoSelection;
@@ -42,6 +42,9 @@ public slots:
     void getVideo();
     void finishedProcessing();
     void handleReplay();
+
+    void sliderIn(int index);
+    void sliderOut();
 
 };
 

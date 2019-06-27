@@ -11,6 +11,7 @@ VideoWindow::VideoWindow()
     playButton = new QPushButton("Play");
     loadButton = new QPushButton("Load from File...");
     infoLabel = new QLabel("Video Info");
+    slider = new QSlider(Qt::Horizontal);
 
     selectVideoIndex = new QLineEdit();
     confirmVideoSelection = new QPushButton("Load from Cache");
@@ -20,7 +21,8 @@ VideoWindow::VideoWindow()
     layout->addWidget(selectVideoIndex,3,1);
     layout->addWidget(confirmVideoSelection,3,2);
     layout->addWidget(loadButton,3,3);
-    layout->addWidget(playButton,4,2);
+    layout->addWidget(slider,4,1);
+    layout->addWidget(playButton,4,2,1,2);
 
     window->setLayout(layout);
     window->setVisible(false);
@@ -31,6 +33,9 @@ VideoWindow::VideoWindow()
     connect(confirmVideoSelection, SIGNAL(clicked(bool)), this, SLOT(getVideo()));
     connect(myPlayer, SIGNAL(doneLoading()), this, SLOT(finishedProcessing()));
     connect(myPlayer, SIGNAL(endReached()), this, SLOT(handleReplay()));
+
+    connect(slider, SIGNAL(sliderMoved(int)), this, SLOT(sliderOut()));
+    connect(myPlayer, SIGNAL(framePosition(int)), this, SLOT(sliderIn(int)));
 
     openAction = new QAction(tr("&Video Display"), this);
     openAction->setStatusTip("/Close Video Display Window");
@@ -78,6 +83,7 @@ void VideoWindow::onPlay()
     else if (myPlayer->isStopped())
     {
         myPlayer->Play();
+        slider->setMaximum(myPlayer->maxFrame);
         playButton->setText(tr("Pause"));
 
     }
@@ -109,4 +115,20 @@ void VideoWindow::handleReplay()
 {
     playButton->setText("Replay");
 
+}
+
+void VideoWindow::sliderIn(int index)
+{
+    if(index > slider->maximum()){
+        slider->setValue(index);
+    }
+}
+
+void VideoWindow::sliderOut()
+{
+    if(playButton->text() == "Replay" && slider->value() < slider->maximum()){
+        playButton->setText("Play");
+    }
+
+    myPlayer->currFrame = slider->value();
 }

@@ -22,9 +22,9 @@ class CVPlayer : public QThread
     double frameRate;
     Mat RGBframe;
     QImage img;
-    std::vector<cv::Mat> _video;
 
 public:
+    std::vector<cv::Mat> _video;
 
     unsigned int currFrame = 1;
     unsigned int maxFrame;
@@ -34,6 +34,7 @@ public:
       void processedImage(const QImage &image);
       void doneLoading();
       void endReached();
+      void framePosition(int);
  protected:
      void run();
 
