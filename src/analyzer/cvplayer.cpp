@@ -7,10 +7,10 @@ CVPlayer::CVPlayer(QObject *parent)
 }
 
 bool CVPlayer::loadVideo(QString filename) {
-    capture->open(filename.toStdString());
-    if (capture->isOpened())
+    capture.open(filename.toStdString());
+    if (capture.isOpened())
     {
-        frameRate = capture->get(cv::CAP_PROP_FPS);
+        frameRate = capture.get(cv::CAP_PROP_FPS);
 
         if(frameRate == 0.0){
             frameRate = 30.0;
@@ -21,7 +21,7 @@ bool CVPlayer::loadVideo(QString filename) {
         return false;
 }
 
-bool CVPlayer::loadVideo(std::shared_ptr<VideoGraphData> videoData)
+bool CVPlayer::loadaVideo(std::shared_ptr<VideoGraphData> videoData)
 {
     LOG_JOHN() <<"Tried";
 
@@ -52,7 +52,7 @@ void CVPlayer::run()
         if(!_video.empty()){
             frame = _video.front();
             _video.erase(_video.begin());
-        }else if (!capture->read(frame))
+        }else if (!capture.read(frame))
         {
             stop = true;
         }
@@ -69,7 +69,7 @@ void CVPlayer::run()
             img = QImage((const unsigned char*)(frame.data), frame.cols,frame.rows,QImage::Format_Indexed8);
             LOG_JOHN() << "Done!";
         }
-        cv::waitKey( 1000 / 1 );
+        QThread::msleep( 1000 / frameRate );
         emit processedImage(img);
 
     }
@@ -78,7 +78,7 @@ CVPlayer::~CVPlayer()
 {
     mutex.lock();
     stop = true;
-    capture->release();
+    capture.release();
     condition.wakeOne();
     mutex.unlock();
     wait();

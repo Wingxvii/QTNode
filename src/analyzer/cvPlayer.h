@@ -19,7 +19,7 @@ class CVPlayer : public QThread
     QWaitCondition condition;
     Mat frame;
     double frameRate;
-    VideoCapture* capture;
+    VideoCapture capture;
     Mat RGBframe;
     QImage img;
     std::vector<cv::Mat> _video;
@@ -39,7 +39,7 @@ class CVPlayer : public QThread
     //Load a video from memory
     bool loadVideo(QString filename);
     //Load a video from memory
-    bool loadVideo(std::shared_ptr<VideoGraphData> videoData);
+    bool loadaVideo(std::shared_ptr<VideoGraphData> videoData);
 
 
     //Play the video
