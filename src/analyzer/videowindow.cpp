@@ -77,7 +77,7 @@ void VideoWindow::onPlay()
 void VideoWindow::getVideo()
 {
     if(LinkManager::instance()->getVideoData(selectVideoIndex->text())){
-        myPlayer->loadVideo(LinkManager::instance()->getVideoData(selectVideoIndex->text()));
+        //myPlayer->loadVideo(LinkManager::instance()->getVideoData(selectVideoIndex->text()));
         infoLabel->setText("Video Loaded from cache");
     }else{
         infoLabel->setText("Video Not Found");

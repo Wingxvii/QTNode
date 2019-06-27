@@ -22,7 +22,7 @@ void CVPlayer::Play()
         if (isStopped()){
             stop = false;
         }
-        start(LowPriority);
+        start(IdlePriority);
     }
 }
 void CVPlayer::run()
@@ -43,7 +43,7 @@ void CVPlayer::run()
                                  frame.cols,frame.rows,QImage::Format_Indexed8);
         }
         emit processedImage(img);
-        cv::waitKey( 1000 / frameRate );
+        QThread::msleep( 1000 / frameRate );
     }
 }
 CVPlayer::~CVPlayer()
