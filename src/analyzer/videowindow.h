@@ -8,13 +8,14 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "cvPlayer.h"
+#include <QSlider>
 
 class VideoWindow : public QObject{
     Q_OBJECT
 
 public:
     VideoWindow();
-    ~VideoWindow(){};
+    ~VideoWindow(){}
 
     //main widget
     QWidget* window;
@@ -29,6 +30,7 @@ private:
     QPushButton* playButton;
     QPushButton* loadButton;
 
+
     QLineEdit* selectVideoIndex;
     QPushButton* confirmVideoSelection;
     QLabel* infoLabel;
@@ -38,6 +40,8 @@ public slots:
     void onLoad();
     void onPlay();
     void getVideo();
+    void finishedProcessing();
+    void handleReplay();
 
 };
 

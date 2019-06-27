@@ -20,7 +20,7 @@ VideoWindow::VideoWindow()
     layout->addWidget(selectVideoIndex,3,1);
     layout->addWidget(confirmVideoSelection,3,2);
     layout->addWidget(loadButton,3,3);
-    layout->addWidget(playButton,4,1);
+    layout->addWidget(playButton,4,2);
 
     window->setLayout(layout);
     window->setVisible(false);
@@ -29,6 +29,8 @@ VideoWindow::VideoWindow()
     connect(playButton, SIGNAL(clicked(bool)), this, SLOT(onPlay()));
     connect(loadButton, SIGNAL(clicked(bool)), this, SLOT(onLoad()));
     connect(confirmVideoSelection, SIGNAL(clicked(bool)), this, SLOT(getVideo()));
+    connect(myPlayer, SIGNAL(doneLoading()), this, SLOT(finishedProcessing()));
+    connect(myPlayer, SIGNAL(endReached()), this, SLOT(handleReplay()));
 
     openAction = new QAction(tr("&Video Display"), this);
     openAction->setStatusTip("/Close Video Display Window");
@@ -38,7 +40,7 @@ VideoWindow::VideoWindow()
 }
 void VideoWindow::updatePlayerUI(QImage img)
 {
-    LOG_JOHN() << "Signal Recieved";
+    //LOG_JOHN() << "Signal Recieved";
     if (!img.isNull())
     {
         displayLabel->setAlignment(Qt::AlignCenter);
@@ -58,18 +60,28 @@ void VideoWindow::onLoad()
             QMessageBox msgBox;
             msgBox.setText("The selected video could not be opened!");
             msgBox.exec();
+        }else{
+            playButton->setText("Processing...");
+            playButton->setEnabled(false);
+
         }
 
     }
 }
 void VideoWindow::onPlay()
 {
-    if (myPlayer->isStopped())
+    if(playButton->text() == "Replay"){
+        myPlayer->currFrame = 1;
+        myPlayer->Play();
+        playButton->setText(tr("Pause"));
+    }
+    else if (myPlayer->isStopped())
     {
         myPlayer->Play();
-        playButton->setText(tr("Stop"));
+        playButton->setText(tr("Pause"));
 
-    }else
+    }
+    else
     {
         myPlayer->Stop();
         playButton->setText(tr("Play"));
@@ -79,9 +91,22 @@ void VideoWindow::onPlay()
 void VideoWindow::getVideo()
 {
     if(LinkManager::instance()->getVideoData(selectVideoIndex->text())){
-        myPlayer->loadaVideo(LinkManager::instance()->getVideoData(selectVideoIndex->text()));
+        myPlayer->loadVideo(LinkManager::instance()->getVideoData(selectVideoIndex->text()));
         infoLabel->setText("Video Loaded from cache");
     }else{
         infoLabel->setText("Video Not Found");
     }
+}
+
+void VideoWindow::finishedProcessing()
+{
+    playButton->setText("Play");
+    playButton->setEnabled(true);
+
+}
+
+void VideoWindow::handleReplay()
+{
+    playButton->setText("Replay");
+
 }

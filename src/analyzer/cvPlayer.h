@@ -8,6 +8,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "nodeeditor/DataTypes/videographdata.h"
+#include <QtConcurrent/QtConcurrent>
 
 using namespace cv;
 class CVPlayer : public QThread
@@ -19,16 +20,30 @@ class CVPlayer : public QThread
     QWaitCondition condition;
     Mat frame;
     double frameRate;
-    VideoCapture capture;
     Mat RGBframe;
     QImage img;
     std::vector<cv::Mat> _video;
 
+public:
+
+    unsigned int currFrame = 1;
+    unsigned int maxFrame;
+
  signals:
  //Signal to output frame to be displayed
       void processedImage(const QImage &image);
+      void doneLoading();
+      void endReached();
  protected:
      void run();
+
+public:
+     QFuture<void> funct;
+     QFutureWatcher<void> functWatcher;
+
+public slots:
+     void multiThreadedProcess(cv::VideoCapture capture);
+     void multiThreadedFinished();
 
 
  public:
@@ -39,7 +54,7 @@ class CVPlayer : public QThread
     //Load a video from memory
     bool loadVideo(QString filename);
     //Load a video from memory
-    bool loadaVideo(std::shared_ptr<VideoGraphData> videoData);
+    bool loadVideo(std::shared_ptr<VideoGraphData> videoData);
 
 
     //Play the video

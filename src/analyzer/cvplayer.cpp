@@ -4,29 +4,40 @@ CVPlayer::CVPlayer(QObject *parent)
  : QThread(parent)
 {
     stop = true;
+    connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
+
 }
 
 bool CVPlayer::loadVideo(QString filename) {
+    VideoCapture capture;
     capture.open(filename.toStdString());
+
+
     if (capture.isOpened())
     {
         frameRate = capture.get(cv::CAP_PROP_FPS);
-
+        maxFrame = capture.get(cv::CAP_PROP_FRAME_COUNT);
         if(frameRate == 0.0){
             frameRate = 30.0;
         }
+
+        funct = QtConcurrent::run(this, &CVPlayer::multiThreadedProcess, capture);
+        functWatcher.setFuture(funct);
+
+
         return true;
     }
     else
         return false;
 }
 
-bool CVPlayer::loadaVideo(std::shared_ptr<VideoGraphData> videoData)
+bool CVPlayer::loadVideo(std::shared_ptr<VideoGraphData> videoData)
 {
     LOG_JOHN() <<"Tried";
 
     _video = videoData->_video;
     frameRate = videoData->getFrameRate();
+    maxFrame = videoData->_video.size();
 
     if(frameRate == 0.0){
         frameRate = 30.0;
@@ -49,13 +60,17 @@ void CVPlayer::run()
     LOG_JOHN() << frameRate;
     while(!stop){
 
-        if(!_video.empty()){
-            frame = _video.front();
-            _video.erase(_video.begin());
-        }else if (!capture.read(frame))
-        {
+        if(currFrame < maxFrame){
+            frame = _video.at(currFrame);
+            currFrame++;
+        }else{
             stop = true;
+            emit endReached();
         }
+
+
+
+
         if (frame.channels()== 3){
             //LOG_JOHN() << "Converting..." << _video.size();
             cv::cvtColor(frame, RGBframe, CV_BGR2RGB);
@@ -71,14 +86,34 @@ void CVPlayer::run()
         }
         QThread::msleep( 1000 / frameRate );
         emit processedImage(img);
-
     }
+}
+
+void CVPlayer::multiThreadedProcess(VideoCapture capture)
+{
+    cv::Mat temp;
+    capture >> temp;
+    int start = 1;
+
+    while (!temp.empty())
+    {
+        _video.push_back(temp.clone());
+        capture >> temp;
+        start++;
+    }
+
+    double fps = capture.get(cv::CAP_PROP_FPS);
+
+}
+
+void CVPlayer::multiThreadedFinished()
+{
+    emit doneLoading();
 }
 CVPlayer::~CVPlayer()
 {
     mutex.lock();
     stop = true;
-    capture.release();
     condition.wakeOne();
     mutex.unlock();
     wait();
