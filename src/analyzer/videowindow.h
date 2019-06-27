@@ -29,10 +29,15 @@ private:
     QPushButton* playButton;
     QPushButton* loadButton;
 
+    QLineEdit* selectVideoIndex;
+    QPushButton* confirmVideoSelection;
+    QLabel* infoLabel;
+
 public slots:
     void updatePlayerUI(QImage img);
     void onLoad();
     void onPlay();
+    void getVideo();
 
 };
 
