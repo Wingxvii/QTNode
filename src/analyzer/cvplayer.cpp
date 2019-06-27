@@ -40,13 +40,11 @@ void CVPlayer::Play()
         if (isStopped()){
             stop = false;
         }
-        start(LowPriority);
+        start(HighPriority);
     }
 }
 void CVPlayer::run()
 {
-
-
 
     LOG_JOHN() << frameRate;
     while(!stop){
@@ -59,18 +57,19 @@ void CVPlayer::run()
             stop = true;
         }
         if (frame.channels()== 3){
-            LOG_JOHN() << "Converting...";
+            //LOG_JOHN() << "Converting..." << _video.size();
             cv::cvtColor(frame, RGBframe, CV_BGR2RGB);
-            img = QImage((const unsigned char*)(RGBframe.data),
-                              RGBframe.cols,RGBframe.rows,QImage::Format_RGB888);
+            //LOG_JOHN() << "Reformatting..." << _video.size();
+            img = QImage((const unsigned char*)(RGBframe.data), RGBframe.cols,RGBframe.rows,QImage::Format_RGB888);
+            //LOG_JOHN() << "Done!";
         }
         else
         {
-            LOG_JOHN() << "Reindexing";
-            img = QImage((const unsigned char*)(frame.data),
-                                 frame.cols,frame.rows,QImage::Format_Indexed8);
+            LOG_JOHN() << "Reindexing...";
+            img = QImage((const unsigned char*)(frame.data), frame.cols,frame.rows,QImage::Format_Indexed8);
+            LOG_JOHN() << "Done!";
         }
-        cv::waitKey( 1000 / frameRate );
+        cv::waitKey( 1000 / 1 );
         emit processedImage(img);
 
     }

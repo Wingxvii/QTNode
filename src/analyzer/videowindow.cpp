@@ -38,10 +38,12 @@ VideoWindow::VideoWindow()
 }
 void VideoWindow::updatePlayerUI(QImage img)
 {
+    LOG_JOHN() << "Signal Recieved";
     if (!img.isNull())
     {
         displayLabel->setAlignment(Qt::AlignCenter);
         displayLabel->setPixmap(QPixmap::fromImage(img).scaled(displayLabel->size(), Qt::KeepAspectRatio, Qt::FastTransformation));
+        LOG_JOHN() << "Signal Displayed";
     }
 }
 void VideoWindow::onLoad()
