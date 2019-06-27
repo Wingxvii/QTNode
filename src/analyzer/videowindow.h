@@ -8,13 +8,15 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "cvPlayer.h"
+#include <QThread>
+#include <QtConcurrent/QtConcurrent>
 
 class VideoWindow : public QObject{
     Q_OBJECT
 
 public:
     VideoWindow();
-    ~VideoWindow(){};
+    ~VideoWindow(){}
 
     //main widget
     QWidget* window;
@@ -28,11 +30,30 @@ private:
     QLabel* displayLabel;
     QPushButton* playButton;
     QPushButton* loadButton;
+    QPushButton* clearButton;
+
+    QVector<QPixmap> videoToPlay;
+    QPixmap currFrame;
+    double videoFrameRate;
+    bool videoIsReady;
+
+    QFuture<void> funct;
+    QFutureWatcher<void> functWatcher;
+
 
 public slots:
     void updatePlayerUI(QImage img);
+    void videoReady(double frameRate);
     void onLoad();
     void onPlay();
+    void onVideoClear();
+
+    void multiThreadedProcess();
+    void multiThreadedFinished();
+    void playLocal();
+
+signals:
+    void imageUpdate();
 
 };
 

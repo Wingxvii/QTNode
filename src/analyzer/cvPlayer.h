@@ -25,6 +25,7 @@ class CVPlayer : public QThread
  signals:
  //Signal to output frame to be displayed
       void processedImage(const QImage &image);
+      void doneProcessing(double frameRate);
  protected:
      void run();
  public:
@@ -35,7 +36,7 @@ class CVPlayer : public QThread
     //Load a video from memory
     bool loadVideo(QString filename);
     //Play the video
-    void Play();
+    void Process();
     //Stop the video
     void Stop();
     //check if the player has been stopped

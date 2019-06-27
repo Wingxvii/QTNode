@@ -11,18 +11,17 @@ bool CVPlayer::loadVideo(QString filename) {
     if (capture.isOpened())
     {
         frameRate = capture.get(cv::CAP_PROP_FPS);
+        Process();
         return true;
     }
     else
         return false;
 }
-void CVPlayer::Play()
+void CVPlayer::Process()
 {
     if (!isRunning()) {
-        if (isStopped()){
-            stop = false;
-        }
-        start(LowPriority);
+        stop = false;
+        start(IdlePriority);
     }
 }
 void CVPlayer::run()
@@ -31,6 +30,7 @@ void CVPlayer::run()
         if (!capture.read(frame))
         {
             stop = true;
+           emit doneProcessing(frameRate);
         }
         if (frame.channels()== 3){
             cv::cvtColor(frame, RGBframe, CV_BGR2RGB);
@@ -43,7 +43,7 @@ void CVPlayer::run()
                                  frame.cols,frame.rows,QImage::Format_Indexed8);
         }
         emit processedImage(img);
-        cv::waitKey( 1000 / frameRate );
+        //cv::waitKey( 1000 / frameRate );
     }
 }
 CVPlayer::~CVPlayer()
@@ -54,12 +54,4 @@ CVPlayer::~CVPlayer()
     condition.wakeOne();
     mutex.unlock();
     wait();
-}
-void CVPlayer::Stop()
-{
-    stop = true;
-}
-
-bool CVPlayer::isStopped() const{
-    return this->stop;
 }
