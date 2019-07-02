@@ -58,6 +58,8 @@ public:
     void sendData(QString data, QString name);
     void sendData(bool data, QString name);
 
+    void makeCalibData(int boardX, int boardY, float boardLength, QString name);
+
     std::shared_ptr<CalibData> getCalibData(QString name);
     std::shared_ptr<ImageData> getImageData(QString name);
     std::shared_ptr<PointData> getPointData(QString name);
@@ -105,6 +107,8 @@ public:
     void displayFloatData(QString name);
     void displayStringData(QString name);
     void displayBoolData(QString name);
+
+    void loadImage(QString name);
 
     //clears public data
     void clearAllData();

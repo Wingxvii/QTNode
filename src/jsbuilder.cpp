@@ -26,6 +26,11 @@ void JSBuilder::sendData(const QString index, bool data)
 
 }
 
+void JSBuilder::makeCalibData(const QString index, const int x, const int y, const float length)
+{
+    LinkManager::instance()->makeCalibData(x,y,length, index);
+}
+
 int JSBuilder::getIntData(const QString index)
 {
     return LinkManager::instance()->getIntData(index);
@@ -238,6 +243,11 @@ void JSBuilder::displayBoolData(QString name)
 {
     LinkManager::instance()->displayBoolData(name);
 
+}
+
+void JSBuilder::loadImage(QString name)
+{
+    LinkManager::instance()->loadImage(name);
 }
 
 

@@ -126,6 +126,18 @@ void LinkManager::sendData(bool data, QString name)
     }
 }
 
+void LinkManager::makeCalibData(int boardX, int boardY, float boardLength, QString name)
+{
+    std::shared_ptr<CalibData> newCalib = std::make_shared<CalibData>();
+    newCalib->setSizeXData(boardX);
+    newCalib->setSizeYData(boardY);
+    newCalib->setLengthData(boardLength);
+    newCalib->ready();
+
+    sendData(newCalib, name);
+
+}
+
 std::shared_ptr<CalibData> LinkManager::getCalibData(QString name)
 {
     if(name.contains("PRIVATE")){
@@ -832,6 +844,16 @@ void LinkManager::displayBoolData(QString name)
     }else{
         LOG_JOHN() << "Data Not Found";
     }
+}
+
+void LinkManager::loadImage(QString name)
+{
+    QString fileName = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Choose Image"), "");
+    std::shared_ptr<ImageData> newImage = std::make_shared<ImageData>();
+    newImage->_image = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_COLOR);
+    newImage->ready();
+    sendData(newImage, name);
+
 }
 
 

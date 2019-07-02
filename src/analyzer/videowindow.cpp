@@ -18,10 +18,10 @@ VideoWindow::VideoWindow()
     confirmVideoSelection = new QPushButton("Load from Cache");
 
     layout->addWidget(infoLabel,2,1,1,3);
-    layout->addWidget(displayLabel,1,1,1,3);
-    layout->addWidget(selectVideoIndex,3,1);
-    layout->addWidget(confirmVideoSelection,3,2);
-    layout->addWidget(loadButton,3,3);
+    layout->addWidget(displayLabel,3,1,1,3);
+    layout->addWidget(selectVideoIndex,1,1);
+    layout->addWidget(confirmVideoSelection,1,2);
+    layout->addWidget(loadButton,1,3);
     layout->addWidget(slider,4,1);
     layout->addWidget(playButton,4,2);
     layout->addWidget(playbackSpeed,4,3);
@@ -32,6 +32,7 @@ VideoWindow::VideoWindow()
     playbackSpeed->addItem("1.5");
     playbackSpeed->addItem("2");
     playbackSpeed->addItem("5");
+    playbackSpeed->setCurrentIndex(2);
 
 
     window->setLayout(layout);
@@ -129,13 +130,17 @@ void VideoWindow::handleReplay()
 
 void VideoWindow::sliderIn(int index)
 {
-    if(index > slider->maximum()){
-        slider->setValue(index);
+    LOG_JOHN() << "Slider Updated In: " << index;
+
+    if(index < slider->maximum()){
+        slider->setSliderPosition(index);
     }
 }
 
 void VideoWindow::sliderOut()
 {
+    LOG_JOHN() << "Slider Updated Out: " << slider->value();
+
     if(playButton->text() == "Replay" && slider->value() < slider->maximum()){
         playButton->setText("Play");
     }

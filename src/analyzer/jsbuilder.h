@@ -20,6 +20,8 @@ public slots:
     Q_INVOKABLE void sendData(const QString index, QString data);
     Q_INVOKABLE void sendData(const QString index, bool data);
 
+    Q_INVOKABLE void makeCalibData(const QString index,const int x, const int y, const float length);
+
     Q_INVOKABLE int getIntData(const QString index);
     Q_INVOKABLE float getFloatData(const QString index);
     Q_INVOKABLE QString getStringData(const QString index);
@@ -63,6 +65,8 @@ public slots:
     Q_INVOKABLE void displayFloatData(QString name);
     Q_INVOKABLE void displayStringData(QString name);
     Q_INVOKABLE void displayBoolData(QString name);
+
+    Q_INVOKABLE void loadImage(QString name);
 
 
 };
