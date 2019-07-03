@@ -38,6 +38,7 @@
 #include "nodeeditor/linkin.h"
 #include "nodeeditor/linkout.h"
 #include "nodeeditor/debuggetcorners.h"
+#include "nodeeditor/convertcolor.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -88,6 +89,8 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<CalibInfo>("Calibration");
     final->registerModel<UnDistort>("Calibration");
 
+    final->registerModel<convertColor>("Editing");
+
     final->registerModel<CalibLinkIn>("Link In");
     final->registerModel<ImageLinkIn>("Link In");
     final->registerModel<PointLinkIn>("Link In");
@@ -99,6 +102,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<PointLinkOut>("Link Out");
     final->registerModel<PointsLinkOut>("Link Out");
     final->registerModel<VideoLinkOut>("Link Out");
+
 
     final->registerModel<DebugGetCorners>("Debug");
 

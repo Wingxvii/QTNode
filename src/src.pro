@@ -173,6 +173,7 @@ SOURCES += main.cpp\
     analyzer/linkerwindow.cpp \
     analyzer/imagewindow.cpp \
     analyzer/videowindow.cpp \
+    nodeeditor/convertcolor.cpp
 
 
 
@@ -359,6 +360,7 @@ HEADERS  += mainwindow.h \
     analyzer/linkerwindow.h \
     analyzer/imagewindow.h \
     analyzer/videowindow.h \
+    nodeeditor/convertcolor.h
 
 
 
