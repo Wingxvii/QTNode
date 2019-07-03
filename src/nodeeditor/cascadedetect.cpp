@@ -18,6 +18,7 @@ CascadeDetect::CascadeDetect()
     doublepos = new QRegExpValidator(QRegExp("/^[0-9]+(\\.[0-9]+)?$"), this);
     scaleInput->setValidator(doublepos);
 
+
     cascadeSelection->addItem("Eye");
     cascadeSelection->addItem("Frontal Cat Face");
     cascadeSelection->addItem("Frontal Cat Face Extended");
@@ -33,7 +34,6 @@ CascadeDetect::CascadeDetect()
     cascadeSelection->addItem("Profile Face");
     cascadeSelection->addItem("Right Eye 2 Splits");
     cascadeSelection->addItem("Smile");
-
 
 
     //connections
