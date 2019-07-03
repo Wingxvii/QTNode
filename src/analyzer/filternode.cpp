@@ -39,6 +39,7 @@
 #include "nodeeditor/linkout.h"
 #include "nodeeditor/debuggetcorners.h"
 #include "nodeeditor/convertcolor.h"
+#include "nodeeditor/equalizehist.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -90,6 +91,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<UnDistort>("Calibration");
 
     final->registerModel<convertColor>("Editing");
+    final->registerModel<EqualizeHist>("Editing");
 
     final->registerModel<CalibLinkIn>("Link In");
     final->registerModel<ImageLinkIn>("Link In");

@@ -173,7 +173,9 @@ SOURCES += main.cpp\
     analyzer/linkerwindow.cpp \
     analyzer/imagewindow.cpp \
     analyzer/videowindow.cpp \
-    nodeeditor/convertcolor.cpp
+    nodeeditor/convertcolor.cpp \
+    nodeeditor/cascadedetect.cpp \
+    nodeeditor/equalizehist.cpp
 
 
 
@@ -360,7 +362,9 @@ HEADERS  += mainwindow.h \
     analyzer/linkerwindow.h \
     analyzer/imagewindow.h \
     analyzer/videowindow.h \
-    nodeeditor/convertcolor.h
+    nodeeditor/convertcolor.h \
+    nodeeditor/cascadedetect.h \
+    nodeeditor/equalizehist.h
 
 
 
