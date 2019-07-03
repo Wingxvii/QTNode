@@ -5,10 +5,12 @@ convertColor::convertColor()
     //init
     layout = new QGridLayout;
     window =  new QWidget;
-    startIndex = new QLineEdit("1");
+    startIndex = new QLineEdit("0");
     endIndex = new QLineEdit("-1");
     codeSelection = new QListWidget;
     progressBar = new QLabel("Inactive");
+    startLabel = new QLabel("Start:");
+    endLabel = new QLabel("End:");
 
     addCodes();
 
@@ -27,9 +29,11 @@ convertColor::convertColor()
     connect(codeSelection, SIGNAL(currentRowChanged(int)), this, SLOT(preCheck()));
 
     //set layout
-    layout->addWidget(startIndex,1,1);
-    layout->addWidget(endIndex,1,2);
-    layout->addWidget(codeSelection,2,1,2,1);
+    layout->addWidget(startLabel,1,1);
+    layout->addWidget(startIndex,1,2);
+    layout->addWidget(endLabel,1,3);
+    layout->addWidget(endIndex,1,4);
+    layout->addWidget(codeSelection,2,1,1,4);
     layout->addWidget(progressBar,3,1);
     window->setLayout(layout);
 
@@ -100,13 +104,14 @@ void convertColor::processData()
 
     progressBar->setText("Processing...");
 
-    if(start < videoIn->_video.size()){start = videoIn->_video.size()-1;}
+    if(start > videoIn->_video.size()){start = videoIn->_video.size()-1;}
     if(end <= -1){end = videoIn->_video.size()-1;}
-    if(end > start){end = start;}
+    if(end < start){end = start;}
+
+    LOG_JOHN() << start << "/" << end;
 
     funct = QtConcurrent::run(this, &convertColor::multiThreadedProcess);
     functWatcher.setFuture(funct);
-
 
 }
 
@@ -143,9 +148,12 @@ void convertColor::multiThreadedProcess()
     cv::Mat tempMat;
 
     //convert
-    for(cv::Mat frame : videoIn->_video){
+    for(int x = start; x < end; x++){
+        cv::Mat frame = videoIn->_video[x];
         cv::cvtColor(frame, tempMat, code);
         newVid.push_back(tempMat.clone());
+        //LOG_JOHN() << x ;
+
     }
 
     //newVid

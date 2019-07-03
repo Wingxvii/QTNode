@@ -61,7 +61,7 @@ void VideoWindow::updatePlayerUI(QImage img)
     {
         displayLabel->setAlignment(Qt::AlignCenter);
         displayLabel->setPixmap(QPixmap::fromImage(img).scaled(displayLabel->size(), Qt::KeepAspectRatio, Qt::FastTransformation));
-        LOG_JOHN() << "Signal Displayed";
+        //LOG_JOHN() << "Signal Displayed";
     }
 }
 void VideoWindow::onLoad()
@@ -130,7 +130,7 @@ void VideoWindow::handleReplay()
 
 void VideoWindow::sliderIn(int index)
 {
-    LOG_JOHN() << "Slider Updated In: " << index;
+    //LOG_JOHN() << "Slider Updated In: " << index;
 
     if(index < slider->maximum()){
         slider->setSliderPosition(index);
@@ -139,7 +139,7 @@ void VideoWindow::sliderIn(int index)
 
 void VideoWindow::sliderOut()
 {
-    LOG_JOHN() << "Slider Updated Out: " << slider->value();
+    //LOG_JOHN() << "Slider Updated Out: " << slider->value();
 
     if(playButton->text() == "Replay" && slider->value() < slider->maximum()){
         playButton->setText("Play");

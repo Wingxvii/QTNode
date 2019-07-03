@@ -92,6 +92,8 @@ private:
     QLineEdit* startIndex;
     QLineEdit* endIndex;
     QListWidget *codeSelection;
+    QLabel* startLabel;
+    QLabel* endLabel;
 
     QRegExpValidator* intPos;
 

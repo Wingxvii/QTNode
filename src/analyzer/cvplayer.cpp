@@ -78,9 +78,9 @@ void CVPlayer::run()
         }
         else
         {
-            LOG_JOHN() << "Reindexing...";
+            //LOG_JOHN() << "Reindexing...";
             img = QImage((const unsigned char*)(frame.data), frame.cols,frame.rows,QImage::Format_Indexed8);
-            LOG_JOHN() << "Done!";
+            //LOG_JOHN() << "Done!";
         }
         QThread::msleep( 1000 / (frameRate*frameMultiplier) );
         emit processedImage(img);
