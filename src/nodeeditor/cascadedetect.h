@@ -84,7 +84,8 @@ public: //multithread
 public slots:
     void multiThreadedFinished();
 
-    void selectCascade();
+    void selectCascade(int);
+    void setupCascades();
 
 
 private: //ports
@@ -93,7 +94,7 @@ private: //ports
 
 private: //locals
     cv::CascadeClassifier cascade1;
-    double scale;
+    double scale = 1;
 
 
 private: //UI
@@ -102,7 +103,7 @@ private: //UI
     QLabel *scaleDisplay;
     QListWidget *cascadeSelection;
 
-    QRegExpValidator* doublepos;
+    QDoubleValidator* doublepos;
 
 };
 

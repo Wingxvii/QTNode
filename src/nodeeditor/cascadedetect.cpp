@@ -13,34 +13,22 @@ CascadeDetect::CascadeDetect()
     //init out port
     videoOut = std::make_shared<VideoGraphData>();
 
+    setupCascades();
+
     //input regulation
     //signed int
-    doublepos = new QRegExpValidator(QRegExp("/^[0-9]+(\\.[0-9]+)?$"), this);
+    doublepos = new QDoubleValidator();
     scaleInput->setValidator(doublepos);
-
-
-    cascadeSelection->addItem("Eye");
-    cascadeSelection->addItem("Frontal Cat Face");
-    cascadeSelection->addItem("Frontal Cat Face Extended");
-    cascadeSelection->addItem("Frontal Face Alternate");
-    cascadeSelection->addItem("Frontal Face Alternate 2");
-    cascadeSelection->addItem("Frontal Face");
-    cascadeSelection->addItem("Full Body");
-    cascadeSelection->addItem("Left Eye 2 Splits");
-    cascadeSelection->addItem("Right Eye 2 Splits");
-    cascadeSelection->addItem("Russina Licence Plate");
-    cascadeSelection->addItem("Lower Body");
-    cascadeSelection->addItem("Upper Body");
-    cascadeSelection->addItem("Profile Face");
-    cascadeSelection->addItem("Right Eye 2 Splits");
-    cascadeSelection->addItem("Smile");
-
 
     //connections
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
+    connect(cascadeSelection, SIGNAL(currentRowChanged(int)), this, SLOT(selectCascade(int)));
 
     //build layout
     layout->addWidget(progressBar,1,1);
+    layout->addWidget(scaleDisplay,2,1);
+    layout->addWidget(scaleInput,2,2);
+    layout->addWidget(cascadeSelection,3,1,1,2);
 
     window->setLayout(layout);
     buildContextWindow();
@@ -127,6 +115,7 @@ void CascadeDetect::restore(const QJsonObject &)
 
 void CascadeDetect::processData()
 {
+    LOG_JOHN() << "Started Process";
     progressBar->setText("Processing...");
     scale = scaleInput->selectedText().toDouble();
 
@@ -137,6 +126,15 @@ void CascadeDetect::processData()
 
 void CascadeDetect::preCheck()
 {
+    if(videoIn && videoIn->isReady){
+
+        LOG_JOHN() << "Video is Ready";
+    }
+    if(!cascade1.empty()){
+
+        LOG_JOHN() << "Cascade is Ready";
+    }
+
     if(videoIn && videoIn->isReady && active && !cascade1.empty()){
         processData();
     }
@@ -164,18 +162,22 @@ void CascadeDetect::ShowContextMenu(const QPoint &pos)
 
 void CascadeDetect::multiThreadedProcess()
 {
+    std::vector<cv::Mat> temp;
+
     std::vector<cv::Rect> faces, faces2;
-    cv::Mat smallImg;
+    cv::Mat smallImg, frame;
 
-    for(cv::Mat frame : videoIn->_video){
-        resize(frame, smallImg, cv::Size(), 1/scale, 1/scale,cv::INTER_LINEAR);
+    for(int x = 0; x < videoIn->_video.size(); x++){
 
-        cascade1.detectMultiScale(smallImg, faces, 1.1, 2, 0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30,30));
+        frame = videoIn->_video[x];
+        //resize(frame, smallImg, cv::Size(0,0), 1/scale, 1/scale,cv::INTER_LINEAR);
+
+        cascade1.detectMultiScale(frame, faces, 1.2, 5);
 
         for (size_t i = 0; i < faces.size(); i++)
             {
                 cv::Rect r = faces[i];
-                cv::Mat smallImgROI;
+                //cv::Mat smallImgROI;
                 std::vector<cv::Rect> nestedObjects;
                 cv::Point center;
                 cv::Scalar color = cv::Scalar(255, 0, 0); // Color for Drawing tool
@@ -187,12 +189,17 @@ void CascadeDetect::multiThreadedProcess()
                     center.x = cvRound((r.x + r.width*0.5)*scale);
                     center.y = cvRound((r.y + r.height*0.5)*scale);
                     radius = cvRound((r.width + r.height)*0.25*scale);
-                    circle(frame, center, radius, color, 3, 8, 0);
+                    cv::circle(frame, center, radius, color, 3, 8, 0);
+                    LOG_JOHN() << "Cascade Found: (" << center.x << "," << center.y << ")*" << radius;
                 }
-                else
+
+                /*
+                else{
                     rectangle(frame, cv::Point(cvRound(r.x*scale), cvRound(r.y*scale)),
                         cv::Point(cvRound((r.x + r.width - 1)*scale),
                             cvRound((r.y + r.height - 1)*scale)), color, 3, 8, 0);
+                }
+                */
 
                 /*if (nestedCascade.empty())
                     continue;
@@ -213,7 +220,11 @@ void CascadeDetect::multiThreadedProcess()
                 }
                 */
             }
+        temp.push_back(frame.clone());
+        LOG_JOHN() << "Done " << temp.size() << " Frames";
     }
+
+    videoOut->_video = temp;
 
 }
 
@@ -224,8 +235,76 @@ void CascadeDetect::multiThreadedFinished()
     emit dataUpdated(0);
 }
 
-void CascadeDetect::selectCascade()
+void CascadeDetect::selectCascade(int index)
 {
 
+    LOG_JOHN() << "Cascade Loaded: " << index;
+
+
+    switch(index){
+    case 0:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_eye.xml");
+        break;
+    case 1:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_frontalcatface.xml");
+        break;
+    case 2:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_frontalcatface_extended.xml");
+        break;
+    case 3:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_frontalface_default.xml");
+        break;
+    case 4:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_frontalface_alt.xml");
+        break;
+    case 5:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_frontalface_alt2.xml");
+        break;
+    case 6:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_fullbody.xml");
+        break;
+    case 7:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_lowerbody.xml");
+        break;
+    case 8:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_upperbody.xml");
+        break;
+    case 9:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_lefteye_2splits.xml");
+        break;
+    case 10:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_righteye_2splits.xml");
+        break;
+    case 11:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_profileface.xml");
+        break;
+    case 12:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_smile.xml");
+        break;
+    default:
+        cascade1.load("C:/projects/Shotcut/src/shotcut/opencv/cascades/haarcascade_frontalcatface.xml");
+        break;
+    }
+
+
+    preCheck();
+
+}
+
+void CascadeDetect::setupCascades()
+{
+    cascadeSelection->addItem("Eye");
+    cascadeSelection->addItem("Frontal Cat Face");
+    cascadeSelection->addItem("Frontal Cat Face Extended");
+    cascadeSelection->addItem("Frontal Face");
+    cascadeSelection->addItem("Frontal Face Alternate");
+    cascadeSelection->addItem("Frontal Face Alternate 2");
+    cascadeSelection->addItem("Full Body");
+    cascadeSelection->addItem("Lower Body");
+    cascadeSelection->addItem("Upper Body");
+    cascadeSelection->addItem("Left Eye 2 Splits");
+    cascadeSelection->addItem("Right Eye 2 Splits");
+    cascadeSelection->addItem("Profile Face");
+    cascadeSelection->addItem("Smile");
 }
 

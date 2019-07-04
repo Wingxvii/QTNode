@@ -84,6 +84,7 @@ private:
     cv::ColorConversionCodes code = (cv::ColorConversionCodes)0;
     int start = 0;
     int end = -1;
+    bool success;
 
 
 

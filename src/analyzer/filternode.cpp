@@ -40,6 +40,7 @@
 #include "nodeeditor/debuggetcorners.h"
 #include "nodeeditor/convertcolor.h"
 #include "nodeeditor/equalizehist.h"
+#include "nodeeditor/cascadedetect.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -92,6 +93,8 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 
     final->registerModel<convertColor>("Editing");
     final->registerModel<EqualizeHist>("Editing");
+
+    final->registerModel<CascadeDetect>("Detection");
 
     final->registerModel<CalibLinkIn>("Link In");
     final->registerModel<ImageLinkIn>("Link In");
