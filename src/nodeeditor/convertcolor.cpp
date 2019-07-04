@@ -88,7 +88,6 @@ QJsonObject convertColor::save() const
     dataJson["name"] = name();
     dataJson["start"] = start;
     dataJson["end"] = end;
-    dataJson["codeIndex"] = codeSelection->currentIndex().row();
 
 
     return dataJson;
@@ -96,7 +95,16 @@ QJsonObject convertColor::save() const
 
 void convertColor::restore(const QJsonObject & json)
 {
+    if(json.contains("start")){
+        startIndex->setText(QString::number(json["start"].toInt()));
+    }
+    if(json.contains("end")){
+        startIndex->setText(QString::number(json["end"].toInt()));
+    }
+
+
     preCheck();
+
 }
 
 

@@ -104,12 +104,17 @@ QJsonObject CascadeDetect::save() const
     QJsonObject dataJson;
 
     dataJson["name"] = name();
+    dataJson["scale"] = scale;
+
     return dataJson;
 
 }
 
-void CascadeDetect::restore(const QJsonObject &)
+void CascadeDetect::restore(const QJsonObject & json)
 {
+    if(json.contains("scale")){
+        scale = json["isReady"].toDouble();
+    }
     preCheck();
 }
 
