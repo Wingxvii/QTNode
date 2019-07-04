@@ -6,7 +6,7 @@ CascadeDetect::CascadeDetect()
     layout = new QGridLayout;
     window = new QWidget;
     progressBar = new QLabel("Inactive");
-    scaleInput = new QLineEdit();
+    scaleInput = new QLineEdit("1");
     scaleDisplay = new QLabel("Scale");
     cascadeSelection = new QListWidget();
 
@@ -117,7 +117,8 @@ void CascadeDetect::processData()
 {
     LOG_JOHN() << "Started Process";
     progressBar->setText("Processing...");
-    scale = scaleInput->selectedText().toDouble();
+    scale = scaleInput->text().toDouble();
+    LOG_JOHN() << "Scale: " << scale;
 
     funct = QtConcurrent::run(this, &CascadeDetect::multiThreadedProcess);
     functWatcher.setFuture(funct);
