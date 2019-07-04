@@ -16,6 +16,7 @@ convertColor::convertColor()
 
     //init out data
     videoOut = std::make_shared<VideoGraphData>();
+    videoOut->unready();
 
     //input regulation
     //signed int

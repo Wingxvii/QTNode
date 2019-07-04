@@ -162,8 +162,12 @@ void DisplayCascades::multiThreadedProcess()
     cv::Mat frame;
     cv::Point center;
 
-    for(int x = 0; x < videoIn->_video.size(); x++){
+    LOG_JOHN() << "Starting display";
+
+    for(int x = 0; x < videoIn->_video.size()-1; x++){
         frame = videoIn->_video[x];
+
+        LOG_JOHN() << "Starting circle draw for box " << x;
 
         for(cv::Rect rect : dataIn->_boxes[x]){
             center.x = cvRound((rect.x + rect.width*0.5)*scale);
@@ -171,10 +175,15 @@ void DisplayCascades::multiThreadedProcess()
 
             cv::circle(frame, center, cvRound((rect.width + rect.height)*0.25*scale), cv::Scalar(255, 0, 0), 3, 8, 0);
 
+            LOG_JOHN() << "Finished drawing circle for box " << x;
         }
-    temp.push_back(frame.clone());
+        temp.push_back(frame.clone());
+
+        LOG_JOHN() << "Saved Box " <<  x;
 
     }
+
+    LOG_JOHN() << "Finished Drawing";
 
     videoOut->_video = temp;
 }

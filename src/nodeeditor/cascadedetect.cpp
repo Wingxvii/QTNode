@@ -12,7 +12,7 @@ CascadeDetect::CascadeDetect()
 
     //init out port
     dataOut = std::make_shared<DetectionBoxesData>();
-
+    dataOut->unready();
     setupCascades();
 
     //input regulation
