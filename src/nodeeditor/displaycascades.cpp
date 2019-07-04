@@ -162,7 +162,7 @@ void DisplayCascades::multiThreadedProcess()
     cv::Mat frame;
     cv::Point center;
 
-    for(int x = 0; x < videoIn->_video.size(); x++){
+    for(int x = 0; x < (videoIn->_video.size()-1); x++){
         frame = videoIn->_video[x];
 
         for(cv::Rect rect : dataIn->_boxes[x]){
