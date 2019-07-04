@@ -1,5 +1,7 @@
-#ifndef CASCADEDETECT_H
-#define CASCADEDETECT_H
+#ifndef DISPLAYCASCADES_H
+#define DISPLAYCASCADES_H
+
+#include <QObject>
 
 #include <QtCore/QObject>
 #include <nodes/NodeDataModel>
@@ -30,23 +32,23 @@ using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
 
-class CascadeDetect : public NodeDataModel
+class DisplayCascades : public NodeDataModel
 {   Q_OBJECT
 
 public:
-    CascadeDetect();
-    virtual ~CascadeDetect(){};
+    DisplayCascades();
+    virtual ~DisplayCascades(){};
 
 
     QString caption() const override{
-        return QStringLiteral("Detect Cascades");
+        return QStringLiteral("Display Cascades");
     }
     bool captionVisible(){
         return false;
     }
     QString name()const override
     {
-        return QStringLiteral("Detect Cascades");
+        return QStringLiteral("Display Cascades");
     }
 
 public:
@@ -85,28 +87,19 @@ public: //multithread
 public slots:
     void multiThreadedFinished();
 
-    void selectCascade(int);
-    void setupCascades();
-
-
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
-    std::shared_ptr<DetectionBoxesData> dataOut;
+    std::shared_ptr<DetectionBoxesData> dataIn;
+
+    std::shared_ptr<VideoGraphData> videoOut;
 
 private: //locals
-    cv::CascadeClassifier cascade1;
-    double scale = 1;
 
 
 private: //UI
     QGridLayout *layout;
-    QLineEdit *scaleInput;
-    QLabel *scaleDisplay;
-    QListWidget *cascadeSelection;
-
-    QDoubleValidator* doublepos;
 
 };
 
 
-#endif // CASCADEDETECT_H
+#endif // DISPLAYCASCADES_H

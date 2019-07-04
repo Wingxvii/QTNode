@@ -175,7 +175,8 @@ SOURCES += main.cpp\
     analyzer/videowindow.cpp \
     nodeeditor/convertcolor.cpp \
     nodeeditor/cascadedetect.cpp \
-    nodeeditor/equalizehist.cpp
+    nodeeditor/equalizehist.cpp \
+    nodeeditor/displaycascades.cpp
 
 
 
@@ -364,7 +365,9 @@ HEADERS  += mainwindow.h \
     analyzer/videowindow.h \
     nodeeditor/convertcolor.h \
     nodeeditor/cascadedetect.h \
-    nodeeditor/equalizehist.h
+    nodeeditor/equalizehist.h \
+    nodeeditor/DataTypes/detectionboxesdata.h \
+    nodeeditor/displaycascades.h
 
 
 

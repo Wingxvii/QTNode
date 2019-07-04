@@ -11,7 +11,7 @@ CascadeDetect::CascadeDetect()
     cascadeSelection = new QListWidget();
 
     //init out port
-    videoOut = std::make_shared<VideoGraphData>();
+    dataOut = std::make_shared<DetectionBoxesData>();
 
     setupCascades();
 
@@ -57,14 +57,14 @@ QtNodes::NodeDataType CascadeDetect::dataType(QtNodes::PortType portType, QtNode
     if(portType == PortType::In){
         return VideoGraphData().type();
     }
-    return VideoGraphData().type();
+    return DetectionBoxesData().type();
 }
 
 std::shared_ptr<QtNodes::NodeData> CascadeDetect::outData(QtNodes::PortIndex port)
 {
     switch(port){
     case 0:
-        return videoOut;
+        return dataOut;
         break;
 
     }
@@ -78,7 +78,7 @@ void CascadeDetect::setInData(std::shared_ptr<QtNodes::NodeData> data, int locat
             modelValidationError = QString();
 
             //instantiate output
-            videoOut = std::make_shared<VideoGraphData>();
+            dataOut = std::make_shared<DetectionBoxesData>();
             preCheck();
         }
        else{
@@ -140,7 +140,7 @@ void CascadeDetect::preCheck()
         processData();
     }
     else{
-        if(videoOut){videoOut->unready();}
+        if(dataOut){dataOut->unready();}
     }
 }
 
@@ -163,14 +163,12 @@ void CascadeDetect::ShowContextMenu(const QPoint &pos)
 
 void CascadeDetect::multiThreadedProcess()
 {
-    std::vector<cv::Mat> temp;
+    std::vector<std::vector<cv::Rect>> temp;
 
     std::vector<cv::Rect> faces, faces2;
     cv::Mat smallImg, frame;
 
-    for(int x = 0; x < videoIn->_video.size(); x++){
-
-        frame = videoIn->_video[x];
+    for(cv::Mat frame : videoIn->_video){
         //resize(frame, smallImg, cv::Size(0,0), 1/scale, 1/scale,cv::INTER_LINEAR);
 
         cascade1.detectMultiScale(frame, faces, 1.2, 5);
@@ -190,7 +188,7 @@ void CascadeDetect::multiThreadedProcess()
                     center.x = cvRound((r.x + r.width*0.5)*scale);
                     center.y = cvRound((r.y + r.height*0.5)*scale);
                     radius = cvRound((r.width + r.height)*0.25*scale);
-                    cv::circle(frame, center, radius, color, 3, 8, 0);
+                    //cv::circle(frame, center, radius, color, 3, 8, 0);
                     LOG_JOHN() << "Cascade Found: (" << center.x << "," << center.y << ")*" << radius;
                 }
 
@@ -221,18 +219,19 @@ void CascadeDetect::multiThreadedProcess()
                 }
                 */
             }
-        temp.push_back(frame.clone());
+        temp.push_back(faces);
         LOG_JOHN() << "Done " << temp.size() << " Frames";
     }
 
-    videoOut->_video = temp;
+    dataOut->scale = scale;
+    dataOut->_boxes = temp;
 
 }
 
 void CascadeDetect::multiThreadedFinished()
 {
     progressBar->setText("Finished");
-    videoOut->ready();
+    dataOut->ready();
     emit dataUpdated(0);
 }
 
