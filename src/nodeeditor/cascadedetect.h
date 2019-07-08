@@ -96,7 +96,7 @@ private: //ports
 private: //locals
     cv::CascadeClassifier cascade1;
     double scale = 1;
-
+    int selectedRow = -1;
 
 private: //UI
     QGridLayout *layout;

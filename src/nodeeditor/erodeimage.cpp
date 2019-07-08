@@ -105,6 +105,15 @@ QJsonObject ErodeImage::save() const
 
 void ErodeImage::restore(const QJsonObject & json)
 {
+    if(json.contains("size")){
+        sizeSelecton->setCurrentIndex(json["size"].toInt());
+        changeSize();
+    }
+    if(json.contains("shape")){
+        shapeSelection->setCurrentIndex(json["shape"].toInt());
+        changeShape();
+    }
+
     preCheck();
 }
 

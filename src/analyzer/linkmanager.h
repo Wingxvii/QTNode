@@ -30,6 +30,7 @@ Used by:
 #include "nodeeditor/DataTypes/pointdata.h"
 #include "nodeeditor/DataTypes/pointsdata.h"
 #include "nodeeditor/DataTypes/videographdata.h"
+#include "nodeeditor/DataTypes/detectionboxesdata.h"
 
 //singleton that holds all linker data
 class LinkManager: public QObject{

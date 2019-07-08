@@ -104,12 +104,22 @@ QJsonObject CascadeDetect::save() const
     QJsonObject dataJson;
 
     dataJson["name"] = name();
+    dataJson["scale"] = scale;
+    dataJson["cascade"] = selectedRow;
     return dataJson;
 
 }
 
-void CascadeDetect::restore(const QJsonObject &)
+void CascadeDetect::restore(const QJsonObject & json)
 {
+    if(json.contains("scale")){
+        scaleInput->setText(QString::number(json["scale"].toInt()));
+    }
+    if(json.contains("cascade")){
+        cascadeSelection->setCurrentRow(json["cascade"].toInt());
+        selectCascade(json["cascade"].toInt());
+    }
+
     preCheck();
 }
 
@@ -117,8 +127,6 @@ void CascadeDetect::processData()
 {
     LOG_JOHN() << "Started Process";
     progressBar->setText("Processing...");
-    scale = scaleInput->text().toDouble();
-    LOG_JOHN() << "Scale: " << scale;
 
     funct = QtConcurrent::run(this, &CascadeDetect::multiThreadedProcess);
     functWatcher.setFuture(funct);
@@ -127,6 +135,9 @@ void CascadeDetect::processData()
 
 void CascadeDetect::preCheck()
 {
+    scale = scaleInput->text().toDouble();
+    LOG_JOHN() << "Scale: " << scale;
+
     if(videoIn && videoIn->isReady){
 
         LOG_JOHN() << "Video is Ready";
@@ -239,7 +250,7 @@ void CascadeDetect::selectCascade(int index)
 {
 
     LOG_JOHN() << "Cascade Loaded: " << index;
-
+    selectedRow = index;
 
     switch(index){
     case 0:

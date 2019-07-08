@@ -96,6 +96,17 @@ QJsonObject convertColor::save() const
 
 void convertColor::restore(const QJsonObject & json)
 {
+    if(json.contains("start")){
+        startIndex->setText(QString::number(json["start"].toInt()));
+    }
+    if(json.contains("end")){
+        endIndex->setText(QString::number(json["end"].toInt()));
+    }
+    if(json.contains("codeIndex")){
+        codeSelection->setCurrentRow(json["codeIndex"].toInt());
+    }
+
+
     preCheck();
 }
 
@@ -103,8 +114,6 @@ void convertColor::restore(const QJsonObject & json)
 void convertColor::processData()
 {
     code = (cv::ColorConversionCodes)codeSelection->currentIndex().row();
-    start = startIndex->text().toInt();
-    end = endIndex->text().toInt();
 
     progressBar->setText("Processing...");
 
@@ -121,6 +130,8 @@ void convertColor::processData()
 
 void convertColor::preCheck()
 {
+    start = startIndex->text().toInt();
+    end = endIndex->text().toInt();
 
     if(videoIn && videoIn->isReady && active){
         processData();
