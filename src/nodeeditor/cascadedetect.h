@@ -97,6 +97,8 @@ private: //locals
     cv::CascadeClassifier cascade1;
     double scale = 1;
     int selectedRow = -1;
+    float scaleFactor = 1.2f;
+    int neighbors = 5;
 
 private: //UI
     QGridLayout *layout;
@@ -104,8 +106,14 @@ private: //UI
     QLabel *scaleDisplay;
     QListWidget *cascadeSelection;
 
-    QDoubleValidator* doublepos;
+    QLabel* scaleFactorLabel;
+    QLineEdit* scaleFactorInput;
 
+    QLabel* neigborsLabel;
+    QLineEdit* neighborsInput;
+
+    QDoubleValidator* doublepos;
+    QRegExpValidator* intPos;
 };
 
 

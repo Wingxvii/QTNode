@@ -106,7 +106,7 @@ QJsonObject ErodeImage::save() const
 void ErodeImage::restore(const QJsonObject & json)
 {
     if(json.contains("size")){
-        sizeSelecton->setCurrentIndex(json["size"].toInt());
+        sizeSelecton->setCurrentIndex(json["size"].toInt()-1);
         changeSize();
     }
     if(json.contains("shape")){
@@ -158,12 +158,14 @@ void ErodeImage::multiThreadedProcess()
 {
     cv::Mat temp;
     cv::Mat element = cv::getStructuringElement(shape, cv::Size(size,size));
+    std::vector<cv::Mat> tempVideo = std::vector<cv::Mat>();
 
     for(int x = 0; x < videoIn->data().size(); x++){
-        cv::erode(videoIn->data().at(x), temp, element);
-        videoOut->_video.push_back(temp.clone());
+        temp = videoIn->data().at(x).clone();
+        cv::erode(temp, temp, element);
+        tempVideo.push_back(temp.clone());
     }
-
+    videoOut->_video = tempVideo;
 }
 
 void ErodeImage::multiThreadedFinished()

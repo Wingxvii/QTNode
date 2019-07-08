@@ -9,6 +9,10 @@ CascadeDetect::CascadeDetect()
     scaleInput = new QLineEdit("1");
     scaleDisplay = new QLabel("Scale");
     cascadeSelection = new QListWidget();
+    scaleFactorLabel = new QLabel("Scale Factor Threshold:");
+    neigborsLabel = new QLabel("Minimum number of Neighbors: ");
+    scaleFactorInput = new QLineEdit("1.2");
+    neighborsInput = new QLineEdit("5");
 
     //init out port
     dataOut = std::make_shared<DetectionBoxesData>();
@@ -16,9 +20,14 @@ CascadeDetect::CascadeDetect()
     setupCascades();
 
     //input regulation
-    //signed int
+    //double
     doublepos = new QDoubleValidator();
+    //unsigned int
+    intPos = new QRegExpValidator(QRegExp("\\d*"), this);
+
     scaleInput->setValidator(doublepos);
+    scaleFactorInput->setValidator(doublepos);
+    neighborsInput->setValidator(intPos);
 
     //connections
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
@@ -28,7 +37,11 @@ CascadeDetect::CascadeDetect()
     layout->addWidget(progressBar,1,1);
     layout->addWidget(scaleDisplay,2,1);
     layout->addWidget(scaleInput,2,2);
-    layout->addWidget(cascadeSelection,3,1,1,2);
+    layout->addWidget(scaleFactorLabel,3,1);
+    layout->addWidget(scaleFactorInput,3,2);
+    layout->addWidget(neigborsLabel,4,1);
+    layout->addWidget(neighborsInput,4,2);
+    layout->addWidget(cascadeSelection,5,1,1,2);
 
     window->setLayout(layout);
     buildContextWindow();
@@ -106,6 +119,8 @@ QJsonObject CascadeDetect::save() const
     dataJson["name"] = name();
     dataJson["scale"] = scale;
     dataJson["cascade"] = selectedRow;
+    dataJson["scfact"] = scaleFactor;
+    dataJson["neighbors"] = neighbors;
     return dataJson;
 
 }
@@ -113,12 +128,19 @@ QJsonObject CascadeDetect::save() const
 void CascadeDetect::restore(const QJsonObject & json)
 {
     if(json.contains("scale")){
-        scaleInput->setText(QString::number(json["scale"].toInt()));
+        scaleInput->setText(QString::number(json["scale"].toDouble()));
     }
     if(json.contains("cascade")){
         cascadeSelection->setCurrentRow(json["cascade"].toInt());
         selectCascade(json["cascade"].toInt());
     }
+    if(json.contains("scfact")){
+        scaleInput->setText(QString::number(json["scfact"].toDouble()));
+    }
+    if(json.contains("neighbors")){
+        scaleInput->setText(QString::number(json["scale"].toInt()));
+    }
+
 
     preCheck();
 }
@@ -136,6 +158,9 @@ void CascadeDetect::processData()
 void CascadeDetect::preCheck()
 {
     scale = scaleInput->text().toDouble();
+    scaleFactor = scaleFactorInput->text().toDouble();
+    neighbors = neighborsInput->text().toInt();
+
     LOG_JOHN() << "Scale: " << scale;
 
     if(videoIn && videoIn->isReady){
@@ -182,7 +207,7 @@ void CascadeDetect::multiThreadedProcess()
     for(cv::Mat frame : videoIn->_video){
         //resize(frame, smallImg, cv::Size(0,0), 1/scale, 1/scale,cv::INTER_LINEAR);
 
-        cascade1.detectMultiScale(frame, faces, 1.2, 5);
+        cascade1.detectMultiScale(frame, faces, scaleFactor, neighbors);
 
         for (size_t i = 0; i < faces.size(); i++)
             {
