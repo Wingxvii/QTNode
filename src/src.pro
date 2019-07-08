@@ -177,7 +177,8 @@ SOURCES += main.cpp\
     nodeeditor/cascadedetect.cpp \
     nodeeditor/equalizehist.cpp \
     nodeeditor/displaycascades.cpp \
-    nodeeditor/erodeimage.cpp
+    nodeeditor/erodeimage.cpp \
+    nodeeditor/dilateimage.cpp
 
 
 
@@ -369,7 +370,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/equalizehist.h \
     nodeeditor/DataTypes/detectionboxesdata.h \
     nodeeditor/displaycascades.h \
-    nodeeditor/erodeimage.h
+    nodeeditor/erodeimage.h \
+    nodeeditor/dilateimage.h
 
 
 

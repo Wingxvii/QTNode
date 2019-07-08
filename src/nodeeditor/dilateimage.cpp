@@ -11,11 +11,12 @@
 DilateImage::DilateImage(){
     window = new QWidget;
 
-    button = new QPushButton("Dilate");
-    layout = new QFormLayout;
+    layout = new QGridLayout;
 
     shapeSelection = new QComboBox();
     shapeLabel = new QLabel("Select Shape");
+    progressBar = new QLabel("Inactive");
+
 
     shapeSelection->addItem("Rectangle");
     shapeSelection->addItem("Cross");
@@ -38,16 +39,18 @@ DilateImage::DilateImage(){
     sizeSelecton->setCurrentIndex(7);
 
     connect(shapeSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(changeShape()));
+    connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
     connect(sizeSelecton, SIGNAL(currentIndexChanged(int)), this, SLOT(changeSize()));
 
-    layout->addRow(shapeLabel,shapeSelection);
-    layout->addRow(sizeLabel, sizeSelecton);
-    layout->addRow(button);
+    layout->addWidget(shapeLabel,1,1);
+    layout->addWidget(shapeSelection,1,2);
+    layout->addWidget(sizeLabel,2,1);
+    layout->addWidget(sizeSelecton,2,2);
+    layout->addWidget(progressBar,3,1);
     window->setLayout(layout);
 
-
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(startErosion()));
     videoOut = std::make_shared<VideoGraphData>();
+    buildContextWindow();
 }
 
 unsigned int DilateImage::nPorts(QtNodes::PortType portType)const
@@ -65,6 +68,8 @@ void DilateImage::setInData(std::shared_ptr<NodeData> data, int location){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
             //data was found
+            preCheck();
+
         }
         else{
             modelValidationState = NodeValidationState::Warning;
@@ -88,6 +93,81 @@ QString DilateImage::validationMessage() const
     return modelValidationError;
 }
 
+QJsonObject DilateImage::save() const
+{
+    QJsonObject dataJson;
+    dataJson["name"] = name();
+    dataJson["size"] = size;
+    dataJson["shape"] = shapeSelection->currentIndex();
+
+    return dataJson;
+
+}
+
+void DilateImage::restore(const QJsonObject &)
+{
+    preCheck();
+}
+
+void DilateImage::processData()
+{
+    progressBar->setText("Processing...");
+
+
+    funct = QtConcurrent::run(this, &DilateImage::multiThreadedProcess);
+    functWatcher.setFuture(funct);
+
+}
+
+void DilateImage::preCheck()
+{
+    if(videoIn && videoIn->isReady && active){
+        processData();
+    }
+    else{
+        if(videoOut){videoOut->unready();}
+    }
+}
+
+void DilateImage::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+
+
+}
+
+void DilateImage::multiThreadedProcess()
+{
+    cv::Mat temp;
+    cv::Mat element = cv::getStructuringElement(shape, cv::Size(size,size));
+
+    for(int x = 0; x < videoIn->data().size(); x++){
+        cv::dilate(videoIn->data().at(x), temp, element);
+        videoOut->_video.push_back(temp.clone());
+    }
+
+}
+
+void DilateImage::multiThreadedFinished()
+{
+    LOG_JOHN() << "Converted Successfully";
+    progressBar->setText("Finished");
+
+    videoOut->ready();
+    emit dataUpdated(0);
+
+}
+
 
 void DilateImage::changeShape(){
 
@@ -109,18 +189,3 @@ void DilateImage::changeSize(){
     size = 1 + sizeSelecton->currentIndex();
 }
 
-
-void DilateImage::startDilation(){
-    if (videoIn){
-        cv::Mat temp;
-        cv::Mat element = cv::getStructuringElement(shape, cv::Size(size,size));
-
-        for(int x = 0; x < videoIn->data().size(); x++){
-            cv::dilate(videoIn->data().at(x), temp, element);
-            videoOut->_video.push_back(temp.clone());
-            LOG_JOHN() << "Converted " + QString::number(x);
-        }
-        LOG_JOHN() << "Converted Successfully";
-    }
-
-}

@@ -43,6 +43,7 @@
 #include "nodeeditor/cascadedetect.h"
 #include "nodeeditor/displaycascades.h"
 #include "nodeeditor/erodeimage.h"
+#include "nodeeditor/dilateimage.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -96,6 +97,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<convertColor>("Editing");
     final->registerModel<EqualizeHist>("Editing");
     final->registerModel<ErodeImage>("Editing");
+    final->registerModel<DilateImage>("Editing");
 
     final->registerModel<CascadeDetect>("Cascades");
     final->registerModel<DisplayCascades>("Cascades");

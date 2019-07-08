@@ -1,17 +1,17 @@
 #ifndef DILATEIMAGE_H
 #define DILATEIMAGE_H
 #include <QtCore/QObject>
-
 #include <nodes/NodeDataModel>
 #include "analyzer/graphdataconnector.h"
-#include "videographdata.h"
+#include <QtConcurrent/QtConcurrent>
 
-#include <iostream>
+//data types
+#include "DataTypes/videographdata.h"
+
+#include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
-#include <QComboBox>
-#include <QFormLayout>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -48,33 +48,53 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex port) override;
     void setInData(std::shared_ptr<NodeData>, int) override;
 
-    QWidget* embeddedWidget() override {return window;}
     NodeValidationState validationState() const override;
     QString validationMessage() const override;
     bool resizable() const override {return false;}
 
-public slots:
-    void startDilation();
-    void changeShape();
-    void changeSize();
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
 
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
+public slots:
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
+public: //multithread
+
+    void multiThreadedProcess();
+
+    QFuture<void> funct;
+    QFutureWatcher<void> functWatcher;
+    QLabel *progressBar;
+public slots:
+    void multiThreadedFinished();
+
+    void changeShape();
+    void changeSize();
+
 private: //port values
     std::shared_ptr<VideoGraphData> videoIn;
     std::shared_ptr<VideoGraphData> videoOut;
-    QPushButton* button;
+
+private: //locals
+    int size = 8;
+    cv::MorphShapes shape = cv::MorphShapes::MORPH_RECT;
+
+private: //UI
+    QGridLayout* layout;
     QComboBox* shapeSelection;
     QComboBox* sizeSelecton;
-
-    QFormLayout* layout;
-    QWidget *window;
     QLabel *sizeLabel;
     QLabel *shapeLabel;
 
-    int size = 8;
-    cv::MorphShapes shape = cv::MorphShapes::MORPH_RECT;
 
 
 };
