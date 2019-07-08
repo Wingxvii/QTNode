@@ -58,6 +58,7 @@ public:
     void sendData(float data, QString name);
     void sendData(QString data, QString name);
     void sendData(bool data, QString name);
+    void sendData(std::shared_ptr<DetectionBoxesData> data, QString name);
 
     void makeCalibData(int boardX, int boardY, float boardLength, QString name);
 
@@ -70,6 +71,7 @@ public:
     float getFloatData(QString name);
     QString getStringData(QString name);
     bool getBoolData(QString name);
+    std::shared_ptr<DetectionBoxesData> getDetectionData(QString name);
 
     void saveData(QString name, int type);
     void saveImageData(QString name);
@@ -86,6 +88,7 @@ public:
     void deleteFloatData(QString name);
     void deleteStringData(QString name);
     void deleteBoolData(QString name);
+    void deleteDetectionData(QString name);
 
     void cloneData(QString name, int type);
     void cloneCalibData(QString name);
@@ -97,6 +100,7 @@ public:
     void cloneFloatData(QString name);
     void cloneStringData(QString name);
     void cloneBoolData(QString name);
+    void cloneDetectionData(QString name);
 
     void displayData(QString name, int type);
     void displayCalibData(QString name);
@@ -108,6 +112,7 @@ public:
     void displayFloatData(QString name);
     void displayStringData(QString name);
     void displayBoolData(QString name);
+    void displayDetectionData(QString name);
 
     void loadImage(QString name);
 
@@ -130,15 +135,17 @@ private:
     LinkManager();
     ~LinkManager(){}
 
-    std::map<QString, std::shared_ptr<CalibData>> calibList;
-    std::map<QString, std::shared_ptr<ImageData>> imageList;
-    std::map<QString, std::shared_ptr<PointData>> pointList;
-    std::map<QString, std::shared_ptr<PointsData>> pointsList;
-    std::map<QString, std::shared_ptr<VideoGraphData>> videoGraphList;
-    std::map<QString, int> intList;
-    std::map<QString, float> floatList;
-    std::map<QString, QString> stringList;
-    std::map<QString, bool> boolList;
+    std::map<QString, std::shared_ptr<CalibData>> calibList;                    //0
+    std::map<QString, std::shared_ptr<ImageData>> imageList;                    //1
+    std::map<QString, std::shared_ptr<PointData>> pointList;                    //2
+    std::map<QString, std::shared_ptr<PointsData>> pointsList;                  //3
+    std::map<QString, std::shared_ptr<VideoGraphData>> videoGraphList;          //4
+    std::map<QString, int> intList;                                             //5
+    std::map<QString, float> floatList;                                         //6
+    std::map<QString, QString> stringList;                                      //7
+    std::map<QString, bool> boolList;                                           //8
+    std::map<QString, std::shared_ptr<DetectionBoxesData>> detectionBoxesList;  //9
+
 
 
     //secondary data dump for internal use
@@ -151,6 +158,7 @@ private:
     std::map<QString, float> floatListPrivate;
     std::map<QString, QString> stringListPrivate;
     std::map<QString, bool> boolListPrivate;
+    std::map<QString, std::shared_ptr<DetectionBoxesData>> detectionBoxesListPrivate;
 
 
 //multithreading

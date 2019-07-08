@@ -19,6 +19,7 @@
 #include "nodeeditor/DataTypes/pointdata.h"
 #include "nodeeditor/DataTypes/pointsdata.h"
 #include "nodeeditor/DataTypes/videographdata.h"
+#include "nodeeditor/DataTypes/detectionboxesdata.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -313,4 +314,60 @@ private: //UI
 
 };
 
+class DetectionLinkOut : public NodeDataModel{
+    Q_OBJECT
+
+public:
+    DetectionLinkOut();
+    virtual ~DetectionLinkOut(){}
+
+    QString caption()const override{
+        return QStringLiteral("Detection Boxes Linker Output");
+    }
+
+    bool captionVisible(){
+        return true;
+    }
+    QString name()const override{
+        return QStringLiteral("Detection Boxes Linker Output");
+    }
+
+public:
+    unsigned int nPorts(PortType portType) const override;
+    NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+    std::shared_ptr<NodeData> outData(PortIndex port) override;
+    void setInData(std::shared_ptr<NodeData>, int) override{}
+
+    bool resizable() const override{return false;}
+
+private:
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
+
+public slots:
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
+
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
+
+private: //ports
+
+    std::shared_ptr<DetectionBoxesData> dataOut;
+
+private: //locals
+    QString index = "";
+
+private: //UI
+
+    QGridLayout *layout;
+    QLabel *statusLabel;
+    QLabel *indexLabel;
+    QLineEdit* indexInput;
+
+};
 #endif // LINKOUT_H

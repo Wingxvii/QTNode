@@ -107,12 +107,14 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<PointLinkIn>("Link In");
     final->registerModel<PointsLinkIn>("Link In");
     final->registerModel<VideoLinkIn>("Link In");
+    final->registerModel<DetectionLinkIn>("Link In");
 
     final->registerModel<CalibLinkOut>("Link Out");
     final->registerModel<ImageLinkOut>("Link Out");
     final->registerModel<PointLinkOut>("Link Out");
     final->registerModel<PointsLinkOut>("Link Out");
     final->registerModel<VideoLinkOut>("Link Out");
+    final->registerModel<DetectionLinkOut>("Link Out");
 
 
     final->registerModel<DebugGetCorners>("Debug");

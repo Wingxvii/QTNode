@@ -129,6 +129,11 @@ void JSBuilder::deleteBoolData(QString name)
     LinkManager::instance()->deleteBoolData(name);
 
 }
+
+void JSBuilder::deleteDetectionData(QString name)
+{
+    LinkManager::instance()->deleteDetectionData(name);
+}
 void JSBuilder::cloneData(const QString index, const int indexType)
 {
     LinkManager::instance()->cloneData(index, indexType);
@@ -187,6 +192,11 @@ void JSBuilder::cloneBoolData(QString name)
 
 }
 
+void JSBuilder::cloneDetectionData(QString name)
+{
+    LinkManager::instance()->cloneDetectionData(name);
+}
+
 void JSBuilder::displayData(const QString index, const int indexType)
 {
     LinkManager::instance()->displayData(index, indexType);
@@ -243,6 +253,11 @@ void JSBuilder::displayBoolData(QString name)
 {
     LinkManager::instance()->displayBoolData(name);
 
+}
+
+void JSBuilder::displayDetectionData(QString name)
+{
+    LinkManager::instance()->displayDetectionData(name);
 }
 
 void JSBuilder::loadImage(QString name)

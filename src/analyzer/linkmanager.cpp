@@ -13,6 +13,7 @@ LinkManager::LinkManager()
     floatList = std::map<QString, float>();
     stringList = std::map<QString, QString>();
     boolList = std::map<QString, bool>();
+    detectionBoxesList = std::map<QString, std::shared_ptr<DetectionBoxesData>>();
 
 }
 
@@ -124,6 +125,17 @@ void LinkManager::sendData(bool data, QString name)
         boolList[name] = data;
         emit updated(8,name);
     }
+}
+
+void LinkManager::sendData(std::shared_ptr<DetectionBoxesData> data, QString name)
+{
+    if(name.contains("PRIVATE")){
+        detectionBoxesListPrivate[name] = data;
+    }else if(name != ""){
+        detectionBoxesList[name] = data;
+        emit updated(9,name);
+    }
+
 }
 
 void LinkManager::makeCalibData(int boardX, int boardY, float boardLength, QString name)
@@ -240,6 +252,17 @@ bool LinkManager::getBoolData(QString name)
     return boolList[name];
 }
 
+std::shared_ptr<DetectionBoxesData> LinkManager::getDetectionData(QString name)
+{
+    if(name.contains("PRIVATE")){
+        return detectionBoxesListPrivate[name];
+    }
+    if(detectionBoxesList.find(name) == detectionBoxesList.end()){
+        return NULL;
+    }
+    return detectionBoxesList[name];
+}
+
 void LinkManager::saveData(QString name, int type)
 {
     switch(type){
@@ -279,6 +302,11 @@ void LinkManager::saveData(QString name, int type)
         //bool
         LOG_JOHN() << "Feature does not exist";
         break;
+    case 9:
+        //detection boxes
+        LOG_JOHN() << "Feature does not exist";
+        break;
+
     default:
         //no type
         LOG_JOHN() << "Type does not exist";
@@ -366,6 +394,9 @@ void LinkManager::deleteData(QString name, int type)
     case 8:
         //bool
     deleteBoolData(name);
+        break;
+    case 9://detection boxes
+        deleteDetectionData(name);
         break;
     default:
         //no type
@@ -481,6 +512,17 @@ void LinkManager::deleteBoolData(QString name)
     }
 }
 
+void LinkManager::deleteDetectionData(QString name)
+{
+    if(detectionBoxesList[name]){
+        detectionBoxesList.erase(name);
+        LOG_JOHN() << "Deleted Detection Data";
+        emit updated(9, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
 void LinkManager::cloneData(QString name, int type)
 {
     switch(type){
@@ -519,6 +561,10 @@ void LinkManager::cloneData(QString name, int type)
     case 8:
         //bool
     cloneBoolData(name);
+        break;
+    case 9:
+        //detection boxes
+    cloneDetectionData(name);
         break;
     default:
         //no type
@@ -643,6 +689,18 @@ void LinkManager::cloneBoolData(QString name)
     }
 }
 
+void LinkManager::cloneDetectionData(QString name)
+{
+    if(detectionBoxesList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(detectionBoxesList[name],newName);
+        LOG_JOHN() << "cloned Detection Data";
+        emit updated(9, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
 void LinkManager::displayData(QString name, int type)
 {
     switch(type){
@@ -681,6 +739,10 @@ void LinkManager::displayData(QString name, int type)
     case 8:
         //bool
         displayBoolData(name);
+        break;
+    case 9:
+        //detection boxes
+        displayDetectionData(name);
         break;
     default:
         //no type
@@ -846,6 +908,18 @@ void LinkManager::displayBoolData(QString name)
     }
 }
 
+void LinkManager::displayDetectionData(QString name)
+{
+    if(detectionBoxesList[name]){
+        LOG_JOHN() << "display detection boxes Data";
+        LOG_JOHN() << "Feature does not exist";
+
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
 void LinkManager::loadImage(QString name)
 {
     QString fileName = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Choose Image"), "");
@@ -868,6 +942,7 @@ void LinkManager::clearAllData()
     floatList.clear();
     stringList.clear();
     boolList.clear();
+    detectionBoxesList.clear();
 }
 
 void LinkManager::privateClear()
@@ -881,6 +956,7 @@ void LinkManager::privateClear()
     floatListPrivate.clear();
     stringListPrivate.clear();
     boolListPrivate.clear();
+    detectionBoxesListPrivate.clear();
 }
 
 std::map<QString, int> LinkManager::getAllData(int x)
@@ -948,6 +1024,12 @@ std::map<QString, int> LinkManager::getAllData(int x)
         newString.append(data.first);
         newString.append(":]");
         out.insert(std::pair<QString, int>(newString, 8));
+    }
+    for(auto const& data : detectionBoxesList){
+        QString newString = "Detection Boxes Data at [:";
+        newString.append(data.first);
+        newString.append(":]");
+        out.insert(std::pair<QString, int>(newString, 9));
     }
 
     return out;

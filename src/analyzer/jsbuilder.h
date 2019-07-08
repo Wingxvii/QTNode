@@ -43,6 +43,7 @@ public slots:
     Q_INVOKABLE void deleteFloatData(QString name);
     Q_INVOKABLE void deleteStringData(QString name);
     Q_INVOKABLE void deleteBoolData(QString name);
+    Q_INVOKABLE void deleteDetectionData(QString name);
 
     Q_INVOKABLE void cloneData(QString name, int type);
     Q_INVOKABLE void cloneCalibData(QString name);
@@ -54,6 +55,7 @@ public slots:
     Q_INVOKABLE void cloneFloatData(QString name);
     Q_INVOKABLE void cloneStringData(QString name);
     Q_INVOKABLE void cloneBoolData(QString name);
+    Q_INVOKABLE void cloneDetectionData(QString name);
 
     Q_INVOKABLE void displayData(QString name, int type);
     Q_INVOKABLE void displayCalibData(QString name);
@@ -65,6 +67,7 @@ public slots:
     Q_INVOKABLE void displayFloatData(QString name);
     Q_INVOKABLE void displayStringData(QString name);
     Q_INVOKABLE void displayBoolData(QString name);
+    Q_INVOKABLE void displayDetectionData(QString name);
 
     Q_INVOKABLE void loadImage(QString name);
 

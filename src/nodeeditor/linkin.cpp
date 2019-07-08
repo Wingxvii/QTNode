@@ -712,3 +712,146 @@ void VideoLinkIn::ShowContextMenu(const QPoint &pos)
     contextMenu.exec(window->mapToGlobal(pos));
 }
 
+//############################       Detection Boxes        #############################
+
+
+DetectionLinkIn::DetectionLinkIn()
+{
+    layout = new QGridLayout;
+    window = new QWidget;
+
+    //inits
+    statusLabel = new QLabel();
+    indexLabel = new QLabel("Select Data Index: ");
+    indexInput = new QLineEdit();
+    indexInput->setText("0");
+    send = new QPushButton("Send Data");
+
+
+    //connect
+    //connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(send, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
+
+    layout->addWidget(indexLabel, 1,1);
+    layout->addWidget(indexInput, 1,2);
+    layout->addWidget(statusLabel,2,1);
+    layout->addWidget(send, 3,1);
+    window->setLayout(layout);
+
+    buildContextWindow();
+    //preCheck();
+}
+
+unsigned int DetectionLinkIn::nPorts(QtNodes::PortType portType) const
+{
+    unsigned int result = 1;
+    switch(portType){
+    case PortType::In:
+        result = 1;
+        break;
+    case PortType::Out:
+        result = 0;
+        break;
+    default:
+        break;
+
+    }
+    return result;
+}
+
+QtNodes::NodeDataType DetectionLinkIn::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const
+{
+    return DetectionBoxesData().type();
+}
+
+void DetectionLinkIn::setInData(std::shared_ptr<QtNodes::NodeData> data, int location)
+{
+    switch(location){
+    case 0:
+    dataIn = std::dynamic_pointer_cast<DetectionBoxesData>(data);
+        if(dataIn){
+            modelValidationState = NodeValidationState::Valid;
+            modelValidationError = QString();
+
+            //instantiate output
+            //preCheck();
+        }
+       else{
+          modelValidationState = NodeValidationState::Warning;
+          modelValidationError = QStringLiteral("Missing or incorrect inputs");
+        }
+    break;
+    }
+}
+
+QtNodes::NodeValidationState DetectionLinkIn::validationState() const
+{
+    return modelValidationState;
+}
+
+QString DetectionLinkIn::validationMessage() const
+{
+    return modelValidationError;
+}
+
+QJsonObject DetectionLinkIn::save() const
+{
+    QJsonObject dataJson;
+    dataJson["name"] = name();
+
+    dataJson["Index"] = index.toUtf8().constData();
+
+    return dataJson;
+}
+
+void DetectionLinkIn::restore(const QJsonObject &json)
+{
+    if(json.contains("Index")){
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
+    }
+
+    //preCheck();
+
+}
+
+void DetectionLinkIn::processData()
+{
+    std::shared_ptr<DetectionBoxesData> detectionOut;
+    detectionOut = std::dynamic_pointer_cast<DetectionBoxesData>(dataIn);
+    LinkManager::instance()->sendData(detectionOut ,index);
+}
+
+void DetectionLinkIn::preCheck()
+{
+    index = indexInput->text();
+
+    if(LinkManager::instance()->getVideoData(index)){
+        statusLabel->setText("Data Slot In Use");
+    }else{
+        statusLabel->setText("Data Slot Empty");
+    }
+
+    LOG_JOHN() << "Checkers";
+    if(this->active && dataIn &&dataIn->isReady){
+        LOG_JOHN() << "Thing works";
+        processData();
+        statusLabel->setText("Data Slot Updated");
+    }
+}
+
+void DetectionLinkIn::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+}
+
