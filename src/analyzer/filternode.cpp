@@ -44,6 +44,7 @@
 #include "nodeeditor/displaycascades.h"
 #include "nodeeditor/erodeimage.h"
 #include "nodeeditor/dilateimage.h"
+#include "nodeeditor/colorthreshold.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -83,11 +84,21 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 
     //Working Nodes
     final->registerModel<VideoSourceDataModel>("Input");
-    final->registerModel<FrameIterator>("Input");
-    final->registerModel<AutoFrameIterator>("Input");
+    final->registerModel<CalibLinkOut>("Input");
+    final->registerModel<ImageLinkOut>("Input");
+    final->registerModel<PointLinkOut>("Input");
+    final->registerModel<PointsLinkOut>("Input");
+    final->registerModel<VideoLinkOut>("Input");
+    final->registerModel<DetectionLinkOut>("Input");
 
     final->registerModel<VideoDisplay>("Output");
     final->registerModel<ImageDisplay>("Output");
+    final->registerModel<CalibLinkIn>("Output");
+    final->registerModel<ImageLinkIn>("Output");
+    final->registerModel<PointLinkIn>("Output");
+    final->registerModel<PointsLinkIn>("Output");
+    final->registerModel<VideoLinkIn>("Output");
+    final->registerModel<DetectionLinkIn>("Output");
 
     final->registerModel<GetCorners>("Calibration");
     final->registerModel<Calibrate>("Calibration");
@@ -99,22 +110,14 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<ErodeImage>("Editing");
     final->registerModel<DilateImage>("Editing");
 
+    final->registerModel<FrameIterator>("Video");
+    final->registerModel<AutoFrameIterator>("Video");
+    final->registerModel<ColorThreshold>("Video");
+
     final->registerModel<CascadeDetect>("Cascades");
     final->registerModel<DisplayCascades>("Cascades");
 
-    final->registerModel<CalibLinkIn>("Link In");
-    final->registerModel<ImageLinkIn>("Link In");
-    final->registerModel<PointLinkIn>("Link In");
-    final->registerModel<PointsLinkIn>("Link In");
-    final->registerModel<VideoLinkIn>("Link In");
-    final->registerModel<DetectionLinkIn>("Link In");
 
-    final->registerModel<CalibLinkOut>("Link Out");
-    final->registerModel<ImageLinkOut>("Link Out");
-    final->registerModel<PointLinkOut>("Link Out");
-    final->registerModel<PointsLinkOut>("Link Out");
-    final->registerModel<VideoLinkOut>("Link Out");
-    final->registerModel<DetectionLinkOut>("Link Out");
 
 
     final->registerModel<DebugGetCorners>("Debug");

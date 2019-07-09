@@ -178,7 +178,8 @@ SOURCES += main.cpp\
     nodeeditor/equalizehist.cpp \
     nodeeditor/displaycascades.cpp \
     nodeeditor/erodeimage.cpp \
-    nodeeditor/dilateimage.cpp
+    nodeeditor/dilateimage.cpp \
+    nodeeditor/colorthreshold.cpp
 
 
 
@@ -371,7 +372,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/DataTypes/detectionboxesdata.h \
     nodeeditor/displaycascades.h \
     nodeeditor/erodeimage.h \
-    nodeeditor/dilateimage.h
+    nodeeditor/dilateimage.h \
+    nodeeditor/colorthreshold.h
 
 
 
