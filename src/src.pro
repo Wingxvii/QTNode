@@ -179,7 +179,8 @@ SOURCES += main.cpp\
     nodeeditor/displaycascades.cpp \
     nodeeditor/erodeimage.cpp \
     nodeeditor/dilateimage.cpp \
-    nodeeditor/colorthreshold.cpp
+    nodeeditor/colorthreshold.cpp \
+    nodeeditor/autotrackobject.cpp
 
 
 
@@ -373,7 +374,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/displaycascades.h \
     nodeeditor/erodeimage.h \
     nodeeditor/dilateimage.h \
-    nodeeditor/colorthreshold.h
+    nodeeditor/colorthreshold.h \
+    nodeeditor/autotrackobject.h
 
 
 

@@ -45,6 +45,7 @@
 #include "nodeeditor/erodeimage.h"
 #include "nodeeditor/dilateimage.h"
 #include "nodeeditor/colorthreshold.h"
+#include "nodeeditor/autotrackobject.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -117,7 +118,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<CascadeDetect>("Cascades");
     final->registerModel<DisplayCascades>("Cascades");
 
-
+    final->registerModel<AutoTrackObject>("Tracking");
 
 
     final->registerModel<DebugGetCorners>("Debug");
