@@ -180,7 +180,8 @@ SOURCES += main.cpp\
     nodeeditor/erodeimage.cpp \
     nodeeditor/dilateimage.cpp \
     nodeeditor/colorthreshold.cpp \
-    nodeeditor/autotrackobject.cpp
+    nodeeditor/autotrackobject.cpp \
+    nodeeditor/displaytrackedobject.cpp
 
 
 
@@ -375,7 +376,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/erodeimage.h \
     nodeeditor/dilateimage.h \
     nodeeditor/colorthreshold.h \
-    nodeeditor/autotrackobject.h
+    nodeeditor/autotrackobject.h \
+    nodeeditor/displaytrackedobject.h
 
 
 

@@ -34,10 +34,6 @@ ColorThreshold::ColorThreshold(){
     SMaxEdit->setMaximum(256);
     VMinEdit->setMaximum(256);
     VMaxEdit->setMaximum(256);
-
-    HMaxEdit->setValue(255);
-    SMaxEdit->setValue(255);
-    VMaxEdit->setValue(255);
     \
     HMinText = new QLabel("X Min");
     HMaxText = new QLabel("X Max");
@@ -170,19 +166,19 @@ void ColorThreshold::restore(const QJsonObject & json)
         HMinEdit->setValue(json["xMin"].toInt());
     }
     if(json.contains("xMax")){
-        HMinEdit->setValue(json["xMax"].toInt());
+        HMaxEdit->setValue(json["xMax"].toInt());
     }
     if(json.contains("yMin")){
-        HMinEdit->setValue(json["yMin"].toInt());
+        SMinEdit->setValue(json["yMin"].toInt());
     }
     if(json.contains("yMax")){
-        HMinEdit->setValue(json["yMax"].toInt());
+        SMaxEdit->setValue(json["yMax"].toInt());
     }
     if(json.contains("zMin")){
-        HMinEdit->setValue(json["zMin"].toInt());
+        VMinEdit->setValue(json["zMin"].toInt());
     }
     if(json.contains("zMax")){
-        HMinEdit->setValue(json["zMax"].toInt());
+        VMaxEdit->setValue(json["zMax"].toInt());
     }
     saveHData();
     saveSData();

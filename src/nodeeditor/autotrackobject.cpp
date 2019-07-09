@@ -6,12 +6,28 @@ AutoTrackObject::AutoTrackObject()
     window =  new QWidget;
 
     progressBar = new QLabel("Inactive");
+    rangeMinLabel = new QLabel("Min Range Denominator: ");
+    rangeMaxLabel = new QLabel("Max Range Denominator: ");
+    rangeMinInput = new QLineEdit();
+    rangeMaxInput = new QLineEdit();
 
     objectsOut = std::make_shared<DetectionBoxesData>();
 
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
-    layout->addWidget(progressBar,1,1);
+    //input regulation
+    //double
+    doublepos = new QDoubleValidator();
+
+    rangeMaxInput->setValidator(doublepos);
+    rangeMinInput->setValidator(doublepos);
+
+    layout->addWidget(progressBar,3,1);
+    layout->addWidget(rangeMinLabel,1,1);
+    layout->addWidget(rangeMinInput,1,2);
+    layout->addWidget(rangeMaxLabel,2,1);
+    layout->addWidget(rangeMaxInput,2,2);
+
     window->setLayout(layout);
 
     buildContextWindow();
@@ -79,10 +95,18 @@ void AutoTrackObject::processData()
 {
     FrameHeight = videoIn->_video[0].rows;
     FrameWidth = videoIn->_video[0].cols;
-    int MaxObjectArea = FrameHeight * FrameWidth / 1.5;
+
+    if(rangeMaxInput->text() != 0){
+        rangeMax = rangeMaxInput->text().toDouble();
+    }
+    if(rangeMinInput->text() != 0){
+        rangeMin = rangeMinInput->text().toDouble();
+    }
+
+    MinObjectArea = (FrameHeight * FrameWidth) / rangeMin;
+    MaxObjectArea = (FrameHeight * FrameWidth) / rangeMax;
 
     progressBar->setText("Processing...");
-
 
     funct = QtConcurrent::run(this, &AutoTrackObject::multiThreadedProcess);
     functWatcher.setFuture(funct);
@@ -135,12 +159,14 @@ void AutoTrackObject::multiThreadedProcess()
         //used to find the biggest object
 
         if(hierarchy.size() > 0){
-            LOG_JOHN() << "Contour detected";
             int numObjects = hierarchy.size();
             cv::Rect tempPoint;
 
             if(numObjects < MaxNumObjects){
+
+                LOG_JOHN() << "Objects Discovered:" << numObjects;
                 for (int index = 0; index >= 0; index = hierarchy[index][0]) {
+                    LOG_JOHN() << "Index" << index;
 
                     cv::Moments moment = moments((cv::Mat)contours[index]);
                     double area = moment.m00;
