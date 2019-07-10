@@ -80,13 +80,20 @@ QJsonObject AutoTrackObject::save() const
 {
     QJsonObject dataJson;
     dataJson["name"] = name();
-
+    dataJson["rangeMax"] = rangeMax;
+    dataJson["rangeMin"] = rangeMin;
     return dataJson;
 
 }
 
 void AutoTrackObject::restore(const QJsonObject & json)
 {
+    if(json.contains("rangeMax")){
+        rangeMaxInput->setText(QString::number(json["rangeMax"].toDouble()));
+    }
+    if(json.contains("rangeMin")){
+        rangeMinInput->setText(QString::number(json["rangeMin"].toDouble()));
+    }
 
     preCheck();
 }
@@ -95,13 +102,6 @@ void AutoTrackObject::processData()
 {
     FrameHeight = videoIn->_video[0].rows;
     FrameWidth = videoIn->_video[0].cols;
-
-    if(rangeMaxInput->text() != 0){
-        rangeMax = rangeMaxInput->text().toDouble();
-    }
-    if(rangeMinInput->text() != 0){
-        rangeMin = rangeMinInput->text().toDouble();
-    }
 
     MinObjectArea = (FrameHeight * FrameWidth) / rangeMin;
     MaxObjectArea = (FrameHeight * FrameWidth) / rangeMax;
@@ -115,6 +115,14 @@ void AutoTrackObject::processData()
 
 void AutoTrackObject::preCheck()
 {
+    if(rangeMaxInput->text() != 0){
+        rangeMax = rangeMaxInput->text().toDouble();
+    }
+    if(rangeMinInput->text() != 0){
+        rangeMin = rangeMinInput->text().toDouble();
+    }
+
+
     if(videoIn && videoIn->isReady && active){
         processData();
     }

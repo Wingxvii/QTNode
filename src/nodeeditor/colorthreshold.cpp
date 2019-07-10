@@ -42,23 +42,55 @@ ColorThreshold::ColorThreshold(){
     VMinText = new QLabel("Z Min");
     VMaxText = new QLabel("Z Max");
 
-    formLayout = new QFormLayout;
+    HMinValue = new QLabel("0");
+    HMaxValue = new QLabel("0");
+    SMinValue = new QLabel("0");
+    SMaxValue = new QLabel("0");
+    VMinValue = new QLabel("0");
+    VMaxValue = new QLabel("0");
 
-    connect(HMinEdit, SIGNAL(valueChanged(int)), this, SLOT(saveHData()));
-    connect(HMaxEdit, SIGNAL(valueChanged(int)), this, SLOT(saveHData()));
-    connect(SMinEdit, SIGNAL(valueChanged(int)), this, SLOT(saveSData()));
-    connect(SMaxEdit, SIGNAL(valueChanged(int)), this, SLOT(saveSData()));
-    connect(VMinEdit, SIGNAL(valueChanged(int)), this, SLOT(saveVData()));
-    connect(VMaxEdit, SIGNAL(valueChanged(int)), this, SLOT(saveVData()));
+    formLayout = new QGridLayout;
+
+    connect(HMinEdit, SIGNAL(sliderReleased()), this, SLOT(saveHData()));
+    connect(HMaxEdit, SIGNAL(sliderReleased()), this, SLOT(saveHData()));
+    connect(SMinEdit, SIGNAL(sliderReleased()), this, SLOT(saveSData()));
+    connect(SMaxEdit, SIGNAL(sliderReleased()), this, SLOT(saveSData()));
+    connect(VMinEdit, SIGNAL(sliderReleased()), this, SLOT(saveVData()));
+    connect(VMaxEdit, SIGNAL(sliderReleased()), this, SLOT(saveVData()));
+    connect(HMinEdit, SIGNAL(valueChanged(int)), this, SLOT(updateHData()));
+    connect(HMaxEdit, SIGNAL(valueChanged(int)), this, SLOT(updateHData()));
+    connect(SMinEdit, SIGNAL(valueChanged(int)), this, SLOT(updateSData()));
+    connect(SMaxEdit, SIGNAL(valueChanged(int)), this, SLOT(updateSData()));
+    connect(VMinEdit, SIGNAL(valueChanged(int)), this, SLOT(updateVData()));
+    connect(VMaxEdit, SIGNAL(valueChanged(int)), this, SLOT(updateVData()));
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
-    formLayout->addRow(HMinText, HMinEdit);
-    formLayout->addRow(HMaxText, HMaxEdit);
-    formLayout->addRow(SMinText, SMinEdit);
-    formLayout->addRow(SMaxText, SMaxEdit);
-    formLayout->addRow(VMinText, VMinEdit);
-    formLayout->addRow(VMaxText, VMaxEdit);
-    formLayout->addRow(progressBar);
+    //add an updating label that changes with valuechanged ***********************
+
+
+    formLayout->addWidget(HMinText,1,1);
+    formLayout->addWidget(HMaxText,2,1);
+    formLayout->addWidget(SMinText,3,1);
+    formLayout->addWidget(SMaxText,4,1);
+    formLayout->addWidget(VMinText,5,1);
+    formLayout->addWidget(VMaxText,6,1);
+
+    formLayout->addWidget(HMinEdit,1,2);
+    formLayout->addWidget(HMaxEdit,2,2);
+    formLayout->addWidget(SMinEdit,3,2);
+    formLayout->addWidget(SMaxEdit,4,2);
+    formLayout->addWidget(VMinEdit,5,2);
+    formLayout->addWidget(VMaxEdit,6,2);
+
+    formLayout->addWidget(HMinValue,1,3);
+    formLayout->addWidget(HMaxValue,2,3);
+    formLayout->addWidget(SMinValue,3,3);
+    formLayout->addWidget(SMaxValue,4,3);
+    formLayout->addWidget(VMinValue,5,3);
+    formLayout->addWidget(VMaxValue,6,3);
+
+
+    formLayout->addWidget(progressBar);
     window->setLayout(formLayout);
 
     outVideo = std::make_shared<VideoGraphData>();
@@ -128,19 +160,40 @@ void ColorThreshold::saveHData(){
     LOG_JOHN() << "Saved " + QString::number(HMin) + "," + QString::number(HMax);
     HMin = HMinEdit->value();
     HMax = HMaxEdit->value();
-
+    preCheck();
 }
 void ColorThreshold::saveSData(){
     LOG_JOHN() << "Saved " + QString::number(SMin) + "," + QString::number(SMax);
     SMin = SMinEdit->value();
     SMax = SMaxEdit->value();
+    preCheck();
 
 }
 void ColorThreshold::saveVData(){
     LOG_JOHN() << "Saved " + QString::number(VMin) + "," + QString::number(VMax);
     VMin = VMinEdit->value();
     VMax = VMaxEdit->value();
+    preCheck();
+}
 
+void ColorThreshold::updateHData()
+{
+    HMinValue->setText(QString().number(HMinEdit->value()));
+    HMaxValue->setText(QString().number(HMaxEdit->value()));
+}
+
+
+void ColorThreshold::updateSData()
+{
+    SMinValue->setText(QString().number(SMinEdit->value()));
+    SMaxValue->setText(QString().number(SMaxEdit->value()));
+
+}
+
+void ColorThreshold::updateVData()
+{
+    VMinValue->setText(QString().number(VMinEdit->value()));
+    VMaxValue->setText(QString().number(VMaxEdit->value()));
 
 }
 

@@ -12,7 +12,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QLineEdit>
-#include <QFormLayout>
+#include <QGridLayout>
 #include <QSlider>
 #include <QAbstractSlider>
 
@@ -59,6 +59,11 @@ public slots:
     void saveSData();
     void saveVData();
 
+    void updateHData();
+    void updateSData();
+    void updateVData();
+
+
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
@@ -90,19 +95,29 @@ private: //Data Ports
     std::shared_ptr<VideoGraphData> outVideo;
 
 private: //UI
-    QFormLayout* formLayout;
+    QGridLayout* formLayout;
+
     QSlider* HMinEdit;
     QSlider* HMaxEdit;
     QSlider* SMinEdit;
     QSlider* SMaxEdit;
     QSlider* VMinEdit;
     QSlider* VMaxEdit;
+
     QLabel* HMinText;
     QLabel* HMaxText;
     QLabel* SMinText;
     QLabel* SMaxText;
     QLabel* VMinText;
     QLabel* VMaxText;
+
+    QLabel* HMinValue;
+    QLabel* HMaxValue;
+    QLabel* SMinValue;
+    QLabel* SMaxValue;
+    QLabel* VMinValue;
+    QLabel* VMaxValue;
+
 
 private: //locals
 
