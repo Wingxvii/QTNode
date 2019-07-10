@@ -1,4 +1,4 @@
-CONFI   += link_prl
+CONFIG   += link_prl
 
 QT       += widgets opengl xml network printsupport qml quick sql webkitwidgets
 QT       += multimedia websockets quickwidgets
@@ -578,6 +578,8 @@ LIBS += "$$PWD/../opencv/bin/libopencv_xobjdetect342.dll"
 LIBS += "$$PWD/../opencv/bin/libopencv_xphoto342.dll"
 }
 
+
+
 #LIBS += "$$PWD/../nodeeditor/NodeEditor.dll"
 
 debug_and_release {
@@ -597,6 +599,7 @@ isEmpty(SHOTCUT_VERSION) {
 }
 DEFINES += SHOTCUT_VERSION=\\\"$$SHOTCUT_VERSION\\\"
 VERSION = $$SHOTCUT_VERSION
+
 
 mac {
     TARGET = Shotcut

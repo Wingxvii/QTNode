@@ -12,7 +12,7 @@
 //QT widgets
 #include <QLabel>
 #include <QGridLayout>
-
+#include <qwt_plot_seriesitem.h>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
