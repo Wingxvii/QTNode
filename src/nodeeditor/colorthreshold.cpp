@@ -65,8 +65,6 @@ ColorThreshold::ColorThreshold(){
     connect(VMaxEdit, SIGNAL(valueChanged(int)), this, SLOT(updateVData()));
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
-    //add an updating label that changes with valuechanged ***********************
-
 
     formLayout->addWidget(HMinText,1,1);
     formLayout->addWidget(HMaxText,2,1);

@@ -181,7 +181,9 @@ SOURCES += main.cpp\
     nodeeditor/dilateimage.cpp \
     nodeeditor/colorthreshold.cpp \
     nodeeditor/autotrackobject.cpp \
-    nodeeditor/displaytrackedobject.cpp
+    nodeeditor/displaytrackedobject.cpp \
+    nodeeditor/videoobjectstats.cpp \
+    nodeeditor/modelclass.cpp
 
 
 
@@ -299,10 +301,8 @@ HEADERS  += mainwindow.h \
     events.h \
     dialogs/blacklist.h \
     dialogs/filterlist.h \
-    analyzer/graphcontoller.h \
     analyzer/sensorwindow.h \
     analyzer/filternode.h \
-    analyzer/graphdata.h \
     analyzer/graphdataconnector.h \
     analyzer/linegraph.h \
     analyzer/graphstats.h \
@@ -377,7 +377,9 @@ HEADERS  += mainwindow.h \
     nodeeditor/dilateimage.h \
     nodeeditor/colorthreshold.h \
     nodeeditor/autotrackobject.h \
-    nodeeditor/displaytrackedobject.h
+    nodeeditor/displaytrackedobject.h \
+    nodeeditor/videoobjectstats.h \
+    nodeeditor/modelclass.h
 
 
 
