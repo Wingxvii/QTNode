@@ -1,5 +1,7 @@
 CONFIG   += link_prl
 
+CONFIG   += qwt
+
 QT       += widgets opengl xml network printsupport qml quick sql webkitwidgets
 QT       += multimedia websockets quickwidgets
 QT       += qml-private core-private quick-private gui-private
@@ -122,13 +124,9 @@ SOURCES += main.cpp\
     events.cpp \
     dialogs/blacklist.cpp \
     dialogs/filterlist.cpp \
-    analyzer/graphcontoller.cpp \
     analyzer/sensorwindow.cpp \
     analyzer/filternode.cpp \
     analyzer/sensormanager.cpp \
-    analyzer/graphdata.cpp \
-    analyzer/graphdataconnector.cpp \
-    analyzer/linegraph.cpp \
     analyzer/scrubeventmanager.cpp \
     nodeeditor/calibrate.cpp \
     nodeeditor/getcorners.cpp \
@@ -140,7 +138,6 @@ SOURCES += main.cpp\
     nodeeditor/videosourcedatamodel.cpp \
     nodeeditor/videodisplay.cpp \
     nodeeditor/videooutputmodel.cpp \
-    nodeeditor/outputdisplaymodel.cpp \
     nodeeditor/dynamic_framework/Connection.cpp \
     nodeeditor/dynamic_framework/ConnectionBlurEffect.cpp \
     nodeeditor/dynamic_framework/ConnectionGeometry.cpp \
@@ -183,7 +180,7 @@ SOURCES += main.cpp\
     nodeeditor/autotrackobject.cpp \
     nodeeditor/displaytrackedobject.cpp \
     nodeeditor/videoobjectstats.cpp \
-    nodeeditor/modelclass.cpp
+    nodeeditor/outputdisplaymodel.cpp
 
 
 
@@ -303,9 +300,6 @@ HEADERS  += mainwindow.h \
     dialogs/filterlist.h \
     analyzer/sensorwindow.h \
     analyzer/filternode.h \
-    analyzer/graphdataconnector.h \
-    analyzer/linegraph.h \
-    analyzer/graphstats.h \
     analyzer/scrubeventmanager.h \
     nodeeditor/autoframeiterator.h \
     nodeeditor/calibinfo.h \
@@ -317,7 +311,6 @@ HEADERS  += mainwindow.h \
     nodeeditor/videodisplay.h \
     nodeeditor/videooutputmodel.h \
     nodeeditor/videosourcedatamodel.h \
-    nodeeditor/outputdisplaymodel.h \
     nodeeditor/DataTypes/calibdata.h \
     nodeeditor/DataTypes/imagedata.h \
     nodeeditor/DataTypes/pointdata.h \
@@ -379,7 +372,7 @@ HEADERS  += mainwindow.h \
     nodeeditor/autotrackobject.h \
     nodeeditor/displaytrackedobject.h \
     nodeeditor/videoobjectstats.h \
-    nodeeditor/modelclass.h
+    nodeeditor/outputdisplaymodel.h
 
 
 
@@ -578,7 +571,7 @@ LIBS += "$$PWD/../opencv/bin/libopencv_xobjdetect342.dll"
 LIBS += "$$PWD/../opencv/bin/libopencv_xphoto342.dll"
 }
 
-
+INCLUDEPATH += C:/qwt-6.1.4/include
 
 #LIBS += "$$PWD/../nodeeditor/NodeEditor.dll"
 

@@ -57,7 +57,7 @@ private:
     bool eventsCreated;
 
     GraphStats stats;
-    LineGraph* _lineGraph;
+    //LineGraph* _lineGraph;
     QPushButton *createEvents;
     QVBoxLayout* layout;
 

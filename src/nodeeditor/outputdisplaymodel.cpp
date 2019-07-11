@@ -8,11 +8,11 @@ OutputDisplayModel::OutputDisplayModel()
     window = new QWidget();
     window->setLayout(layout);
 
-    _lineGraph = new LineGraph();
+    //_lineGraph = new LineGraph();
     createEvents = new QPushButton("create events");
 
     layout->addWidget(createEvents, 0);
-    layout->addWidget(_lineGraph, 1);
+    //layout->addWidget(_lineGraph, 1);
 
     connect(createEvents, SIGNAL(clicked(bool)), this, SLOT(onCreateEvents()));
 
@@ -95,10 +95,10 @@ void OutputDisplayModel::setInData(std::shared_ptr<QtNodes::NodeData> data, int)
             stats.addData(point.first, point.second);
         }
 
-        _lineGraph->clearPixmap();
-        _lineGraph->setGraphStats(stats);
-        _lineGraph->updatePixmap(_data);
-        _lineGraph->update();
+        //_lineGraph->clearPixmap();
+        //_lineGraph->setGraphStats(stats);
+        //_lineGraph->updatePixmap(_data);
+        //_lineGraph->update();
     }
     else
     {
@@ -113,14 +113,14 @@ void OutputDisplayModel::setInData(std::shared_ptr<QtNodes::NodeData> data, int)
         modelValidationState = NodeValidationState::Warning;
         modelValidationError = QStringLiteral("Missing or incorrect inputs");
         stats = GraphStats();
-        _lineGraph->clearPixmap();
-        _lineGraph->setGraphStats(stats);
-        _lineGraph->updatePixmap(std::map<float, float>());
-        _lineGraph->update();
+        //_lineGraph->clearPixmap();
+        //_lineGraph->setGraphStats(stats);
+        //_lineGraph->updatePixmap(std::map<float, float>());
+        //_lineGraph->update();
 
 
     }
-    _lineGraph->adjustSize();
+    //_lineGraph->adjustSize();
     window->adjustSize();
 }
 

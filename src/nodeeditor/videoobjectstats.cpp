@@ -1,6 +1,7 @@
-#include "videoobjectstats.h"
+/*#include "videoobjectstats.h"
 
 VideoObjectStats::VideoObjectStats()
 {
 
 }
+*/

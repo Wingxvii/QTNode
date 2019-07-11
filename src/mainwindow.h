@@ -33,7 +33,6 @@
 #include <unordered_map>
 #include <string>
 #include <QJsonArray>
-#include "analyzer/graphcontoller.h"
 
 
 #define EXIT_RESTART (42)

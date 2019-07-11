@@ -1,4 +1,4 @@
-#ifndef VIDEOOBJECTSTATS_H
+/*#ifndef VIDEOOBJECTSTATS_H
 #define VIDEOOBJECTSTATS_H
 
 #include <QtCore/QObject>
@@ -69,9 +69,12 @@ public: //multithread
     QFuture<void> funct;
     QFutureWatcher<void> functWatcher;
     QLabel *progressBar;
+    QwtPlotSeriesItem *plotSeries;
+
 public slots:
     void multiThreadedFinished();
 
 };
 
 #endif // VIDEOOBJECTSTATS_H
+*/
