@@ -91,13 +91,13 @@ VideoObjectStats::VideoObjectStats()
     //connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     layout->addWidget(displayPlot,1,1);
-    layout->addWidget(MaxObjs,2,1);
-    layout->addWidget(MeanObjs,3,1);
-    layout->addWidget(MeanObjsStripped,4,1);
-    layout->addWidget(MedianObjs,5,1);
-    layout->addWidget(MedianStripped,6,1);
-    layout->addWidget(ModeObjsStripped,7,1);
-    layout->addWidget(TotalFrames,8,1);
+    layout->addWidget(MaxObjs,1,1);
+    layout->addWidget(MeanObjs,2,1);
+    layout->addWidget(MeanObjsStripped,3,1);
+    layout->addWidget(MedianObjs,4,1);
+    layout->addWidget(MedianStripped,5,1);
+    layout->addWidget(ModeObjsStripped,6,1);
+    layout->addWidget(TotalFrames,7,1);
 
     window->setLayout(layout);
     buildContextWindow();
