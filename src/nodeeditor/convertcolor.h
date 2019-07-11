@@ -82,19 +82,12 @@ private: //ports
 
 private:
     cv::ColorConversionCodes code = (cv::ColorConversionCodes)0;
-    int start = 0;
-    int end = -1;
-    bool success;
 
 
 
 private:
     QGridLayout *layout;
-    QLineEdit* startIndex;
-    QLineEdit* endIndex;
     QListWidget *codeSelection;
-    QLabel* startLabel;
-    QLabel* endLabel;
 
     QRegExpValidator* intPos;
 

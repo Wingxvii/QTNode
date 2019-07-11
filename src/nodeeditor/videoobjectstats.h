@@ -1,4 +1,4 @@
-/*#ifndef VIDEOOBJECTSTATS_H
+#ifndef VIDEOOBJECTSTATS_H
 #define VIDEOOBJECTSTATS_H
 
 #include <QtCore/QObject>
@@ -7,12 +7,14 @@
 #include <QtConcurrent/QtConcurrent>
 
 //data types
-#include "DataTypes/videographdata.h"
+#include "DataTypes/detectionboxesdata.h"
 
 //QT widgets
 #include <QLabel>
 #include <QGridLayout>
-#include <qwt_plot_seriesitem.h>
+#include <qwt_plot.h>
+#include <qwt_plot_curve.h>
+#include <QCheckBox>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -30,14 +32,14 @@ public:
 
 public: //required classes
     QString caption() const override{
-        return QStringLiteral("Display Cascades");
+        return QStringLiteral("Object Stats");
     }
     bool captionVisible(){
         return false;
     }
     QString name()const override
     {
-        return QStringLiteral("Display Cascades");
+        return QStringLiteral("Object Stats");
     }
     unsigned int nPorts(PortType PortType) const override;
     NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
@@ -57,6 +59,7 @@ public: //required classes
 public slots: //required slots
     void processData() override;
     void preCheck() override;
+    void updateUI();
 
     void ShowContextMenu(const QPoint &pos) override;
     void activate(){active = true;preCheck();window->setStyleSheet("");}
@@ -69,12 +72,36 @@ public: //multithread
     QFuture<void> funct;
     QFutureWatcher<void> functWatcher;
     QLabel *progressBar;
-    QwtPlotSeriesItem *plotSeries;
 
 public slots:
     void multiThreadedFinished();
 
+private: //ports
+    std::shared_ptr<DetectionBoxesData> inBoxes;
+
+private: //ui
+    QGridLayout *layout;
+    QwtPlot *displayPlot;
+    QLabel *MaxObjs;
+    QLabel *MeanObjs;
+    QLabel *MeanObjsStripped;
+    QLabel *MedianObjs;
+    QLabel *MedianStripped;
+    QLabel *ModeObjsStripped;
+    QLabel *TotalFrames;
+
+private: //locals
+    int maxObjs;
+    double meanObjs;
+    double meanStripped;
+    double medianObjs;
+    double medianStripped;
+    double modestripped;
+    int totalFrames;
+    bool point;
+    QwtPlotCurve *curve;
+
 };
 
 #endif // VIDEOOBJECTSTATS_H
-*/
+

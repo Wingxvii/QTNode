@@ -5,12 +5,8 @@ convertColor::convertColor()
     //init
     layout = new QGridLayout;
     window =  new QWidget;
-    startIndex = new QLineEdit("0");
-    endIndex = new QLineEdit("-1");
     codeSelection = new QListWidget;
     progressBar = new QLabel("Inactive");
-    startLabel = new QLabel("Start:");
-    endLabel = new QLabel("End:");
 
     addCodes();
 
@@ -21,20 +17,14 @@ convertColor::convertColor()
     //signed int
     intPos = new QRegExpValidator(QRegExp("-?\\d*"), this);
 
-    startIndex->setValidator(intPos);
-    endIndex->setValidator(intPos);
 
     //connections
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
     connect(codeSelection, SIGNAL(currentRowChanged(int)), this, SLOT(preCheck()));
 
     //set layout
-    layout->addWidget(startLabel,1,1);
-    layout->addWidget(startIndex,1,2);
-    layout->addWidget(endLabel,1,3);
-    layout->addWidget(endIndex,1,4);
-    layout->addWidget(codeSelection,2,1,1,4);
-    layout->addWidget(progressBar,3,1);
+    layout->addWidget(codeSelection,1,1);
+    layout->addWidget(progressBar,2,1);
     window->setLayout(layout);
 
     buildContextWindow();
@@ -86,8 +76,6 @@ QJsonObject convertColor::save() const
 {
     QJsonObject dataJson;
     dataJson["name"] = name();
-    dataJson["start"] = start;
-    dataJson["end"] = end;
     dataJson["codeIndex"] = codeSelection->currentIndex().row();
 
 
@@ -96,12 +84,6 @@ QJsonObject convertColor::save() const
 
 void convertColor::restore(const QJsonObject & json)
 {
-    if(json.contains("start")){
-        startIndex->setText(QString::number(json["start"].toInt()));
-    }
-    if(json.contains("end")){
-        endIndex->setText(QString::number(json["end"].toInt()));
-    }
     if(json.contains("codeIndex")){
         codeSelection->setCurrentRow(json["codeIndex"].toInt());
     }
@@ -117,12 +99,6 @@ void convertColor::processData()
 
     progressBar->setText("Processing...");
 
-    if(start > videoIn->_video.size()){start = videoIn->_video.size()-1;}
-    if(end <= -1){end = videoIn->_video.size()-1;}
-    if(end < start){end = start;}
-
-    LOG_JOHN() << start << "/" << end;
-
     funct = QtConcurrent::run(this, &convertColor::multiThreadedProcess);
     functWatcher.setFuture(funct);
 
@@ -130,8 +106,6 @@ void convertColor::processData()
 
 void convertColor::preCheck()
 {
-    start = startIndex->text().toInt();
-    end = endIndex->text().toInt();
 
     if(videoIn && videoIn->isReady && active){
         processData();
@@ -163,12 +137,11 @@ void convertColor::multiThreadedProcess()
     cv::Mat tempMat;
 
     //convert
-    for(int x = start; x < end; x++){
+    for(int x = 0; x < videoIn->_video.size(); x++){
         cv::Mat frame = videoIn->_video[x];
         cv::cvtColor(frame, tempMat, code);
         newVid.push_back(tempMat.clone());
         //LOG_JOHN() << x ;
-
     }
 
     //newVid

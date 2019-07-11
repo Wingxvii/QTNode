@@ -14,7 +14,6 @@
 #include <QLineEdit>
 #include <QGridLayout>
 #include <QRegExpValidator>
-#include <qwt_plot.h>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -90,7 +89,6 @@ private: //UI
     QLineEdit* frameSelector;
     QLabel *totalFramesDisplay;
     QLabel *totalFramesLabel;
-    QwtPlot *plot;
 
     QRegExpValidator* intValid;
 };
