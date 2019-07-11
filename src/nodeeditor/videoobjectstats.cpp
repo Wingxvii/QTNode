@@ -87,17 +87,20 @@ VideoObjectStats::VideoObjectStats()
 
     displayPlot->setAxisScale(QwtPlot::Axis::yLeft, 0,5);
     displayPlot->setAxisScale(QwtPlot::Axis::xBottom, 0,1000);
+    displayPlot->setTitle("Object Detection Rates");
+    displayPlot->setAxisTitle(QwtPlot::Axis::yLeft, "Number of objects Detected");
+    displayPlot->setAxisTitle(QwtPlot::Axis::xBottom, "Frame Number");
 
     //connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
-    layout->addWidget(displayPlot,1,1);
-    layout->addWidget(MaxObjs,1,1);
-    layout->addWidget(MeanObjs,2,1);
-    layout->addWidget(MeanObjsStripped,3,1);
-    layout->addWidget(MedianObjs,4,1);
-    layout->addWidget(MedianStripped,5,1);
-    layout->addWidget(ModeObjsStripped,6,1);
-    layout->addWidget(TotalFrames,7,1);
+    layout->addWidget(displayPlot,1,1,7,1);
+    layout->addWidget(MaxObjs,1,2);
+    layout->addWidget(MeanObjs,2,2);
+    layout->addWidget(MeanObjsStripped,3,2);
+    layout->addWidget(MedianObjs,4,2);
+    layout->addWidget(MedianStripped,5,2);
+    layout->addWidget(ModeObjsStripped,6,2);
+    layout->addWidget(TotalFrames,7,2);
 
     window->setLayout(layout);
     buildContextWindow();

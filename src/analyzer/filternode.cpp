@@ -48,6 +48,7 @@
 #include "nodeeditor/autotrackobject.h"
 #include "nodeeditor/displaytrackedobject.h"
 #include "nodeeditor/videoobjectstats.h"
+#include "nodeeditor/videopositionstats.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -103,6 +104,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<VideoLinkIn>("Output");
     final->registerModel<DetectionLinkIn>("Output");
     final->registerModel<VideoObjectStats>("Output");
+    final->registerModel<VideoPositionStats>("Output");
 
     final->registerModel<GetCorners>("Calibration");
     final->registerModel<Calibrate>("Calibration");

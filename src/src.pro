@@ -180,7 +180,9 @@ SOURCES += main.cpp\
     nodeeditor/autotrackobject.cpp \
     nodeeditor/displaytrackedobject.cpp \
     nodeeditor/videoobjectstats.cpp \
-    nodeeditor/outputdisplaymodel.cpp
+    nodeeditor/outputdisplaymodel.cpp \
+    nodeeditor/videopositionstats.cpp \
+    widgets/heatmapplot.cpp
 
 
 
@@ -372,7 +374,9 @@ HEADERS  += mainwindow.h \
     nodeeditor/autotrackobject.h \
     nodeeditor/displaytrackedobject.h \
     nodeeditor/videoobjectstats.h \
-    nodeeditor/outputdisplaymodel.h
+    nodeeditor/outputdisplaymodel.h \
+    nodeeditor/videopositionstats.h \
+    widgets/heatmapplot.h
 
 
 
