@@ -180,7 +180,8 @@ SOURCES += main.cpp\
     nodeeditor/autotrackobject.cpp \
     nodeeditor/displaytrackedobject.cpp \
     nodeeditor/videoobjectstats.cpp \
-    nodeeditor/outputdisplaymodel.cpp
+    nodeeditor/outputdisplaymodel.cpp \
+    nodeeditor/regionofintrest.cpp
 
 
 
@@ -372,7 +373,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/autotrackobject.h \
     nodeeditor/displaytrackedobject.h \
     nodeeditor/videoobjectstats.h \
-    nodeeditor/outputdisplaymodel.h
+    nodeeditor/outputdisplaymodel.h \
+    nodeeditor/regionofintrest.h
 
 
 

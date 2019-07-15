@@ -48,6 +48,7 @@
 #include "nodeeditor/autotrackobject.h"
 #include "nodeeditor/displaytrackedobject.h"
 #include "nodeeditor/videoobjectstats.h"
+#include "nodeeditor/regionofintrest.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -102,7 +103,6 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<PointsLinkIn>("Output");
     final->registerModel<VideoLinkIn>("Output");
     final->registerModel<DetectionLinkIn>("Output");
-    final->registerModel<VideoObjectStats>("Output");
 
     final->registerModel<GetCorners>("Calibration");
     final->registerModel<Calibrate>("Calibration");
@@ -113,16 +113,18 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<EqualizeHist>("Editing");
     final->registerModel<ErodeImage>("Editing");
     final->registerModel<DilateImage>("Editing");
+    final->registerModel<RegionOfIntrest>("Editing");
 
     final->registerModel<FrameIterator>("Video");
     final->registerModel<AutoFrameIterator>("Video");
     final->registerModel<ColorThreshold>("Video");
 
-    final->registerModel<CascadeDetect>("Cascades");
-    final->registerModel<DisplayCascades>("Cascades");
+    final->registerModel<CascadeDetect>("Detectors");
+    final->registerModel<AutoTrackObject>("Detectors");
 
-    final->registerModel<AutoTrackObject>("Tracking");
-    final->registerModel<DisplayTrackedObject>("Tracking");
+    final->registerModel<DisplayCascades>("Analyzers");
+    final->registerModel<DisplayTrackedObject>("Analyzers");
+    final->registerModel<VideoObjectStats>("Analyzers");
 
 
     final->registerModel<DebugGetCorners>("Debug");

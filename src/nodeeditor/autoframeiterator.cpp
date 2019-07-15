@@ -35,12 +35,12 @@ AutoFrameIterator::AutoFrameIterator()
 
     //connect functions to slots
     //connect(startButton, SIGNAL(clicked(bool)), this, SLOT(startIteration()));
-    connect(startFrameInput, SIGNAL(textChanged(QString)), this, SLOT(updateUI()));
-    connect(endFrameInput, SIGNAL(textChanged(QString)), this, SLOT(updateUI()));
-    connect(byPassInput, SIGNAL(textChanged(QString)), this, SLOT(updateUI()));
-    connect(startFrameInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
-    connect(endFrameInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
-    connect(byPassInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+    connect(startFrameInput, SIGNAL(editingFinished()), this, SLOT(updateUI()));
+    connect(endFrameInput, SIGNAL(editingFinished()), this, SLOT(updateUI()));
+    connect(byPassInput, SIGNAL(editingFinished()), this, SLOT(updateUI()));
+    connect(startFrameInput, SIGNAL(editingFinished()), this, SLOT(preCheck()));
+    connect(endFrameInput, SIGNAL(editingFinished()), this, SLOT(preCheck()));
+    connect(byPassInput, SIGNAL(editingFinished()), this, SLOT(preCheck()));
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     //build layout
@@ -215,7 +215,7 @@ void AutoFrameIterator::updateUI()
 void AutoFrameIterator::preCheck(){
     //use this to check if ports are ready
 
-    if(startFrame && endFrame && byPass && byPass != 0){
+    if(startFrame && endFrame && byPass && byPass){
         isReady = true;
     }
 
