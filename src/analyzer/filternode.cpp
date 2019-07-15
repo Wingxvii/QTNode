@@ -49,6 +49,7 @@
 #include "nodeeditor/displaytrackedobject.h"
 #include "nodeeditor/videoobjectstats.h"
 #include "nodeeditor/regionofintrest.h"
+#include "nodeeditor/resizevideo.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -114,6 +115,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<ErodeImage>("Editing");
     final->registerModel<DilateImage>("Editing");
     final->registerModel<RegionOfIntrest>("Editing");
+    final->registerModel<ResizeVideo>("Editing");
 
     final->registerModel<FrameIterator>("Video");
     final->registerModel<AutoFrameIterator>("Video");

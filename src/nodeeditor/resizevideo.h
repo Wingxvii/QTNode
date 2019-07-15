@@ -1,5 +1,5 @@
-#ifndef REGIONOFINTREST_H
-#define REGIONOFINTREST_H
+#ifndef RESIZEVIDEO_H
+#define RESIZEVIDEO_H
 
 #include <QtCore/QObject>
 #include <nodes/NodeDataModel>
@@ -14,7 +14,7 @@
 #include <QLineEdit>
 #include <QGridLayout>
 #include <QRegExpValidator>
-#include <QCheckBox>
+#include <QComboBox>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -23,21 +23,21 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
-class RegionOfIntrest : public NodeDataModel{
+class ResizeVideo : public NodeDataModel{
     Q_OBJECT
 public:
-    RegionOfIntrest();
-    virtual ~RegionOfIntrest(){}
+    ResizeVideo();
+    virtual ~ResizeVideo(){}
 
     QString caption() const override{
-        return QStringLiteral("ROI Cropper");
+        return QStringLiteral("Resize Video");
     }
     bool captionVisible(){
         return false;
     }
     QString name()const override
     {
-        return QStringLiteral("ROI Cropper");
+        return QStringLiteral("Resize Video");
     }
 
 public:
@@ -82,55 +82,21 @@ private: //ports
 
 private: //locals
     bool isReady;
-
-    int TopLeftX = -1;
-    int TopLeftY = -1;
-    int BotRightX = -1;
-    int BotRightY = -1;
-
-    int TopRightX = -1;
-    int TopRightY = -1;
-    int BotLeftX = -1;
-    int BotLeftY = -1;
-
+    double ResizeScale = -1;
+    int interpIndex = -1;
 
 private: //UI
     QGridLayout *layout;
 
-    QCheckBox *rectify;
+    QLabel *interpolationMethodLabel;
 
-    QLabel *topLeftCoords;
-    QLabel *botRightCoords;
+    QComboBox *interpolationMethod;
+    QLabel *resizeLabel;
+    QLineEdit *resizeScale;
 
-    QLabel *topComma;
-    QLabel *botComma;
-
-    QLabel *topClose;
-    QLabel *botClose;
-
-    QLineEdit* topLeftX;
-    QLineEdit* topLeftY;
-    QLineEdit* botRightX;
-    QLineEdit* botRightY;
-
-    //used for rectification
-    QLabel *topRightCoords;
-    QLabel *botLeftCoords;
-
-    QLabel *topComma2;
-    QLabel *botComma2;
-
-    QLabel *topClose2;
-    QLabel *botClose2;
-
-    QLineEdit* topRightX;
-    QLineEdit* topRightY;
-    QLineEdit* botLeftX;
-    QLineEdit* botLeftY;
-
-
-    QRegExpValidator* intPos;
+    QDoubleValidator* doublePos;
 
 };
 
-#endif // REGIONOFINTREST_H
+
+#endif // RESIZERVIDEO_H

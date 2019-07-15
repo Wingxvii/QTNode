@@ -181,7 +181,8 @@ SOURCES += main.cpp\
     nodeeditor/displaytrackedobject.cpp \
     nodeeditor/videoobjectstats.cpp \
     nodeeditor/outputdisplaymodel.cpp \
-    nodeeditor/regionofintrest.cpp
+    nodeeditor/regionofintrest.cpp \
+    nodeeditor/resizevideo.cpp
 
 
 
@@ -374,7 +375,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/displaytrackedobject.h \
     nodeeditor/videoobjectstats.h \
     nodeeditor/outputdisplaymodel.h \
-    nodeeditor/regionofintrest.h
+    nodeeditor/regionofintrest.h \
+    nodeeditor/resizevideo.h
 
 
 
