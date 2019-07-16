@@ -80,7 +80,13 @@ VideoObjectStats::VideoObjectStats()
     MedianStripped = new QLabel("Median number of objects found with stripped frames:");
     ModeObjsStripped = new QLabel("Mode of objects of stripped frames:");
     TotalFrames = new QLabel("Total number of frames: ");
-
+    xRangeControl = new QSlider(Qt::Horizontal);
+    yRangeControl = new QSlider(Qt::Vertical);
+    xPositionControl = new QScrollBar(Qt::Horizontal);
+    yPositionControl = new QScrollBar(Qt::Vertical);
+    yPositionControl->setInvertedAppearance(true);
+    xRangeControl->setMinimum(1);
+    yRangeControl->setMinimum(1);
 
     displayPlot = new QwtPlot();
     displayPlot->setAutoReplot(false);
@@ -92,15 +98,23 @@ VideoObjectStats::VideoObjectStats()
     displayPlot->setAxisTitle(QwtPlot::Axis::xBottom, "Frame Number");
 
     //connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
+    connect(xRangeControl, SIGNAL(valueChanged(int)), this, SLOT(updateX()));
+    connect(yRangeControl, SIGNAL(valueChanged(int)), this, SLOT(updateY()));
+    connect(xPositionControl, SIGNAL(valueChanged(int)), this, SLOT(updateX()));
+    connect(yPositionControl, SIGNAL(valueChanged(int)), this, SLOT(updateY()));
 
-    layout->addWidget(displayPlot,1,1,7,1);
-    layout->addWidget(MaxObjs,1,2);
-    layout->addWidget(MeanObjs,2,2);
-    layout->addWidget(MeanObjsStripped,3,2);
-    layout->addWidget(MedianObjs,4,2);
-    layout->addWidget(MedianStripped,5,2);
-    layout->addWidget(ModeObjsStripped,6,2);
-    layout->addWidget(TotalFrames,7,2);
+    layout->addWidget(displayPlot,1,3,7,1);
+    layout->addWidget(MaxObjs,1,4);
+    layout->addWidget(MeanObjs,2,4);
+    layout->addWidget(MeanObjsStripped,3,4);
+    layout->addWidget(MedianObjs,4,4);
+    layout->addWidget(MedianStripped,5,4);
+    layout->addWidget(ModeObjsStripped,6,4);
+    layout->addWidget(TotalFrames,7,4);
+    layout->addWidget(xRangeControl,9,3);
+    layout->addWidget(yRangeControl,1,1,7,1);
+    layout->addWidget(xPositionControl,8,3);
+    layout->addWidget(yPositionControl,1,2,7,1);
 
     window->setLayout(layout);
     buildContextWindow();
@@ -223,6 +237,11 @@ void VideoObjectStats::processData()
     displayPlot->setAxisScale(QwtPlot::Axis::yLeft, 0,maxObjs);
     displayPlot->setAxisScale(QwtPlot::Axis::xBottom, 0,totalFrames);
 
+    xRangeControl->setMaximum(totalFrames);
+    yRangeControl->setMaximum(maxObjs);
+    xPositionControl->setMaximum(totalFrames);
+    yPositionControl->setMaximum(maxObjs);
+
     updateUI();
 
     displayPlot->replot();
@@ -262,16 +281,21 @@ void VideoObjectStats::ShowContextMenu(const QPoint &pos)
 
 }
 
-void VideoObjectStats::multiThreadedProcess()
+void VideoObjectStats::updateX()
 {
+    displayPlot->setAxisScale(QwtPlot::Axis::xBottom, xPositionControl->value() - xRangeControl->value(),xPositionControl->value() + xRangeControl->value());
+    displayPlot->replot();
+    LOG_JOHN() <<"Replotted X";
 
 }
 
-void VideoObjectStats::multiThreadedFinished()
+void VideoObjectStats::updateY()
 {
+    displayPlot->setAxisScale(QwtPlot::Axis::yLeft, yPositionControl->value() - yRangeControl->value(),yPositionControl->value() + yRangeControl->value());
+    displayPlot->replot();
+    LOG_JOHN() <<"Replotted Y";
 
 }
-
 
 
 

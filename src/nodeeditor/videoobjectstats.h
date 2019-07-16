@@ -15,6 +15,8 @@
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
 #include <QCheckBox>
+#include <QSlider>
+#include <QScrollBar>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -64,17 +66,19 @@ public slots: //required slots
     void ShowContextMenu(const QPoint &pos) override;
     void activate(){active = true;preCheck();window->setStyleSheet("");}
     void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
-
 public: //multithread
 
-    void multiThreadedProcess();
+    //void multiThreadedProcess();
 
-    QFuture<void> funct;
-    QFutureWatcher<void> functWatcher;
-    QLabel *progressBar;
+    //QFuture<void> funct;
+    //QFutureWatcher<void> functWatcher;
+   // QLabel *progressBar;
 
 public slots:
-    void multiThreadedFinished();
+    //void multiThreadedFinished();
+
+    void updateX();
+    void updateY();
 
 private: //ports
     std::shared_ptr<DetectionBoxesData> inBoxes;
@@ -89,6 +93,11 @@ private: //ui
     QLabel *MedianStripped;
     QLabel *ModeObjsStripped;
     QLabel *TotalFrames;
+
+    QSlider *xRangeControl;
+    QSlider *yRangeControl;
+    QScrollBar *xPositionControl;
+    QScrollBar *yPositionControl;
 
 private: //locals
     int maxObjs;
