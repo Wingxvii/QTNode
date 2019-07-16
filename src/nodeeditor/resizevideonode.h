@@ -1,5 +1,5 @@
-#ifndef RESIZEVIDEO_H
-#define RESIZEVIDEO_H
+#ifndef RESIZEVIDEONODE_H
+#define RESIZEVIDEONODE_H
 
 #include <QtCore/QObject>
 #include <nodes/NodeDataModel>
@@ -23,11 +23,11 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
-class ResizeVideo : public NodeDataModel{
+class ResizeVideoNode : public NodeDataModel{
     Q_OBJECT
 public:
-    ResizeVideo();
-    virtual ~ResizeVideo(){}
+    ResizeVideoNode();
+    virtual ~ResizeVideoNode(){}
 
     QString caption() const override{
         return QStringLiteral("Resize Video");

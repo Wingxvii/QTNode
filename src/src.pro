@@ -182,7 +182,7 @@ SOURCES += main.cpp\
     nodeeditor/videoobjectstats.cpp \
     nodeeditor/outputdisplaymodel.cpp \
     nodeeditor/regionofintrest.cpp \
-    nodeeditor/resizevideo.cpp
+    nodeeditor/resizevideonode.cpp
 
 
 
@@ -376,7 +376,7 @@ HEADERS  += mainwindow.h \
     nodeeditor/videoobjectstats.h \
     nodeeditor/outputdisplaymodel.h \
     nodeeditor/regionofintrest.h \
-    nodeeditor/resizevideo.h
+    nodeeditor/resizevideonode.h
 
 
 

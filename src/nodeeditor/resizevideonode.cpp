@@ -1,6 +1,6 @@
-#include "resizevideo.h"
+#include "resizevideonode.h"
 
-ResizeVideo::ResizeVideo()
+ResizeVideoNode::ResizeVideoNode()
 {
     //setup ui
     layout = new QGridLayout;
@@ -34,10 +34,12 @@ ResizeVideo::ResizeVideo()
     layout->addWidget(interpolationMethod,1,2);
     layout->addWidget(resizeLabel,2,1);
     layout->addWidget(resizeScale,2,2);
+    layout->addWidget(progressBar,3,1);
+    window->setLayout(layout);
     buildContextWindow();
 }
 
-unsigned int ResizeVideo::nPorts(QtNodes::PortType portType) const
+unsigned int ResizeVideoNode::nPorts(QtNodes::PortType portType) const
 {
     unsigned int result = 1;
 
@@ -54,7 +56,7 @@ unsigned int ResizeVideo::nPorts(QtNodes::PortType portType) const
     return result;
 }
 
-QtNodes::NodeDataType ResizeVideo::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const
+QtNodes::NodeDataType ResizeVideoNode::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const
 {
     if(portType == PortType::In){
         return VideoGraphData().type();
@@ -62,12 +64,12 @@ QtNodes::NodeDataType ResizeVideo::dataType(QtNodes::PortType portType, QtNodes:
     return VideoGraphData().type();
 }
 
-std::shared_ptr<NodeData> ResizeVideo::outData(PortIndex port)
+std::shared_ptr<NodeData> ResizeVideoNode::outData(PortIndex port)
 {
     return videoOut;
 }
 
-void ResizeVideo::setInData(std::shared_ptr<QtNodes::NodeData> data, int location)
+void ResizeVideoNode::setInData(std::shared_ptr<QtNodes::NodeData> data, int location)
 {
 
     switch(location){
@@ -86,17 +88,17 @@ void ResizeVideo::setInData(std::shared_ptr<QtNodes::NodeData> data, int locatio
     }
 }
 
-QtNodes::NodeValidationState ResizeVideo::validationState() const
+QtNodes::NodeValidationState ResizeVideoNode::validationState() const
 {
     return modelValidationState;
 }
 
-QString ResizeVideo::validationMessage() const
+QString ResizeVideoNode::validationMessage() const
 {
     return modelValidationError;
 }
 
-QJsonObject ResizeVideo::save() const
+QJsonObject ResizeVideoNode::save() const
 {
     QJsonObject dataJson;
 
@@ -108,7 +110,7 @@ QJsonObject ResizeVideo::save() const
     return dataJson;
 }
 
-void ResizeVideo::restore(const QJsonObject & json)
+void ResizeVideoNode::restore(const QJsonObject & json)
 {
     if(json.contains("isReady")){
         isReady = json["isReady"].toBool();
@@ -124,22 +126,22 @@ void ResizeVideo::restore(const QJsonObject & json)
     preCheck();
 }
 
-void ResizeVideo::processData()
+void ResizeVideoNode::processData()
 {
     //setup progress bar parameters
     progressBar->setText("Processing...");
 
-    funct = QtConcurrent::run(this, &ResizeVideo::multiThreadedProcess);
+    funct = QtConcurrent::run(this, &ResizeVideoNode::multiThreadedProcess);
     functWatcher.setFuture(funct);
 
 
 }
 
 
-void ResizeVideo::preCheck(){
+void ResizeVideoNode::preCheck(){
 
     if(!resizeScale->text().isEmpty()){
-        ResizeScale = resizeScale->text().toInt();
+        ResizeScale = resizeScale->text().toDouble();
     }
     if(interpolationMethod->currentIndex() != -1){
         interpIndex = interpolationMethod->currentIndex();
@@ -159,7 +161,7 @@ void ResizeVideo::preCheck(){
     }
 }
 
-void ResizeVideo::ShowContextMenu(const QPoint &pos)
+void ResizeVideoNode::ShowContextMenu(const QPoint &pos)
 {
     QMenu contextMenu(tr("Context menu"));
 
@@ -174,20 +176,23 @@ void ResizeVideo::ShowContextMenu(const QPoint &pos)
     contextMenu.exec(window->mapToGlobal(pos));
 }
 
-void ResizeVideo::multiThreadedProcess()
+void ResizeVideoNode::multiThreadedProcess()
 {
     std::vector<cv::Mat> temp;
+    double sizex = videoIn->_video[1].cols * ResizeScale;
+    double sizey = videoIn->_video[1].rows * ResizeScale;
+
     //iterate
     for(cv::Mat tempFrame : videoIn->_video){
         cv::Mat resized;
-        cv::resize(tempFrame, resized, cv::Size((int)videoIn->_video[1].cols * ResizeScale, (int)videoIn->_video[1].rows * ResizeScale));
+        cv::resize(tempFrame, resized, cv::Size(sizex, sizey));
 
         temp.push_back(resized);
     }
     videoOut->_video = temp;
 }
 
-void ResizeVideo::multiThreadedFinished()
+void ResizeVideoNode::multiThreadedFinished()
 {
     progressBar->setText("Finished");
     videoOut->ready();
