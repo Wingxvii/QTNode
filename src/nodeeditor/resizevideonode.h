@@ -15,6 +15,7 @@
 #include <QGridLayout>
 #include <QRegExpValidator>
 #include <QComboBox>
+#include <QCheckBox>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -30,14 +31,14 @@ public:
     virtual ~ResizeVideoNode(){}
 
     QString caption() const override{
-        return QStringLiteral("Resize Video");
+        return QStringLiteral("Resize and Rotate Video");
     }
     bool captionVisible(){
         return false;
     }
     QString name()const override
     {
-        return QStringLiteral("Resize Video");
+        return QStringLiteral("Resize and Rotate Video");
     }
 
 public:
@@ -76,6 +77,7 @@ public: //multithread
 public slots:
     void multiThreadedFinished();
 
+
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
     std::shared_ptr<VideoGraphData> videoOut;
@@ -84,15 +86,25 @@ private: //locals
     bool isReady;
     double ResizeScale = -1;
     int interpIndex = -1;
+    double Angle = -1;
+    bool Rotate;
+    bool Resize;
 
 private: //UI
     QGridLayout *layout;
 
-    QLabel *interpolationMethodLabel;
+    QLabel *resizeCheckLabel;
+    QCheckBox* resize;
+    QLabel *rotateCheckLabel;
+    QCheckBox* rotate;
 
+    QLabel *interpolationMethodLabel;
     QComboBox *interpolationMethod;
+
     QLabel *resizeLabel;
     QLineEdit *resizeScale;
+    QLabel* angleLabel;
+    QLineEdit* angle;
 
     QDoubleValidator* doublePos;
 

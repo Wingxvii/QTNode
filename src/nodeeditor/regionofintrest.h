@@ -113,22 +113,6 @@ private: //UI
     QLineEdit* botRightX;
     QLineEdit* botRightY;
 
-    //used for rectification
-    QLabel *topRightCoords;
-    QLabel *botLeftCoords;
-
-    QLabel *topComma2;
-    QLabel *botComma2;
-
-    QLabel *topClose2;
-    QLabel *botClose2;
-
-    QLineEdit* topRightX;
-    QLineEdit* topRightY;
-    QLineEdit* botLeftX;
-    QLineEdit* botLeftY;
-
-
     QRegExpValidator* intPos;
 
 };
