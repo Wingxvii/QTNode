@@ -50,6 +50,7 @@
 #include "nodeeditor/videoobjectstats.h"
 #include "nodeeditor/regionofintrest.h"
 #include "nodeeditor/resizevideonode.h"
+#include "nodeeditor/perspectiverectifynode.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -116,6 +117,8 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<DilateImage>("Editing");
     final->registerModel<RegionOfIntrest>("Editing");
     final->registerModel<ResizeVideoNode>("Editing");
+    final->registerModel<PerspectiveRectify>("Editing");
+
 
     final->registerModel<FrameIterator>("Video");
     final->registerModel<AutoFrameIterator>("Video");
