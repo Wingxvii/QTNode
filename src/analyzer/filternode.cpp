@@ -51,6 +51,7 @@
 #include "nodeeditor/regionofintrest.h"
 #include "nodeeditor/resizevideonode.h"
 #include "nodeeditor/perspectiverectifynode.h"
+#include "nodeeditor/videobinningstats.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -130,6 +131,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<DisplayCascades>("Analyzers");
     final->registerModel<DisplayTrackedObject>("Analyzers");
     final->registerModel<VideoObjectStats>("Analyzers");
+    final->registerModel<VideoBinningStats>("Analyzers");
 
 
     final->registerModel<DebugGetCorners>("Debug");
