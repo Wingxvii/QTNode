@@ -22,7 +22,7 @@ public:
 
     PointData(std::vector<cv::Point2f> points)
     {
-        pointList = points;
+        _pointList = points;
     }
 
     NodeDataType type() const override
@@ -30,7 +30,7 @@ public:
         return NodeDataType {"Checkerboard Points", "Checkerboard Points"};
     }
 
-    std::vector<cv::Point2f> data() const {return pointList;}
+    std::vector<cv::Point2f> data() const {return _pointList;}
 
     QString dataAsText() const
     {
@@ -38,12 +38,13 @@ public:
         return text;
     }
 
-    void setData(std::vector<cv::Point2f> data){pointList = data;}
+    void setData(std::vector<cv::Point2f> data){_pointList = data;}
 
-private:
+public:
     QString _text;
-    std::vector<cv::Point2f> pointList;
-
+    std::vector<cv::Point2f> _pointList;
+    std::vector<cv::Scalar> _colors;
+    std::vector<QString> _names;
 };
 
 #endif // POINTDATA_H

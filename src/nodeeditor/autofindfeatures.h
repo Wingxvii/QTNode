@@ -36,13 +36,12 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
-
 class AutoFindFeatures: public NodeDataModel{
     Q_OBJECT
 
 public:
     AutoFindFeatures();
-    virtual ~AutoFindFeatures();
+    virtual ~AutoFindFeatures(){}
 
     QString caption() const override{
         return QStringLiteral("Automatically Find Features");
@@ -109,6 +108,8 @@ private: //port values
     std::shared_ptr<ImageData> imageOut;
     std::shared_ptr<PointData> pointsOut;
 
+    std::shared_ptr<ImageData> displayImage;
+
 private: //UI
     QGridLayout *layout;
 
@@ -127,6 +128,7 @@ private: //UI
     QPushButton *reGenButton;
     QPushButton *addInPoints;
     QPushButton *clearButton;
+    //new ongenimage button
 
     QLabel *maxCornersLabel;
     QLineEdit *maxCorners;
@@ -136,11 +138,6 @@ private: //UI
     QLineEdit *minDistance;
     QLabel *blockSizeLabel;
     QLineEdit *blockSize;
-
-    QLabel *newCornerLabelX;
-    QLabel *newCornerLabelY;
-    QLineEdit *newCornerX;
-    QLineEdit *newCornerY;
 
     QRegExpValidator* intPos;
     QDoubleValidator* doublePos;
@@ -152,6 +149,9 @@ private: //locals
     double QualityLevel = -1;
     double MinDistance = -1;
     int BlockSize = -1;
+    QString DisplayCacheIndex;
+
+    bool isReady= false;
 
 
 };

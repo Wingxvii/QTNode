@@ -15,17 +15,12 @@ AutoFindFeatures::AutoFindFeatures()
 
     allPoints= new QListWidget();
 
-    deleteButton = new QPushButton();
-    addButton = new QPushButton();
-    editButton = new QPushButton();
-    reGenButton = new QPushButton();
-    addInPoints = new QPushButton();
-    clearButton = new QPushButton();
-
-    newCornerLabelX = new QLabel("X");
-    newCornerLabelY = new QLabel("Y");
-    newCornerX = new QLineEdit();
-    newCornerY = new QLineEdit();
+    deleteButton = new QPushButton("Delete");
+    addButton = new QPushButton("Add...");
+    editButton = new QPushButton("Edit...");
+    reGenButton = new QPushButton("Re-Generate Points");
+    addInPoints = new QPushButton("Add from Input");
+    clearButton = new QPushButton("Clear");
 
     maxCornersLabel = new QLabel("Max Corners:");
     maxCorners  = new QLineEdit();
@@ -42,6 +37,8 @@ AutoFindFeatures::AutoFindFeatures()
     imageOut = std::make_shared<ImageData>();
     pointsOut = std::make_shared<PointData>();
 
+    displayImage = std::make_shared<ImageData>();
+
     //setup validators
     intPos = new QRegExpValidator(QRegExp("\\d*"), this);
     doublePos = new QDoubleValidator();
@@ -51,8 +48,6 @@ AutoFindFeatures::AutoFindFeatures()
     blockSize->setValidator(intPos);
     qualityLevel->setValidator(doublePos);
     minDistance->setValidator(doublePos);
-    newCornerX->setValidator(intPos);
-    newCornerY->setValidator(intPos);
 
     //init sample variables
     selectFrame->setText("0");
@@ -67,6 +62,7 @@ AutoFindFeatures::AutoFindFeatures()
     connect(qualityLevel, SIGNAL(returnPressed()), this, SLOT(preCheck()));
     connect(minDistance, SIGNAL(returnPressed()), this, SLOT(preCheck()));
     connect(blockSize, SIGNAL(returnPressed()), this, SLOT(preCheck()));
+    connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     connect(deleteButton, SIGNAL(clicked(bool)), this , SLOT(onDelete()));
     connect(addButton, SIGNAL(clicked(bool)), this , SLOT(onAdd()));
@@ -81,17 +77,13 @@ AutoFindFeatures::AutoFindFeatures()
     layout->addWidget(displayCacheIndex,1,3);
     layout->addWidget(selectFrameLabel,2,2);
     layout->addWidget(selectFrame,2,3);
-    layout->addWidget(allPoints,1,5,7,3);
-    layout->addWidget(deleteButton,8,5);
-    layout->addWidget(addButton,7,4,2,1);
-    layout->addWidget(editButton,8,6);
-    layout->addWidget(reGenButton,5,4,2,1);
-    layout->addWidget(addInPoints,3,4,2,1);
-    layout->addWidget(clearButton,8,7);
-    layout->addWidget(newCornerLabelX,7,2);
-    layout->addWidget(newCornerLabelY,8,2);
-    layout->addWidget(newCornerX,7,3);
-    layout->addWidget(newCornerY,8,3);
+    layout->addWidget(allPoints,1,4,5,3);
+    layout->addWidget(deleteButton,6,4);
+    layout->addWidget(addButton,7,6);
+    layout->addWidget(editButton,6,5);
+    layout->addWidget(reGenButton,7,4);
+    layout->addWidget(addInPoints,7,5);
+    layout->addWidget(clearButton,6,6);
     layout->addWidget(maxCornersLabel,3,2);
     layout->addWidget(maxCorners,3,3);
     layout->addWidget(qualityLevelLabel,4,2);
@@ -100,11 +92,12 @@ AutoFindFeatures::AutoFindFeatures()
     layout->addWidget(minDistance,5,3);
     layout->addWidget(blockSizeLabel,6,2);
     layout->addWidget(blockSize,6,3);
-    layout->addWidget(progressBar,9,2);
+    layout->addWidget(progressBar,7,2);
 
     window->setLayout(layout);
 
     buildContextWindow();
+
 }
 
 
@@ -195,12 +188,51 @@ QString AutoFindFeatures::validationMessage() const
 
 void AutoFindFeatures::processData()
 {
+    progressBar->setText("Processing...");
+
+    funct = QtConcurrent::run(this, &AutoFindFeatures::multiThreadedProcess);
+    functWatcher.setFuture(funct);
 
 }
 
 void AutoFindFeatures::preCheck()
 {
 
+    if(!displayCacheIndex->text().isEmpty()){
+        DisplayCacheIndex = displayCacheIndex->text();
+    }
+    if(!selectFrame->text().isEmpty()){
+        frameSelected = selectFrame->text().toInt();
+    }
+    if(!maxCorners->text().isEmpty()){
+        MaxCorners = maxCorners->text().toInt();
+    }
+    if(!qualityLevel->text().isEmpty()){
+        QualityLevel = qualityLevel->text().toDouble();
+    }
+    if(!minDistance->text().isEmpty()){
+        MinDistance = minDistance->text().toDouble();
+    }
+    if(!blockSize->text().isEmpty()){
+        BlockSize = blockSize->text().toInt();
+    }
+
+    if(MaxCorners != -1 && QualityLevel != -1 && MinDistance != -1 && BlockSize != -1 && frameSelected != -1){
+        if(videoIn && videoIn->isReady && frameSelected >= videoIn->_video.size()){
+            frameSelected = videoIn->_video.size()-1;
+        }
+        isReady = true;
+    }else{
+        isReady = false;
+    }
+
+
+    if(videoIn && videoIn->isReady && active && isReady){
+        processData();
+    }else{
+        imageOut->unready();
+        pointsOut->unready();
+    }
 }
 
 void AutoFindFeatures::ShowContextMenu(const QPoint &pos)
@@ -220,11 +252,99 @@ void AutoFindFeatures::ShowContextMenu(const QPoint &pos)
 
 void AutoFindFeatures::multiThreadedProcess()
 {
+    //fill pointData with colors
+    if(pointsOut->_colors.size() < MaxCorners){
+        cv::RNG rng;
+        for (int i = pointsOut->_colors.size(); i <= MaxCorners; i++)
+        {
+            int r = rng.uniform(0, 256);
+            int g = rng.uniform(0, 256);
+            int b = rng.uniform(0, 256);
+            pointsOut->_colors.push_back(cv::Scalar(r, g, b));
+        }
+    }
+
+    cv::Mat old_gray = videoIn->_video[frameSelected];
+    std::vector<cv::Point2f> p0;
+    //automatically finds features
+    goodFeaturesToTrack(old_gray, p0, MaxCorners, QualityLevel, MinDistance, cv::Mat(), BlockSize, false, 0.04);
+
+    LOG_JOHN() << "Size:" << p0.size();
+
+    while(pointsOut->_names.size() < p0.size()){
+        pointsOut->_names.push_back("Point #" + QString::number(pointsOut->_names.size()));
+    }
+    onClear();
+    pointsOut->_pointList = p0;
 
 }
 
 void AutoFindFeatures::multiThreadedFinished()
 {
+    //send points to list
+    for(int counter = 0; counter < pointsOut->_pointList.size(); counter++){
+        QString tempStr = pointsOut->_names[counter] + " at (" + QString::number(pointsOut->_pointList[counter].x) +
+                "," + QString::number(pointsOut->_pointList[counter].y) + ") in Color R:" +
+                QString::number(pointsOut->_colors[counter].val[0]) +" G:" +
+                QString::number(pointsOut->_colors[counter].val[1]) +" B:" +
+                QString::number(pointsOut->_colors[counter].val[2]);
+
+        allPoints->addItem(tempStr);
+        LOG_JOHN() << "Sent Point";
+    }
+    LOG_JOHN() << pointsOut->_pointList.size();
+
+    onGenImage();
+    progressBar->setText("Finished");
+    imageOut->ready();
+    pointsOut->ready();
+    emit dataUpdated(0);
+    emit dataUpdated(1);
 
 }
 
+void AutoFindFeatures::onGenImage()
+{
+    if(generateImage->isChecked() && !DisplayCacheIndex.isEmpty()){
+        LOG_JOHN() << "Tried To generate";
+
+        cv::Mat temp = videoIn->_video[frameSelected].clone();
+
+        for(int counter = 0; counter < pointsOut->_pointList.size(); counter++){
+            cv::circle(temp, pointsOut->_pointList[counter], 10, cv::Scalar(0,0,0), -1);
+            cv::circle(temp, pointsOut->_pointList[counter], 5, cv::Scalar(255,255,255), -1);
+        }
+
+        displayImage->_image = temp;
+
+        LinkManager::instance()->sendData(displayImage,DisplayCacheIndex);
+    }else{
+        progressBar->setText("Image Not Generated");
+
+
+    }
+}
+void AutoFindFeatures::onDelete(){
+
+
+}
+void AutoFindFeatures::onAdd(){
+
+
+}
+void AutoFindFeatures::onEdit(){
+
+
+}
+void AutoFindFeatures::onRegen(){
+
+
+}
+void AutoFindFeatures::onClear(){
+
+
+}
+void AutoFindFeatures::onAddInPoints(){
+
+
+}

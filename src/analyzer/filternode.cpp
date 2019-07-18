@@ -135,9 +135,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<VideoObjectStats>("Analyzers");
     final->registerModel<VideoBinningStats>("Analyzers");
 
-
     final->registerModel<DebugGetCorners>("Debug");
-
 
     scene->setRegistry(final);
     layout->addWidget(new FlowView(scene));
