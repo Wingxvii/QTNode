@@ -184,7 +184,8 @@ SOURCES += main.cpp\
     nodeeditor/regionofintrest.cpp \
     nodeeditor/resizevideonode.cpp \
     nodeeditor/perspectiverectifynode.cpp \
-    nodeeditor/videobinningstats.cpp
+    nodeeditor/videobinningstats.cpp \
+    nodeeditor/autofindfeatures.cpp
 
 
 
@@ -380,7 +381,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/regionofintrest.h \
     nodeeditor/resizevideonode.h \
     nodeeditor/perspectiverectifynode.h \
-    nodeeditor/videobinningstats.h
+    nodeeditor/videobinningstats.h \
+    nodeeditor/autofindfeatures.h
 
 
 

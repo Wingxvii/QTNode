@@ -52,6 +52,7 @@
 #include "nodeeditor/resizevideonode.h"
 #include "nodeeditor/perspectiverectifynode.h"
 #include "nodeeditor/videobinningstats.h"
+#include "nodeeditor/autofindfeatures.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -127,6 +128,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 
     final->registerModel<CascadeDetect>("Detectors");
     final->registerModel<AutoTrackObject>("Detectors");
+    final->registerModel<AutoFindFeatures>("Detectors");
 
     final->registerModel<DisplayCascades>("Analyzers");
     final->registerModel<DisplayTrackedObject>("Analyzers");
