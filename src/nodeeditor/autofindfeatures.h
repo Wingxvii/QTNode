@@ -20,6 +20,8 @@
 #include <QPushButton>
 #include <QDoubleValidator>
 
+#include "addfeature.h"
+
 //opencv
 #include "opencv2\core.hpp"
 #include "opencv2\imgcodecs.hpp"
@@ -85,12 +87,13 @@ public: //multithread
     QFuture<void> funct;
     QFutureWatcher<void> functWatcher;
     QLabel *progressBar;
+
 public slots:
     void multiThreadedFinished();
 
     void onGenImage();
     void onDelete();
-    void onAdd();
+    void onAdd(int, int, QString);
     void onEdit();
     void onRegen();
     void onClear();
@@ -139,6 +142,8 @@ private: //UI
     QLabel *blockSizeLabel;
     QLineEdit *blockSize;
 
+    AddFeature *addWindow;
+
     QRegExpValidator* intPos;
     QDoubleValidator* doublePos;
 
@@ -152,7 +157,6 @@ private: //locals
     QString DisplayCacheIndex;
 
     bool isReady= false;
-
 
 };
 

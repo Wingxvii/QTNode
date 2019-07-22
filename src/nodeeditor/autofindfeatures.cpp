@@ -14,6 +14,7 @@ AutoFindFeatures::AutoFindFeatures()
     selectFrame = new QLineEdit();
 
     allPoints= new QListWidget();
+    allPoints->setSelectionMode(QAbstractItemView::SingleSelection);
 
     deleteButton = new QPushButton("Delete");
     addButton = new QPushButton("Add...");
@@ -30,6 +31,8 @@ AutoFindFeatures::AutoFindFeatures()
     minDistance = new QLineEdit();
     blockSizeLabel = new QLabel("Block Size:");
     blockSize = new QLineEdit();
+
+    addWindow = new AddFeature();
 
     progressBar = new QLabel("Inactive");
 
@@ -65,7 +68,8 @@ AutoFindFeatures::AutoFindFeatures()
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     connect(deleteButton, SIGNAL(clicked(bool)), this , SLOT(onDelete()));
-    connect(addButton, SIGNAL(clicked(bool)), this , SLOT(onAdd()));
+    connect(addButton, SIGNAL(clicked(bool)), addWindow , SLOT(openWindow()));
+    connect(addWindow, SIGNAL(sendPoint(int, int, QString)), this, SLOT(onAdd(int, int, QString)));
     connect(editButton, SIGNAL(clicked(bool)), this , SLOT(onEdit()));
     connect(reGenButton, SIGNAL(clicked(bool)), this , SLOT(onRegen()));
     connect(addInPoints, SIGNAL(clicked(bool)), this , SLOT(onAddInPoints()));
@@ -226,8 +230,8 @@ void AutoFindFeatures::preCheck()
         isReady = false;
     }
 
-
-    if(videoIn && videoIn->isReady && active && isReady){
+//&& videoIn->_video[1].type() == CV_8U
+    if(videoIn && videoIn->isReady && active && isReady  ){
         processData();
     }else{
         imageOut->unready();
@@ -271,16 +275,26 @@ void AutoFindFeatures::multiThreadedProcess()
 
     LOG_JOHN() << "Size:" << p0.size();
 
-    while(pointsOut->_names.size() < p0.size()){
+    for(cv::Point2f point : p0){
+        bool found = false;
+        for(cv::Point2f search: pointsOut->_pointList){
+            if(point.x == search.x &&point.y == search.y){
+                found = true;
+            }
+
+        }
+        if(!found){
+        pointsOut->_pointList.push_back(point);
         pointsOut->_names.push_back("Point #" + QString::number(pointsOut->_names.size()));
+        }
     }
-    onClear();
-    pointsOut->_pointList = p0;
 
 }
 
 void AutoFindFeatures::multiThreadedFinished()
 {
+    allPoints->clear();
+
     //send points to list
     for(int counter = 0; counter < pointsOut->_pointList.size(); counter++){
         QString tempStr = pointsOut->_names[counter] + " at (" + QString::number(pointsOut->_pointList[counter].x) +
@@ -321,30 +335,32 @@ void AutoFindFeatures::onGenImage()
     }else{
         progressBar->setText("Image Not Generated");
 
-
     }
 }
 void AutoFindFeatures::onDelete(){
-
-
+    pointsOut->_pointList.erase(pointsOut->_pointList.begin() + allPoints->currentRow());
+    pointsOut->_names.erase(pointsOut->_names.begin() + allPoints->currentRow());
+    multiThreadedFinished();
 }
-void AutoFindFeatures::onAdd(){
 
-
+void AutoFindFeatures::onAdd(int x, int y, QString name)
+{
+    pointsOut->_pointList.push_back(cv::Point2f(x,y));
+    pointsOut->_names.push_back(name);
+    multiThreadedFinished();
 }
+
 void AutoFindFeatures::onEdit(){
-
 
 }
 void AutoFindFeatures::onRegen(){
-
-
+    preCheck();
 }
 void AutoFindFeatures::onClear(){
-
-
+    pointsOut->_names.clear();
+    pointsOut->_pointList.clear();
+    multiThreadedFinished();
 }
 void AutoFindFeatures::onAddInPoints(){
-
 
 }
