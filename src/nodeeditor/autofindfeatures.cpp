@@ -266,10 +266,11 @@ void AutoFindFeatures::multiThreadedProcess()
         }
     }
 
-    cv::Mat old_gray = videoIn->_video[frameSelected];
+    cv::Mat convert = videoIn->_video[frameSelected];
     std::vector<cv::Point2f> p0;
     //automatically finds features
-    goodFeaturesToTrack(old_gray, p0, MaxCorners, QualityLevel, MinDistance, cv::Mat(), BlockSize, false, 0.04);
+    cv::cvtColor(convert, convert,(cv::ColorConversionCodes)6);
+    goodFeaturesToTrack(convert, p0, MaxCorners, QualityLevel, MinDistance, cv::Mat(), BlockSize, false, 0.04);
 
     LOG_JOHN() << "Size:" << p0.size();
 
@@ -327,9 +328,8 @@ void AutoFindFeatures::onGenImage()
         cv::Mat temp = videoIn->_video[frameSelected].clone();
 
         for(int counter = 0; counter < pointsOut->_pointList.size(); counter++){
-            cv::circle(temp, pointsOut->_pointList[counter], 10, cv::Scalar(0,0,0), -1);
-            cv::circle(temp, pointsOut->_pointList[counter], 5, cv::Scalar(255,255,255), -1);
-            cv::putText(temp, pointsOut->_names[counter].toStdString(), pointsOut->_pointList[counter], cv::FONT_HERSHEY_SIMPLEX, 1,cv::Scalar(255,255,255));
+            cv::circle(temp, pointsOut->_pointList[counter], 4, pointsOut->_colors[counter], -1);
+            cv::putText(temp, pointsOut->_names[counter].toStdString(), pointsOut->_pointList[counter], cv::FONT_HERSHEY_SIMPLEX, 1,pointsOut->_colors[counter]);
         }
 
         displayImage->_image = temp;
