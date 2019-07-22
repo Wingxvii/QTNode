@@ -186,7 +186,8 @@ SOURCES += main.cpp\
     nodeeditor/perspectiverectifynode.cpp \
     nodeeditor/videobinningstats.cpp \
     nodeeditor/autofindfeatures.cpp \
-    nodeeditor/addfeature.cpp
+    nodeeditor/addfeature.cpp \
+    nodeeditor/calculateopticalflow.cpp
 
 
 
@@ -384,7 +385,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/perspectiverectifynode.h \
     nodeeditor/videobinningstats.h \
     nodeeditor/autofindfeatures.h \
-    nodeeditor/addfeature.h
+    nodeeditor/addfeature.h \
+    nodeeditor/calculateopticalflow.h
 
 
 
