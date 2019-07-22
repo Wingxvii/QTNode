@@ -41,9 +41,7 @@ AddFeature::AddFeature()
 
 void AddFeature::openWindow()
 {
-    x = -1;
-    y = -1;
-    name = "";
+    edit = false;
     window->setVisible(true);
 }
 
@@ -60,7 +58,11 @@ void AddFeature::onEnter()
     }
 
     if(x != -1 && y != -1 && name != ""){
-        emit sendPoint(x,y, name);
+        if(!edit){
+            emit sendPoint(x,y, name);
+        }else{
+            emit sendEdit(row, x,y,name);
+        }
         onExit();
     }
 }
@@ -68,4 +70,16 @@ void AddFeature::onEnter()
 void AddFeature::onExit()
 {
     window->setVisible(false);
+}
+
+void AddFeature::onEdit(int row, int x, int y, QString name)
+{
+    this->row = row;
+    xInput->setText(QString::number(x));
+    yInput->setText(QString::number(y));
+    nameInput->setText(name);
+
+    edit = true;
+    window->setVisible(true);
+
 }

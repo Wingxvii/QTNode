@@ -94,6 +94,7 @@ public slots:
     void onGenImage();
     void onDelete();
     void onAdd(int, int, QString);
+    void onEditRecieve(int, int, int, QString);
     void onEdit();
     void onRegen();
     void onClear();

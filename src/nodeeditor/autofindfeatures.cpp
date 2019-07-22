@@ -70,6 +70,7 @@ AutoFindFeatures::AutoFindFeatures()
     connect(deleteButton, SIGNAL(clicked(bool)), this , SLOT(onDelete()));
     connect(addButton, SIGNAL(clicked(bool)), addWindow , SLOT(openWindow()));
     connect(addWindow, SIGNAL(sendPoint(int, int, QString)), this, SLOT(onAdd(int, int, QString)));
+    connect(addWindow, SIGNAL(sendEdit(int, int, int, QString)), this, SLOT(onEditRecieve(int, int, int, QString)));
     connect(editButton, SIGNAL(clicked(bool)), this , SLOT(onEdit()));
     connect(reGenButton, SIGNAL(clicked(bool)), this , SLOT(onRegen()));
     connect(addInPoints, SIGNAL(clicked(bool)), this , SLOT(onAddInPoints()));
@@ -328,6 +329,7 @@ void AutoFindFeatures::onGenImage()
         for(int counter = 0; counter < pointsOut->_pointList.size(); counter++){
             cv::circle(temp, pointsOut->_pointList[counter], 10, cv::Scalar(0,0,0), -1);
             cv::circle(temp, pointsOut->_pointList[counter], 5, cv::Scalar(255,255,255), -1);
+            cv::putText(temp, pointsOut->_names[counter].toStdString(), pointsOut->_pointList[counter], cv::FONT_HERSHEY_SIMPLEX, 1,cv::Scalar(255,255,255));
         }
 
         displayImage->_image = temp;
@@ -351,9 +353,18 @@ void AutoFindFeatures::onAdd(int x, int y, QString name)
     multiThreadedFinished();
 }
 
-void AutoFindFeatures::onEdit(){
-
+void AutoFindFeatures::onEditRecieve(int row, int x,int y, QString name)
+{
+    pointsOut->_pointList[row] = cv::Point2f(x,y);
+    pointsOut->_names[row] = name;
+    multiThreadedFinished();
 }
+
+void AutoFindFeatures::onEdit(){
+    addWindow->onEdit(allPoints->currentRow(), pointsOut->_pointList[allPoints->currentRow()].x,
+            pointsOut->_pointList[allPoints->currentRow()].y, pointsOut->_names[allPoints->currentRow()]);
+}
+
 void AutoFindFeatures::onRegen(){
     preCheck();
 }
@@ -362,6 +373,15 @@ void AutoFindFeatures::onClear(){
     pointsOut->_pointList.clear();
     multiThreadedFinished();
 }
-void AutoFindFeatures::onAddInPoints(){
-
+void AutoFindFeatures::onAddInPoints()
+{
+    int a = 0;
+    if(pointsIn && pointsIn->isReady){
+        for(cv::Rect pointer : pointsIn->_boxes[frameSelected]){
+            a++;
+            pointsOut->_pointList.push_back(cv::Point2f(pointer.x, pointer.y));
+            pointsOut->_names.push_back("Imported Point #" + QString::number(a));
+        }
+    }
+    multiThreadedFinished();
 }

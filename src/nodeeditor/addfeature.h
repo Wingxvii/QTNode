@@ -33,17 +33,21 @@ private:
 
     int x = -1;
     int y = -1;
+    int row = 0;
     QString name = "";
 
+    bool edit = false;
     QRegExpValidator* intPos;
 
 public slots:
     void openWindow();
     void onEnter();
     void onExit();
+    void onEdit(int row, int x, int y, QString name);
 
 signals:
     void sendPoint(int x,int y, QString name);
+    void sendEdit(int row, int x,int y, QString name);
 
 };
 
