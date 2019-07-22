@@ -202,9 +202,6 @@ void AutoFindFeatures::processData()
 void AutoFindFeatures::preCheck()
 {
 
-    if(!displayCacheIndex->text().isEmpty()){
-        DisplayCacheIndex = displayCacheIndex->text();
-    }
     if(!selectFrame->text().isEmpty()){
         frameSelected = selectFrame->text().toInt();
     }
@@ -319,6 +316,10 @@ void AutoFindFeatures::multiThreadedFinished()
 
 void AutoFindFeatures::onGenImage()
 {
+    if(!displayCacheIndex->text().isEmpty()){
+        DisplayCacheIndex = displayCacheIndex->text();
+    }
+
     if(generateImage->isChecked() && !DisplayCacheIndex.isEmpty()){
         LOG_JOHN() << "Tried To generate";
 
@@ -333,7 +334,7 @@ void AutoFindFeatures::onGenImage()
 
         LinkManager::instance()->sendData(displayImage,DisplayCacheIndex);
     }else{
-        progressBar->setText("Image Not Generated");
+        LOG_JOHN() << "Did not generate";
 
     }
 }
