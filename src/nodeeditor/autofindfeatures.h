@@ -16,9 +16,9 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QRegExpValidator>
-#include <QListWidget>
 #include <QPushButton>
 #include <QDoubleValidator>
+#include <QComboBox>
 
 //opencv
 #include "opencv2\core.hpp"
@@ -28,6 +28,10 @@
 #include "opencv2\calib3d.hpp"
 #include "opencv2\videoio.hpp"
 #include "opencv2\video.hpp"
+#include "opencv2\features2d.hpp"
+#include "opencv2\xfeatures2d.hpp"
+#include "opencv2\xfeatures2d\nonfree.hpp"
+
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -90,6 +94,7 @@ public slots:
     void multiThreadedFinished();
 
     void onGenImage();
+    void addAlgorithms();
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
@@ -111,6 +116,7 @@ private: //UI
     QLineEdit *displayCacheIndex;
     QCheckBox *generateImage;
 
+    QComboBox *algorithmSelector;
 
     QLabel *maxCornersLabel;
     QLineEdit *maxCorners;
@@ -130,6 +136,7 @@ private: //locals
     double MinDistance = -1;
     int BlockSize = -1;
     QString DisplayCacheIndex;
+    int algorithm = 0;
 
     bool isReady= false;
     std::vector<cv::Scalar> colors;

@@ -19,6 +19,9 @@ AutoFindFeatures::AutoFindFeatures()
     minDistance = new QLineEdit();
     blockSizeLabel = new QLabel("Block Size:");
     blockSize = new QLineEdit();
+    algorithmSelector = new QComboBox();
+    addAlgorithms();
+
 
     progressBar = new QLabel("Inactive");
 
@@ -254,4 +257,30 @@ void AutoFindFeatures::onGenImage()
         LOG_JOHN() << "Did not generate";
 
     }
+}
+
+void AutoFindFeatures::addAlgorithms()
+{
+    algorithmSelector->addItem("GFTT"); //0
+    algorithmSelector->addItem("GFTT + Harris"); //1
+    algorithmSelector->addItem("Agast"); //2
+    algorithmSelector->addItem("AKAZE"); //3
+    algorithmSelector->addItem("BRISK"); //4
+    algorithmSelector->addItem("Fast"); //5
+    algorithmSelector->addItem("KAZE"); //6
+    algorithmSelector->addItem("MSER"); //7
+    algorithmSelector->addItem("ORB"); //8
+    algorithmSelector->addItem("Simple Blob"); //9
+    algorithmSelector->addItem("Affine2D"); //10
+    algorithmSelector->addItem("DAISY"); //11
+    algorithmSelector->addItem("FREAK"); //12
+    algorithmSelector->addItem("HarrisLaplace"); //13
+    algorithmSelector->addItem("Latch"); //14
+    algorithmSelector->addItem("Lucid"); //15
+    algorithmSelector->addItem("MSD"); //16
+    algorithmSelector->addItem("SIFT"); //17
+    algorithmSelector->addItem("StarDetector"); //18
+    algorithmSelector->addItem("SURF"); //19
+    algorithmSelector->addItem("VGG"); //20
+
 }
