@@ -1,5 +1,5 @@
-#ifndef CALCULATEOPTICALFLOW_H
-#define CALCULATEOPTICALFLOW_H
+#ifndef TRACKINGLIST_H
+#define TRACKINGLIST_H
 #include <QtCore/QObject>
 
 #include <nodes/NodeDataModel>
@@ -37,15 +37,14 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
-class CalculateOpticalFlow: public NodeDataModel{
+class TrackingList: public NodeDataModel{
     Q_OBJECT
-
 public:
-    CalculateOpticalFlow();
-    virtual ~CalculateOpticalFlow(){}
+    TrackingList();
+    virtual ~TrackingList(){}
 
     QString caption() const override{
-        return QStringLiteral("Calculate Optical Flow");
+        return QStringLiteral("Edit Tracking List");
     }
 
     bool captionVisible(){
@@ -54,7 +53,7 @@ public:
 
     QString name()const override
     {
-        return QStringLiteral("Calculate Optical Flow");
+        return QStringLiteral("Edit Tracking List");
     }
 
 public:
@@ -79,10 +78,6 @@ public slots:
     void activate(){active = true;preCheck();window->setStyleSheet("");}
     void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
 
-private:
-    NodeValidationState modelValidationState = NodeValidationState::Warning;
-    QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
-
 public: //multithread
 
     void multiThreadedProcess();
@@ -94,16 +89,33 @@ public: //multithread
 public slots:
     void multiThreadedFinished();
 
-private: //port values
-    std::shared_ptr<VideoGraphData> videoIn;
-    std::shared_ptr<PointData> pointsIn;
-    std::shared_ptr<VideoGraphData> videoOut;
-    std::shared_ptr<PointsData> pointsOut;
+    void onDelete();
+    void onAdd(int, int, QString);
+    void onEditRecieve(int, int, int, QString);
+    void onEdit();
+    void onRegen();
+    void onClear();
 
+private:
+    NodeValidationState modelValidationState = NodeValidationState::Warning;
+    QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
+
+private:
+    std::shared_ptr<PointData> pointsIn;
+    std::shared_ptr<PointData> pointsOut;
 
 private: //UI
     QGridLayout *layout;
 
+    QListWidget *allPoints;
+    QPushButton *deleteButton;
+    QPushButton *addButton;
+    QPushButton *editButton;
+    QPushButton *reGenButton;
+    QPushButton *clearButton;
+
+    AddFeature *addWindow;
+
 };
 
-#endif // CALCULATEOPTICALFLOW_H
+#endif // TRACKINGLIST_H

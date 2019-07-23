@@ -43,7 +43,6 @@ public:
 public:
     QString _text;
     std::vector<cv::Point2f> _pointList;
-    std::vector<cv::Scalar> _colors;
     std::vector<QString> _names;
 };
 

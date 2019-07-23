@@ -137,7 +137,7 @@ void GetCorners::multiThreadedFinished()
         }
     }
 
-    cornersOut->pointList = pointsBuffer;
+    cornersOut->_pointList = pointsBuffer;
 
     if(LinkManager::instance()->getIntData("PRIVATEsuccesses") > minimumSuccesses){
         cornersOut->ready();

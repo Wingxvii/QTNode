@@ -187,7 +187,8 @@ SOURCES += main.cpp\
     nodeeditor/videobinningstats.cpp \
     nodeeditor/autofindfeatures.cpp \
     nodeeditor/addfeature.cpp \
-    nodeeditor/calculateopticalflow.cpp
+    nodeeditor/calculateopticalflow.cpp \
+    nodeeditor/trackinglist.cpp
 
 
 
@@ -386,7 +387,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/videobinningstats.h \
     nodeeditor/autofindfeatures.h \
     nodeeditor/addfeature.h \
-    nodeeditor/calculateopticalflow.h
+    nodeeditor/calculateopticalflow.h \
+    nodeeditor/trackinglist.h
 
 
 

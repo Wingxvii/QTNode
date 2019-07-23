@@ -53,6 +53,8 @@
 #include "nodeeditor/perspectiverectifynode.h"
 #include "nodeeditor/videobinningstats.h"
 #include "nodeeditor/autofindfeatures.h"
+#include "nodeeditor/calculateopticalflow.h"
+#include "nodeeditor/trackinglist.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -134,6 +136,9 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<DisplayTrackedObject>("Analyzers");
     final->registerModel<VideoObjectStats>("Analyzers");
     final->registerModel<VideoBinningStats>("Analyzers");
+    final->registerModel<CalculateOpticalFlow>("Analyzers");
+
+    final->registerModel<TrackingList>("Classifer");
 
     final->registerModel<DebugGetCorners>("Debug");
 

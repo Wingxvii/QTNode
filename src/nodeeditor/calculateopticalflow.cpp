@@ -143,7 +143,41 @@ void CalculateOpticalFlow::ShowContextMenu(const QPoint &pos)
 
 void CalculateOpticalFlow::multiThreadedProcess()
 {
+    std::vector<cv::Mat> temp;
+    std::vector<std::vector<cv::Point2f>> tempPoints;
+    cv::Mat greyFrame , oldFrame, img;
+    oldFrame = videoIn->_video[0];
+    std::vector<cv::Point2f> p0, p1, goodPoints;
+    p0 = pointsIn->_pointList;
+    std::vector<uchar> status;
+    std::vector<float> err;
+    cv::TermCriteria criteria = cv::TermCriteria((cv::TermCriteria::COUNT) + (cv::TermCriteria::EPS), 10, 0.03);
+    cv::Mat mask = cv::Mat::zeros(oldFrame.size(), oldFrame.type());
 
+    for(cv::Mat frame : videoIn->_video){
+        cvtColor(frame, greyFrame, 6);
+        calcOpticalFlowPyrLK(oldFrame, greyFrame, p0, p1, status, err, cv::Size(15, 15), 2, criteria);
+
+        for (uint i = 0; i < p0.size(); i++)
+        {
+            // Select good points
+            if (status[i] == 1) {
+                goodPoints.push_back(p1[i]);
+                // draw the tracks
+                line(mask, p1[i], p0[i], cv::Scalar(0,255,0), 2);
+                circle(frame, p1[i], 5, cv::Scalar(0,255,0), -1);
+            }
+        }
+        add(frame, mask, img);
+        temp.push_back(img.clone());
+        tempPoints.push_back(goodPoints);
+        //update points
+        oldFrame = greyFrame.clone();
+        p0 = goodPoints;
+
+    }
+    pointsOut->_pointList = tempPoints;
+    videoOut->_video = temp;
 }
 
 void CalculateOpticalFlow::multiThreadedFinished()

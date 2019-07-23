@@ -20,8 +20,6 @@
 #include <QPushButton>
 #include <QDoubleValidator>
 
-#include "addfeature.h"
-
 //opencv
 #include "opencv2\core.hpp"
 #include "opencv2\imgcodecs.hpp"
@@ -92,13 +90,6 @@ public slots:
     void multiThreadedFinished();
 
     void onGenImage();
-    void onDelete();
-    void onAdd(int, int, QString);
-    void onEditRecieve(int, int, int, QString);
-    void onEdit();
-    void onRegen();
-    void onClear();
-    void onAddInPoints();
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
@@ -108,10 +99,9 @@ private:
     //virtual void restore(QJsonObject const &) override;
 private: //port values
     std::shared_ptr<VideoGraphData> videoIn;
-    std::shared_ptr<DetectionBoxesData> pointsIn;
-    std::shared_ptr<ImageData> imageOut;
     std::shared_ptr<PointData> pointsOut;
 
+    //sent to cache
     std::shared_ptr<ImageData> displayImage;
 
 private: //UI
@@ -121,18 +111,6 @@ private: //UI
     QLineEdit *displayCacheIndex;
     QCheckBox *generateImage;
 
-    QLabel *selectFrameLabel;
-    QLineEdit *selectFrame;
-
-    QListWidget *allPoints;
-
-    QPushButton *deleteButton;
-    QPushButton *addButton;
-    QPushButton *editButton;
-    QPushButton *reGenButton;
-    QPushButton *addInPoints;
-    QPushButton *clearButton;
-    //new ongenimage button
 
     QLabel *maxCornersLabel;
     QLineEdit *maxCorners;
@@ -143,14 +121,10 @@ private: //UI
     QLabel *blockSizeLabel;
     QLineEdit *blockSize;
 
-    AddFeature *addWindow;
-
     QRegExpValidator* intPos;
     QDoubleValidator* doublePos;
 
-
 private: //locals
-    int frameSelected= -1;
     int MaxCorners = -1;
     double QualityLevel = -1;
     double MinDistance = -1;
@@ -158,6 +132,7 @@ private: //locals
     QString DisplayCacheIndex;
 
     bool isReady= false;
+    std::vector<cv::Scalar> colors;
 
 };
 
