@@ -58,6 +58,7 @@ AutoFindFeatures::AutoFindFeatures()
     layout->addWidget(displayCacheIndexLabel,1,2);
     layout->addWidget(displayCacheIndex,1,3);
     layout->addWidget(algorithmSelector,2,2,1,2);
+    layout->addWidget(progressBar,3,2);
     /*
     layout->addWidget(maxCornersLabel,3,2);
     layout->addWidget(maxCorners,3,3);
@@ -67,7 +68,6 @@ AutoFindFeatures::AutoFindFeatures()
     layout->addWidget(minDistance,5,3);
     layout->addWidget(blockSizeLabel,6,2);
     layout->addWidget(blockSize,6,3);
-    layout->addWidget(progressBar,7,2);
     */
     window->setLayout(layout);
 
