@@ -131,15 +131,27 @@ private: //UI
     QDoubleValidator* doublePos;
 
 private: //locals
-    int MaxCorners = -1;
-    double QualityLevel = -1;
-    double MinDistance = -1;
-    int BlockSize = -1;
     QString DisplayCacheIndex;
     int algorithm = 0;
-
     bool isReady= false;
     std::vector<cv::Scalar> colors;
+
+    int GFTT_MaxCorners = -1;
+    double GFTT_QualityLevel = -1;
+    double GFTT_MinDistance = -1;
+    int GFTT_BlockSize = -1;
+
+    int AGAST_threshold = 10;
+
+    int BRISK_threshold = 30;
+
+    int FAST_threshold = 10;
+
+    int SURF_hessianThreshold = 400;
+
+
+
+
 
 };
 

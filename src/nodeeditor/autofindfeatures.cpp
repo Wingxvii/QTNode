@@ -51,12 +51,14 @@ AutoFindFeatures::AutoFindFeatures()
     connect(minDistance, SIGNAL(returnPressed()), this, SLOT(preCheck()));
     connect(blockSize, SIGNAL(returnPressed()), this, SLOT(preCheck()));
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
-
+    connect(algorithmSelector, SIGNAL(activated(int)), this, SLOT(preCheck()));
 
     //build layout
     layout->addWidget(generateImage,1,1);
     layout->addWidget(displayCacheIndexLabel,1,2);
     layout->addWidget(displayCacheIndex,1,3);
+    layout->addWidget(algorithmSelector,2,2,1,2);
+    /*
     layout->addWidget(maxCornersLabel,3,2);
     layout->addWidget(maxCorners,3,3);
     layout->addWidget(qualityLevelLabel,4,2);
@@ -66,7 +68,7 @@ AutoFindFeatures::AutoFindFeatures()
     layout->addWidget(blockSizeLabel,6,2);
     layout->addWidget(blockSize,6,3);
     layout->addWidget(progressBar,7,2);
-
+    */
     window->setLayout(layout);
 
     buildContextWindow();
@@ -149,19 +151,19 @@ void AutoFindFeatures::processData()
 void AutoFindFeatures::preCheck()
 {
     if(!maxCorners->text().isEmpty()){
-        MaxCorners = maxCorners->text().toInt();
+        GFTT_MaxCorners = maxCorners->text().toInt();
     }
     if(!qualityLevel->text().isEmpty()){
-        QualityLevel = qualityLevel->text().toDouble();
+        GFTT_QualityLevel = qualityLevel->text().toDouble();
     }
     if(!minDistance->text().isEmpty()){
-        MinDistance = minDistance->text().toDouble();
+        GFTT_MinDistance = minDistance->text().toDouble();
     }
     if(!blockSize->text().isEmpty()){
-        BlockSize = blockSize->text().toInt();
+        GFTT_BlockSize = blockSize->text().toInt();
     }
 
-    if(MaxCorners != -1 && QualityLevel != -1 && MinDistance != -1 && BlockSize != -1){
+    if(GFTT_MaxCorners != -1 && GFTT_QualityLevel != -1 && GFTT_MinDistance != -1 && GFTT_BlockSize != -1){
         isReady = true;
     }else{
         isReady = false;
@@ -196,9 +198,9 @@ void AutoFindFeatures::multiThreadedProcess()
     std::vector<QString> namesTemp;
 
     //fill pointData with colors
-    if(colors.size() < MaxCorners){
+    if(colors.size() < GFTT_MaxCorners){
         cv::RNG rng;
-        for (int i = colors.size(); i <= MaxCorners; i++)
+        for (int i = colors.size(); i <= GFTT_MaxCorners; i++)
         {
             int r = rng.uniform(0, 256);
             int g = rng.uniform(0, 256);
@@ -209,8 +211,76 @@ void AutoFindFeatures::multiThreadedProcess()
 
     cv::Mat convert = videoIn->_video[0];
     //automatically finds features
-    cv::cvtColor(convert, convert,(cv::ColorConversionCodes)6);
-    goodFeaturesToTrack(convert, temp, MaxCorners, QualityLevel, MinDistance, cv::Mat(), BlockSize, false, 0.04);
+
+    std::vector<cv::KeyPoint> keypoints;
+
+    if(algorithmSelector->currentIndex() == 0){         //GFTT
+        cv::cvtColor(convert, convert,(cv::ColorConversionCodes)6);
+        goodFeaturesToTrack(convert, temp, GFTT_MaxCorners, GFTT_QualityLevel, GFTT_MinDistance, cv::Mat(), GFTT_BlockSize, false, 0.04);
+    }else if(algorithmSelector->currentIndex() == 1){    //GFTT + Harris
+        cv::cvtColor(convert, convert,(cv::ColorConversionCodes)6);
+        goodFeaturesToTrack(convert, temp, GFTT_MaxCorners, GFTT_QualityLevel, GFTT_MinDistance, cv::Mat(), GFTT_BlockSize, true, 0.04);
+    }else if(algorithmSelector->currentIndex() == 2){   //Agast
+        cv::Ptr<cv::AgastFeatureDetector> detector= cv::AgastFeatureDetector::create(AGAST_threshold);
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 3){   //AKAZE
+        cv::Ptr<cv::AKAZE> detector= cv::AKAZE::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 4){   //BRISK
+        cv::Ptr<cv::BRISK> detector= cv::BRISK::create(BRISK_threshold);
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 5){   //FAST
+        cv::Ptr<cv::FastFeatureDetector> detector= cv::FastFeatureDetector::create(FAST_threshold);
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 6){   //KAZE
+        cv::Ptr<cv::KAZE> detector= cv::KAZE::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 7){   //MSER
+        cv::Ptr<cv::MSER> detector= cv::MSER::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 8){   //ORB
+        cv::Ptr<cv::ORB> detector= cv::ORB::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 9){   //Simple Blob
+        cv::Ptr<cv::SimpleBlobDetector> detector= cv::SimpleBlobDetector::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 10){  //DAISY
+        cv::Ptr<cv::xfeatures2d::DAISY> detector= cv::xfeatures2d::DAISY::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 11){  //FREAK
+        cv::Ptr<cv::xfeatures2d::FREAK> detector= cv::xfeatures2d::FREAK::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 12){  //LATCH
+        cv::Ptr<cv::xfeatures2d::LATCH> detector= cv::xfeatures2d::LATCH::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 13){  //LUCID
+        cv::Ptr<cv::xfeatures2d::LUCID> detector= cv::xfeatures2d::LUCID::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 14){  //MSD
+        cv::Ptr<cv::xfeatures2d::MSDDetector> detector= cv::xfeatures2d::MSDDetector::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 15){  //SIFT
+        cv::Ptr<cv::xfeatures2d::SIFT> detector= cv::xfeatures2d::SIFT::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 16){  //STAR
+        cv::Ptr<cv::xfeatures2d::StarDetector> detector= cv::xfeatures2d::StarDetector::create();
+        detector->detect(convert, keypoints);
+    }else if(algorithmSelector->currentIndex() == 17){ //SURF
+        cv::Ptr<cv::xfeatures2d::SURF> surf= cv::xfeatures2d::SURF::create(SURF_hessianThreshold);
+        surf->detect(convert, keypoints);
+    }
+    else if(algorithmSelector->currentIndex() == 18){   //VGG
+        cv::Ptr<cv::xfeatures2d::VGG> detector= cv::xfeatures2d::VGG::create();
+        detector->detect(convert, keypoints);
+    }
+
+
+    //turn keypoints into point data
+    if(!keypoints.empty()){
+        for(int counter = 0; counter < keypoints.size(); counter++){
+            temp.push_back(keypoints[counter].pt);
+        }
+    }
 
 
     for(int counter = 0; counter < temp.size(); counter++){
@@ -271,16 +341,14 @@ void AutoFindFeatures::addAlgorithms()
     algorithmSelector->addItem("MSER"); //7
     algorithmSelector->addItem("ORB"); //8
     algorithmSelector->addItem("Simple Blob"); //9
-    algorithmSelector->addItem("Affine2D"); //10
-    algorithmSelector->addItem("DAISY"); //11
-    algorithmSelector->addItem("FREAK"); //12
-    algorithmSelector->addItem("HarrisLaplace"); //13
-    algorithmSelector->addItem("Latch"); //14
-    algorithmSelector->addItem("Lucid"); //15
-    algorithmSelector->addItem("MSD"); //16
-    algorithmSelector->addItem("SIFT"); //17
-    algorithmSelector->addItem("StarDetector"); //18
-    algorithmSelector->addItem("SURF"); //19
-    algorithmSelector->addItem("VGG"); //20
+    algorithmSelector->addItem("DAISY"); //10
+    algorithmSelector->addItem("FREAK"); //11
+    algorithmSelector->addItem("Latch"); //12
+    algorithmSelector->addItem("Lucid"); //13
+    algorithmSelector->addItem("MSD"); //14
+    algorithmSelector->addItem("SIFT"); //15
+    algorithmSelector->addItem("StarDetector"); //16
+    algorithmSelector->addItem("SURF"); //17
+    algorithmSelector->addItem("VGG"); //18
 
 }
