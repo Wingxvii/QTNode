@@ -188,7 +188,8 @@ SOURCES += main.cpp\
     nodeeditor/autofindfeatures.cpp \
     nodeeditor/addfeature.cpp \
     nodeeditor/calculateopticalflow.cpp \
-    nodeeditor/trackinglist.cpp
+    nodeeditor/trackinglist.cpp \
+    nodeeditor/pointdisplay.cpp
 
 
 
@@ -388,7 +389,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/autofindfeatures.h \
     nodeeditor/addfeature.h \
     nodeeditor/calculateopticalflow.h \
-    nodeeditor/trackinglist.h
+    nodeeditor/trackinglist.h \
+    nodeeditor/pointdisplay.h
 
 
 

@@ -197,17 +197,7 @@ void AutoFindFeatures::multiThreadedProcess()
     std::vector<cv::Point2f> temp;
     std::vector<QString> namesTemp;
 
-    //fill pointData with colors
-    if(colors.size() < GFTT_MaxCorners){
-        cv::RNG rng;
-        for (int i = colors.size(); i <= GFTT_MaxCorners; i++)
-        {
-            int r = rng.uniform(0, 256);
-            int g = rng.uniform(0, 256);
-            int b = rng.uniform(0, 256);
-            colors.push_back(cv::Scalar(r, g, b));
-        }
-    }
+
 
     cv::Mat convert = videoIn->_video[0];
     //automatically finds features
@@ -282,6 +272,17 @@ void AutoFindFeatures::multiThreadedProcess()
         }
     }
 
+    //fill pointData with colors
+    if(colors.size() < temp.size()){
+        cv::RNG rng;
+        for (int i = colors.size(); i <= temp.size(); i++)
+        {
+            int r = rng.uniform(0, 256);
+            int g = rng.uniform(0, 256);
+            int b = rng.uniform(0, 256);
+            colors.push_back(cv::Scalar(r, g, b));
+        }
+    }
 
     for(int counter = 0; counter < temp.size(); counter++){
         namesTemp.push_back("Found Feature #" + QString::number(counter));

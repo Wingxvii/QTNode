@@ -128,7 +128,7 @@ void FrameIterator::gotoFrame()
 void FrameIterator::processData(){
 
     frameOut->_image = videoIn->data().at(currFrame);
-    if(currFrame != 0){
+    if(currFrame != -1){
     frameOut->ready();
     }
 }

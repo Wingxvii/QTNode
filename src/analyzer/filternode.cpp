@@ -55,6 +55,7 @@
 #include "nodeeditor/autofindfeatures.h"
 #include "nodeeditor/calculateopticalflow.h"
 #include "nodeeditor/trackinglist.h"
+#include "nodeeditor/pointdisplay.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -109,6 +110,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<PointsLinkIn>("Output");
     final->registerModel<VideoLinkIn>("Output");
     final->registerModel<DetectionLinkIn>("Output");
+    final->registerModel<PointDisplay>("Output");
 
     final->registerModel<GetCorners>("Calibration");
     final->registerModel<Calibrate>("Calibration");

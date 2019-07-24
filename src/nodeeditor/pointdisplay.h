@@ -1,5 +1,5 @@
-#ifndef CONVERTCOLOR_H
-#define CONVERTCOLOR_H
+#ifndef POINTDISPLAY_H
+#define POINTDISPLAY_H
 
 #include <QObject>
 #include <nodes/NodeDataModel>
@@ -7,13 +7,15 @@
 #include <QtConcurrent/QtConcurrent>
 
 //data types
-#include "DataTypes/videographdata.h"
+#include "DataTypes/pointdata.h"
+#include "DataTypes/imagedata.h"
 
 //QT widgets
 #include <QLabel>
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QListWidget>
+
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -22,21 +24,21 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
-class convertColor : public NodeDataModel{
+class PointDisplay : public NodeDataModel{
     Q_OBJECT
 public:
-    convertColor();
-    ~convertColor(){}
+    PointDisplay();
+    ~PointDisplay(){}
 
     QString caption() const override{
-        return QStringLiteral("Color Convertor");
+        return QStringLiteral("Point Display");
     }
 
     bool captionVisible(){
         return false;
     }
     QString name()const override{
-        return QStringLiteral("Color Convertor");
+        return QStringLiteral("Point Display");
     }
 
 public:
@@ -52,11 +54,6 @@ public:
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
     QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
-
-    QJsonObject save() const override;
-    virtual void restore(QJsonObject const &) override;
-
-    void addCodes();
 
 public slots:
     void processData() override;
@@ -77,20 +74,15 @@ public slots:
     void multiThreadedFinished();
 
 private: //ports
-    std::shared_ptr<VideoGraphData> videoIn;
-    std::shared_ptr<VideoGraphData> videoOut;
+    std::shared_ptr<ImageData> imageIn;
+    std::shared_ptr<PointData> pointIn;
+    std::shared_ptr<ImageData> imageOut;
 
-private:
-    cv::ColorConversionCodes code = (cv::ColorConversionCodes)0;
-
-
-
-private:
+private: //UI
     QGridLayout *layout;
-    QListWidget *codeSelection;
 
-    QRegExpValidator* intPos;
+    std::vector<cv::Scalar> colors;
 
 };
 
-#endif // CONVERTCOLOR_H
+#endif // POINTSDISPLAY_H
