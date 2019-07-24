@@ -189,8 +189,10 @@ void TrackingList::onEditRecieve(int row, int x,int y, QString name)
 }
 
 void TrackingList::onEdit(){
+    if(allPoints->currentRow() != -1){
     addWindow->onEdit(allPoints->currentRow(), pointsOut->_pointList[allPoints->currentRow()].x,
             pointsOut->_pointList[allPoints->currentRow()].y, pointsOut->_names[allPoints->currentRow()]);
+    }
 }
 
 void TrackingList::onRegen(){
