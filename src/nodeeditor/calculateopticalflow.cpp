@@ -147,14 +147,19 @@ void CalculateOpticalFlow::multiThreadedProcess()
     std::vector<std::vector<cv::Point2f>> tempPoints;
     cv::Mat greyFrame , oldFrame, img;
     oldFrame = videoIn->_video[0];
-    std::vector<cv::Point2f> p0, p1, goodPoints;
+    std::vector<cv::Point2f> p0, p1;
     p0 = pointsIn->_pointList;
     std::vector<uchar> status;
     std::vector<float> err;
     cv::TermCriteria criteria = cv::TermCriteria((cv::TermCriteria::COUNT) + (cv::TermCriteria::EPS), 10, 0.03);
     cv::Mat mask = cv::Mat::zeros(oldFrame.size(), oldFrame.type());
 
+    cvtColor(oldFrame, oldFrame, 6);
+
     for(cv::Mat frame : videoIn->_video){
+
+        std::vector<cv::Point2f> goodPoints;
+
         cvtColor(frame, greyFrame, 6);
         calcOpticalFlowPyrLK(oldFrame, greyFrame, p0, p1, status, err, cv::Size(15, 15), 2, criteria);
 
@@ -168,12 +173,13 @@ void CalculateOpticalFlow::multiThreadedProcess()
                 circle(frame, p1[i], 5, cv::Scalar(0,255,0), -1);
             }
         }
-        add(frame, mask, img);
+        cv::add(frame, mask, img);
         temp.push_back(img.clone());
         tempPoints.push_back(goodPoints);
         //update points
         oldFrame = greyFrame.clone();
         p0 = goodPoints;
+        LOG_JOHN() << "Frame Processed:" << temp.size();
 
     }
     pointsOut->_pointList = tempPoints;
