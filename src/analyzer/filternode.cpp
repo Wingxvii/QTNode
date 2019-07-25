@@ -56,6 +56,8 @@
 #include "nodeeditor/calculateopticalflow.h"
 #include "nodeeditor/trackinglist.h"
 #include "nodeeditor/pointdisplay.h"
+#include "nodeeditor/points2rects.h"
+#include "nodeeditor/rects2points.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -124,11 +126,12 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<RegionOfIntrest>("Editing");
     final->registerModel<ResizeVideoNode>("Editing");
     final->registerModel<PerspectiveRectify>("Editing");
+    final->registerModel<ColorThreshold>("Editing");
 
-
-    final->registerModel<FrameIterator>("Video");
-    final->registerModel<AutoFrameIterator>("Video");
-    final->registerModel<ColorThreshold>("Video");
+    final->registerModel<FrameIterator>("Type Conversion");
+    final->registerModel<AutoFrameIterator>("Type Conversion");
+    final->registerModel<Points2Rects>("Type Conversion");
+    final->registerModel<Rects2Points>("Type Conversion");
 
     final->registerModel<CascadeDetect>("Detectors");
     final->registerModel<AutoTrackObject>("Detectors");

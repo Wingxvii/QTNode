@@ -189,7 +189,9 @@ SOURCES += main.cpp\
     nodeeditor/addfeature.cpp \
     nodeeditor/calculateopticalflow.cpp \
     nodeeditor/trackinglist.cpp \
-    nodeeditor/pointdisplay.cpp
+    nodeeditor/pointdisplay.cpp \
+    nodeeditor/rects2points.cpp \
+    nodeeditor/points2rects.cpp
 
 
 
@@ -390,7 +392,9 @@ HEADERS  += mainwindow.h \
     nodeeditor/addfeature.h \
     nodeeditor/calculateopticalflow.h \
     nodeeditor/trackinglist.h \
-    nodeeditor/pointdisplay.h
+    nodeeditor/pointdisplay.h \
+    nodeeditor/rects2points.h \
+    nodeeditor/points2rects.h
 
 
 

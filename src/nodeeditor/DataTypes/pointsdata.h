@@ -28,7 +28,7 @@ public:
 
     NodeDataType type() const override
     {
-        return NodeDataType {"List of Checkerboard Points", "List of Checkerboard Points"};
+        return NodeDataType {"List of Points", "List of Points"};
     }
 
     std::vector<std::vector<cv::Point2f>> data() const {return _pointList;}
