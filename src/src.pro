@@ -191,7 +191,8 @@ SOURCES += main.cpp\
     nodeeditor/trackinglist.cpp \
     nodeeditor/pointdisplay.cpp \
     nodeeditor/rects2points.cpp \
-    nodeeditor/points2rects.cpp
+    nodeeditor/points2rects.cpp \
+    nodeeditor/extractpoints.cpp
 
 
 
@@ -394,7 +395,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/trackinglist.h \
     nodeeditor/pointdisplay.h \
     nodeeditor/rects2points.h \
-    nodeeditor/points2rects.h
+    nodeeditor/points2rects.h \
+    nodeeditor/extractpoints.h
 
 
 

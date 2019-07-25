@@ -58,6 +58,7 @@
 #include "nodeeditor/pointdisplay.h"
 #include "nodeeditor/points2rects.h"
 #include "nodeeditor/rects2points.h"
+#include "nodeeditor/extractpoints.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -132,6 +133,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<AutoFrameIterator>("Type Conversion");
     final->registerModel<Points2Rects>("Type Conversion");
     final->registerModel<Rects2Points>("Type Conversion");
+    final->registerModel<ExtractPoints>("Type Conversion");
 
     final->registerModel<CascadeDetect>("Detectors");
     final->registerModel<AutoTrackObject>("Detectors");
