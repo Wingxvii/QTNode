@@ -31,7 +31,7 @@ void ImageWindow::showImage()
 
     if(LinkManager::instance()->getImageData(selectImageIndex->text())){
         img = LinkManager::instance()->getImageData(selectImageIndex->text())->_image;
-        cv::cvtColor(img,img,CV_BGR2RGB);
+        cv::cvtColor(img,img,cv::COLOR_RGB2BGR);
         imageShow->setPixmap(QPixmap::fromImage((QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888))));
 
     }else{

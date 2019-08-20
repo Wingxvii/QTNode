@@ -47,6 +47,7 @@ public:
     int getSize(){return _pointList.size();}
 
     std::vector<std::vector<cv::Point2f>> _pointList;
+    std::vector<std::vector<std::string>> _names;
 
 private:
     QString _text;

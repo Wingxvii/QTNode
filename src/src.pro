@@ -173,7 +173,6 @@ SOURCES += main.cpp\
     nodeeditor/convertcolor.cpp \
     nodeeditor/cascadedetect.cpp \
     nodeeditor/equalizehist.cpp \
-    nodeeditor/displaycascades.cpp \
     nodeeditor/erodeimage.cpp \
     nodeeditor/dilateimage.cpp \
     nodeeditor/colorthreshold.cpp \
@@ -192,7 +191,14 @@ SOURCES += main.cpp\
     nodeeditor/pointdisplay.cpp \
     nodeeditor/rects2points.cpp \
     nodeeditor/points2rects.cpp \
-    nodeeditor/extractpoints.cpp
+    nodeeditor/extractpoints.cpp \
+    nodeeditor/deepimageclassification.cpp \
+    nodeeditor/displaydetection.cpp \
+    nodeeditor/trainemotionmodels.cpp \
+    nodeeditor/emotiondetection.cpp \
+    nodeeditor/facecrop.cpp \
+    nodeeditor/displayemotions.cpp \
+    nodeeditor/graphemotion.cpp
 
 
 
@@ -377,7 +383,6 @@ HEADERS  += mainwindow.h \
     nodeeditor/cascadedetect.h \
     nodeeditor/equalizehist.h \
     nodeeditor/DataTypes/detectionboxesdata.h \
-    nodeeditor/displaycascades.h \
     nodeeditor/erodeimage.h \
     nodeeditor/dilateimage.h \
     nodeeditor/colorthreshold.h \
@@ -396,7 +401,15 @@ HEADERS  += mainwindow.h \
     nodeeditor/pointdisplay.h \
     nodeeditor/rects2points.h \
     nodeeditor/points2rects.h \
-    nodeeditor/extractpoints.h
+    nodeeditor/extractpoints.h \
+    nodeeditor/deepimageclassification.h \
+    nodeeditor/displaydetection.h \
+    nodeeditor/trainemotionmodels.h \
+    nodeeditor/emotiondetection.h \
+    nodeeditor/DataTypes/emotiondata.h \
+    nodeeditor/facecrop.h \
+    nodeeditor/displayemotions.h \
+    nodeeditor/graphemotion.h
 
 
 
@@ -502,97 +515,97 @@ INCLUDEPATH += "$$PWD/../opencv"
 INCLUDEPATH += "$$PWD/../opencv/opencv2"
 
 CONFIG(debug, debug|release) {
-LIBS += "$$PWD/../opencv/bin/libopencv_aruco342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_bgsegm342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_bioinspired342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_calib3d342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_ccalib342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_core342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_cvv342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_datasets342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_dnn_objdetect342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_dnn342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_dpm342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_face342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_features2d342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_flann342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_fuzzy342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_hfs342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_highgui342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_img_hash342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_imgcodecs342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_imgproc342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_line_descriptor342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_ml342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_objdetect342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_optflow342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_phase_unwrapping342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_photo342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_plot342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_reg342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_rgbd342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_saliency342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_shape342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_stereo342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_stitching342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_structured_light342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_superres342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_surface_matching342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_text342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_tracking342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_video342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_videoio342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_videostab342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_xfeatures2d342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_ximgproc342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_xobjdetect342d.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_xphoto342d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_aruco411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_bgsegm411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_bioinspired411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_calib3d411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_ccalib411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_core411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_cvv411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_datasets411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_dnn_objdetect411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_dnn411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_dpm411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_face411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_features2d411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_flann411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_fuzzy411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_hfs411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_highgui411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_img_hash411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_imgcodecs411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_imgproc411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_line_descriptor411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_ml411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_objdetect411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_optflow411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_phase_unwrapping411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_photo411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_plot411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_reg411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_rgbd411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_saliency411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_shape411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_stereo411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_stitching411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_structured_light411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_superres411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_surface_matching411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_text411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_tracking411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_video411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_videoio411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_videostab411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_xfeatures2d411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_ximgproc411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_xobjdetect411d.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_xphoto411d.dll"
 }else{
-LIBS += "$$PWD/../opencv/bin/libopencv_aruco342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_bgsegm342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_bioinspired342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_calib3d342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_ccalib342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_core342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_cvv342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_datasets342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_dnn_objdetect342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_dnn342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_dpm342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_face342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_features2d342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_flann342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_fuzzy342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_hfs342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_highgui342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_img_hash342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_imgcodecs342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_imgproc342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_line_descriptor342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_ml342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_objdetect342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_optflow342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_phase_unwrapping342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_photo342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_plot342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_reg342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_rgbd342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_saliency342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_shape342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_stereo342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_stitching342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_structured_light342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_superres342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_surface_matching342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_text342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_tracking342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_video342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_videoio342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_videostab342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_xfeatures2d342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_ximgproc342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_xobjdetect342.dll"
-LIBS += "$$PWD/../opencv/bin/libopencv_xphoto342.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_aruco411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_bgsegm411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_bioinspired411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_calib3d411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_ccalib411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_core411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_cvv411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_datasets411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_dnn_objdetect411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_dnn411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_dpm411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_face411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_features2d411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_flann411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_fuzzy411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_hfs411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_highgui411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_img_hash411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_imgcodecs411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_imgproc411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_line_descriptor411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_ml411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_objdetect411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_optflow411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_phase_unwrapping411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_photo411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_plot411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_reg411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_rgbd411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_saliency411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_shape411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_stereo411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_stitching411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_structured_light411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_superres411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_surface_matching411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_text411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_tracking411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_video411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_videoio411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_videostab411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_xfeatures2d411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_ximgproc411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_xobjdetect411.dll"
+LIBS += "$$PWD/../opencv/bin/libopencv_xphoto411.dll"
 }
 
 INCLUDEPATH += C:/qwt-6.1.4/include

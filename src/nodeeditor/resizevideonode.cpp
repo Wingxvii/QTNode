@@ -140,7 +140,7 @@ void ResizeVideoNode::restore(const QJsonObject & json)
         interpIndex = json["interpIndex"].toInt();
     }
     if(json.contains("ResizeScale")){
-        resizeScale->setText(QString::number(json["ResizeScale"].toInt()));
+        resizeScale->setText(QString::number(json["ResizeScale"].toDouble()));
     }
     if(json.contains("resizeCheck")){
         resize->setChecked(json["resizeCheck"].toBool());
@@ -149,7 +149,7 @@ void ResizeVideoNode::restore(const QJsonObject & json)
         rotate->setChecked(json["rotateCheck"].toBool());
     }
     if(json.contains("Angle")){
-        angleLabel->setText(QString::number(json["Angle"].toDouble()));
+        angle->setText(QString::number(json["Angle"].toDouble()));
     }
 
 

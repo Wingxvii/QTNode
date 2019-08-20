@@ -52,7 +52,6 @@ std::shared_ptr<QtNodes::NodeData> DisplayTrackedObject::outData(QtNodes::PortIn
     case 0:
         return videoOut;
         break;
-
     }
 }
 

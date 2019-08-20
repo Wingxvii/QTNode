@@ -31,6 +31,7 @@ Used by:
 #include "nodeeditor/DataTypes/pointsdata.h"
 #include "nodeeditor/DataTypes/videographdata.h"
 #include "nodeeditor/DataTypes/detectionboxesdata.h"
+#include "nodeeditor/DataTypes/emotiondata.h"
 
 //singleton that holds all linker data
 class LinkManager: public QObject{
@@ -54,6 +55,7 @@ public:
     void sendData(std::shared_ptr<PointData> data, QString name);
     void sendData(std::shared_ptr<PointsData> data, QString name);
     void sendData(std::shared_ptr<VideoGraphData> data, QString name);
+    void sendData(std::shared_ptr<EmotionData> data, QString name);
     void sendData(int data, QString name);
     void sendData(float data, QString name);
     void sendData(QString data, QString name);
@@ -67,6 +69,7 @@ public:
     std::shared_ptr<PointData> getPointData(QString name);
     std::shared_ptr<PointsData> getPointsData(QString name);
     std::shared_ptr<VideoGraphData> getVideoData(QString name);
+    std::shared_ptr<EmotionData> getEmotionData(QString name);
     int getIntData(QString name);
     float getFloatData(QString name);
     QString getStringData(QString name);
@@ -76,6 +79,7 @@ public:
     void saveData(QString name, int type);
     void saveImageData(QString name);
     void saveVideoData(QString name);
+    void saveEmotionData(QString name);
     void saveStringData(QString name);
 
     void deleteData(QString name, int type);
@@ -84,6 +88,7 @@ public:
     void deletePointData(QString name);
     void deletePointsData(QString name);
     void deleteVideoData(QString name);
+    void deleteEmotionData(QString name);
     void deleteIntData(QString name);
     void deleteFloatData(QString name);
     void deleteStringData(QString name);
@@ -96,6 +101,7 @@ public:
     void clonePointData(QString name);
     void clonePointsData(QString name);
     void cloneVideoData(QString name);
+    void cloneEmotionData(QString name);
     void cloneIntData(QString name);
     void cloneFloatData(QString name);
     void cloneStringData(QString name);
@@ -108,6 +114,7 @@ public:
     void displayPointData(QString name);
     void displayPointsData(QString name);
     void displayVideoData(QString name);
+    void displayEmotionData(QString name);
     void displayIntData(QString name);
     void displayFloatData(QString name);
     void displayStringData(QString name);
@@ -145,6 +152,7 @@ private:
     std::map<QString, QString> stringList;                                      //7
     std::map<QString, bool> boolList;                                           //8
     std::map<QString, std::shared_ptr<DetectionBoxesData>> detectionBoxesList;  //9
+    std::map<QString, std::shared_ptr<EmotionData>> emotionDataList;            //10
 
 
 
@@ -159,6 +167,7 @@ private:
     std::map<QString, QString> stringListPrivate;
     std::map<QString, bool> boolListPrivate;
     std::map<QString, std::shared_ptr<DetectionBoxesData>> detectionBoxesListPrivate;
+    std::map<QString, std::shared_ptr<EmotionData>> emotionDataListPrivate;
 
 
 //multithreading

@@ -42,3 +42,8 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 /opencv/bin/*.exe
+
+# data sets
+/opencv/deepnetworkdata/emotion/*.png
+/opencv/deepnetworkdata/emotion/*.jpg
+/opencv/deepnetworkdata

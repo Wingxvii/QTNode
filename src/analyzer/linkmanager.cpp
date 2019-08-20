@@ -27,7 +27,7 @@ void LinkManager::multiThreadVideoSave()
     int width = videoGraphList[stringListPrivate["PRIVATEsave"]]->_video[1].size().width;
     int height = videoGraphList[stringListPrivate["PRIVATEsave"]]->_video[1].size().height;
 
-    cv::VideoWriter videoOutput(fileNameCV,CV_FOURCC('M','J','P','G'), fps, cv::Size(width, height));
+    cv::VideoWriter videoOutput(fileNameCV,cv::VideoWriter::fourcc('M','J','P','G'), fps, cv::Size(width, height));
 
     for(cv::Mat const& img : videoGraphList[stringListPrivate["PRIVATEsave"]]->_video){
         videoOutput.write(img);
@@ -924,7 +924,7 @@ void LinkManager::loadImage(QString name)
 {
     QString fileName = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Choose Image"), "");
     std::shared_ptr<ImageData> newImage = std::make_shared<ImageData>();
-    newImage->_image = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_COLOR);
+    newImage->_image = cv::imread(fileName.toStdString(), cv::IMREAD_COLOR);
     newImage->ready();
     sendData(newImage, name);
 

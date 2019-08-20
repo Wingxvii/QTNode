@@ -175,19 +175,19 @@ void RegionOfIntrest::preCheck(){
         BotRightY = botRightY->text().toInt();
     }
 
-    if(videoIn && TopLeftX > (videoIn->_video[1].cols-1)){
+    if(videoIn && videoIn->isReady && TopLeftX > (videoIn->_video[1].cols-1)){
         TopLeftX = videoIn->_video[1].cols -1;
         topLeftX->setText(QString::number(TopLeftX));
     }
-    if(videoIn && TopLeftY > (videoIn->_video[1].rows-1)){
+    if(videoIn && videoIn->isReady&& TopLeftY > (videoIn->_video[1].rows-1)){
         TopLeftY = videoIn->_video[1].rows -1;
         topLeftY->setText(QString::number(TopLeftY));
     }
-    if(videoIn && BotRightX > (videoIn->_video[1].cols-1)){
+    if(videoIn && videoIn->isReady&& BotRightX > (videoIn->_video[1].cols-1)){
         BotRightX = videoIn->_video[1].cols -1;
         botRightX->setText(QString::number(BotRightX));
     }
-    if(videoIn && BotRightY > (videoIn->_video[1].rows-1)){
+    if(videoIn && videoIn->isReady&& BotRightY > (videoIn->_video[1].rows-1)){
         BotRightY = videoIn->_video[1].rows -1;
         botRightY->setText(QString::number(BotRightY));
     }
@@ -204,6 +204,7 @@ void RegionOfIntrest::preCheck(){
     //use this to check if ports are ready
     if(TopLeftX != -1 && TopLeftY != -1 && BotRightX != -1 && BotRightY!= -1){
         isReady = true;
+        LOG_JOHN() << "Ports are ready";
     }
 
     if(videoIn && videoIn->isReady && isReady && active &&isReady){

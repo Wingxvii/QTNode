@@ -121,8 +121,13 @@ void ExtractPoints::gotoFrame()
 void ExtractPoints::processData(){
 
     pointOut->_pointList = pointsIn->data().at(currFrame);
+
+    std::vector<QString> names;
+    for(std::string name : pointsIn->_names.at(currFrame)){
+        names.push_back(QString::fromStdString(name));
+    }
     if(currFrame != -1){
-    pointOut->ready();
+        pointOut->ready();
     }
 }
 

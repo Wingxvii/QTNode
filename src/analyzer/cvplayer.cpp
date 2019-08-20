@@ -71,7 +71,7 @@ void CVPlayer::run()
 
         if (frame.channels()== 3){
             //LOG_JOHN() << "Converting..." << _video.size();
-            cv::cvtColor(frame, RGBframe, CV_BGR2RGB);
+            cv::cvtColor(frame, RGBframe, cv::COLOR_RGB2BGR);
             //LOG_JOHN() << "Reformatting..." << _video.size();
             img = QImage((const unsigned char*)(RGBframe.data), RGBframe.cols,RGBframe.rows,QImage::Format_RGB888);
             //LOG_JOHN() << "Done!";

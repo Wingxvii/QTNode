@@ -122,17 +122,23 @@ void Points2Rects::ShowContextMenu(const QPoint &pos)
 void Points2Rects::multiThreadedProcess()
 {
     std::vector<std::vector<cv::Rect>> temp;
-    for(std::vector<cv::Point2f> frames : pointsIn->_pointList){
+    std::vector<std::vector<std::string>> tempNames;
+
+    for(int x = 0; x < pointsIn->_pointList.size(); x++){
         std::vector<cv::Rect> tempFrame;
-        for(cv::Point2f points : frames){
+        std::vector<std::string> tempName;
+        for(int y = 0; y < pointsIn->_pointList[x].size(); y++){
             cv::Rect tempRect;
-            tempRect.x = points.x;
-            tempRect.y = points.y;
+            tempRect.x = pointsIn->_pointList[x][y].x;
+            tempRect.y = pointsIn->_pointList[x][y].y;
             tempFrame.push_back(tempRect);
+            tempName.push_back(pointsIn->_names[x][y]);
         }
         temp.push_back(tempFrame);
+        tempNames.push_back(tempName);
     }
     boxesOut->_boxes = temp;
+    boxesOut->_names = tempNames;
 }
 
 void Points2Rects::multiThreadedFinished()

@@ -41,7 +41,7 @@
 #include "nodeeditor/convertcolor.h"
 #include "nodeeditor/equalizehist.h"
 #include "nodeeditor/cascadedetect.h"
-#include "nodeeditor/displaycascades.h"
+#include "nodeeditor/displaydetection.h"
 #include "nodeeditor/erodeimage.h"
 #include "nodeeditor/dilateimage.h"
 #include "nodeeditor/colorthreshold.h"
@@ -59,6 +59,12 @@
 #include "nodeeditor/points2rects.h"
 #include "nodeeditor/rects2points.h"
 #include "nodeeditor/extractpoints.h"
+#include "nodeeditor/deepimageclassification.h"
+#include "nodeeditor/trainemotionmodels.h"
+#include "nodeeditor/emotiondetection.h"
+#include "nodeeditor/facecrop.h"
+#include "nodeeditor/displayemotions.h"
+#include "nodeeditor/graphemotion.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -128,6 +134,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<ResizeVideoNode>("Editing");
     final->registerModel<PerspectiveRectify>("Editing");
     final->registerModel<ColorThreshold>("Editing");
+    final->registerModel<FaceCrop>("Editing");
 
     final->registerModel<FrameIterator>("Type Conversion");
     final->registerModel<AutoFrameIterator>("Type Conversion");
@@ -138,16 +145,21 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<CascadeDetect>("Detectors");
     final->registerModel<AutoTrackObject>("Detectors");
     final->registerModel<AutoFindFeatures>("Detectors");
+    final->registerModel<EmotionDetection>("Detectors");
 
-    final->registerModel<DisplayCascades>("Analyzers");
+    final->registerModel<DisplayDetection>("Analyzers");
     final->registerModel<DisplayTrackedObject>("Analyzers");
     final->registerModel<VideoObjectStats>("Analyzers");
     final->registerModel<VideoBinningStats>("Analyzers");
     final->registerModel<CalculateOpticalFlow>("Analyzers");
+    final->registerModel<DisplayEmotions>("Analyzers");
+    final->registerModel<GraphEmotion>("Analyzers");
 
     final->registerModel<TrackingList>("Classifer");
+    final->registerModel<DeepImageClassification>("Classifer");
 
     final->registerModel<DebugGetCorners>("Debug");
+    final->registerModel<TrainEmotionModel>("Debug");
 
     scene->setRegistry(final);
     layout->addWidget(new FlowView(scene));

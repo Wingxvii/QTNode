@@ -56,7 +56,7 @@ std::shared_ptr<NodeData> VideoSourceDataModel::outData(PortIndex port)
 
 void VideoSourceDataModel::processData()
 {
-    QString fileName = QFileDialog::getOpenFileName(button, tr("Choose Video"), "");
+    QString fileName = QFileDialog::getOpenFileName(button, tr("Choose Video"),QString(), tr("Videos (*.mp4 *.avi)"));
     cv::VideoCapture capture(fileName.toStdString());
 
 

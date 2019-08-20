@@ -163,7 +163,7 @@ void AutoTrackObject::multiThreadedProcess()
         std::vector<std::vector<cv::Point>> contours;
         std::vector<cv::Vec4i> hierarchy;
 
-        cv::findContours(temp, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+        cv::findContours(temp, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_SIMPLE);
         //used to find the biggest object
 
         if(hierarchy.size() > 0){

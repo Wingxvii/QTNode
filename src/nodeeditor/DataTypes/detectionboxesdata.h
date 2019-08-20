@@ -54,6 +54,8 @@ public:
 
 public:
     std::vector<std::vector<cv::Rect>> _boxes;
+    std::vector<std::vector<float>> _conf;
+    std::vector<std::vector<std::string>> _names;
     double scale;
 
     QString _text;

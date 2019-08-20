@@ -45,7 +45,7 @@
 
 namespace cv {
 namespace dnn {
-CV__DNN_EXPERIMENTAL_NS_BEGIN
+CV__DNN_INLINE_NS_BEGIN
 //! @addtogroup dnn
 //! @{
 
@@ -72,6 +72,15 @@ CV__DNN_EXPERIMENTAL_NS_BEGIN
 */
 
     class CV_EXPORTS BlankLayer : public Layer
+    {
+    public:
+        static Ptr<Layer> create(const LayerParams &params);
+    };
+
+    /**
+     * Constant layer produces the same data blob at an every forward pass.
+     */
+    class CV_EXPORTS ConstLayer : public Layer
     {
     public:
         static Ptr<Layer> create(const LayerParams &params);
@@ -201,7 +210,10 @@ CV__DNN_EXPERIMENTAL_NS_BEGIN
     class CV_EXPORTS BaseConvolutionLayer : public Layer
     {
     public:
-        Size kernel, stride, pad, dilation, adjustPad;
+        CV_DEPRECATED_EXTERNAL Size kernel, stride, pad, dilation, adjustPad;
+        std::vector<size_t> adjust_pads;
+        std::vector<size_t> kernel_size, strides, dilations;
+        std::vector<size_t> pads_begin, pads_end;
         String padMode;
         int numOutput;
     };
@@ -234,7 +246,10 @@ CV__DNN_EXPERIMENTAL_NS_BEGIN
     {
     public:
         int type;
-        Size kernel, stride, pad;
+        std::vector<size_t> kernel_size, strides;
+        std::vector<size_t> pads_begin, pads_end;
+        CV_DEPRECATED_EXTERNAL Size kernel, stride, pad;
+        CV_DEPRECATED_EXTERNAL int pad_l, pad_t, pad_r, pad_b;
         bool globalPooling;
         bool computeMaxIdx;
         String padMode;
@@ -477,10 +492,7 @@ CV__DNN_EXPERIMENTAL_NS_BEGIN
     class CV_EXPORTS CropLayer : public Layer
     {
     public:
-        int startAxis;
-        std::vector<int> offset;
-
-        static Ptr<CropLayer> create(const LayerParams &params);
+        static Ptr<Layer> create(const LayerParams &params);
     };
 
     class CV_EXPORTS EltwiseLayer : public Layer
@@ -489,7 +501,7 @@ CV__DNN_EXPERIMENTAL_NS_BEGIN
         static Ptr<EltwiseLayer> create(const LayerParams &params);
     };
 
-    class CV_EXPORTS BatchNormLayer : public Layer
+    class CV_EXPORTS BatchNormLayer : public ActivationLayer
     {
     public:
         bool hasWeights, hasBias;
@@ -576,7 +588,7 @@ CV__DNN_EXPERIMENTAL_NS_BEGIN
     {
     public:
         float pnorm, epsilon;
-        CV_DEPRECATED bool acrossSpatial;
+        CV_DEPRECATED_EXTERNAL bool acrossSpatial;
 
         static Ptr<NormalizeBBoxLayer> create(const LayerParams& params);
     };
@@ -593,7 +605,7 @@ CV__DNN_EXPERIMENTAL_NS_BEGIN
     };
 
     /**
-     * @brief Bilinear resize layer from https://github.com/cdmh/deeplab-public
+     * @brief Bilinear resize layer from https://github.com/cdmh/deeplab-public-ver2
      *
      * It differs from @ref ResizeLayer in output shape and resize scales computations.
      */
@@ -617,7 +629,7 @@ CV__DNN_EXPERIMENTAL_NS_BEGIN
 
 //! @}
 //! @}
-CV__DNN_EXPERIMENTAL_NS_END
+CV__DNN_INLINE_NS_END
 }
 }
 #endif
