@@ -693,3 +693,118 @@ void DetectionLinkOut::ShowContextMenu(const QPoint &pos)
     contextMenu.exec(window->mapToGlobal(pos));
 
 }
+
+//##########################     Emotion Data      ################################
+
+EmotionLinkOut::EmotionLinkOut()
+{
+    layout = new QGridLayout;
+    window = new QWidget;
+
+    //inits
+    statusLabel = new QLabel();
+    indexLabel = new QLabel("Select Data Index: ");
+    indexInput = new QLineEdit();
+    indexInput->setText("0");
+
+
+    //connect
+    connect(indexInput, SIGNAL(textChanged(QString)), this, SLOT(preCheck()));
+
+    layout->addWidget(indexLabel, 1,1);
+    layout->addWidget(indexInput, 1,2);
+    layout->addWidget(statusLabel,2,1);
+    window->setLayout(layout);
+
+    buildContextWindow();
+    preCheck();
+}
+
+
+unsigned int EmotionLinkOut::nPorts(QtNodes::PortType portType) const
+{
+    unsigned int result = 1;
+    switch(portType){
+    case PortType::In:
+        result = 0;
+        break;
+    case PortType::Out:
+        result = 1;
+        break;
+    default:
+        break;
+
+    }
+    return result;
+
+}
+
+QtNodes::NodeDataType EmotionLinkOut::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const
+{
+    return EmotionData().type();
+}
+
+std::shared_ptr<QtNodes::NodeData> EmotionLinkOut::outData(QtNodes::PortIndex port)
+{
+    return dataOut;
+}
+
+QJsonObject EmotionLinkOut::save() const
+{
+    QJsonObject dataJson;
+    dataJson["name"] = name();
+
+    dataJson["Index"] = index.toUtf8().constData();
+
+    return dataJson;
+
+}
+
+void EmotionLinkOut::restore(const QJsonObject &json)
+{
+    if(json.contains("Index")){
+        QString temp = json["Index"].toString();
+        indexInput->setText(temp);
+    }
+
+    preCheck();
+
+}
+
+void EmotionLinkOut::processData()
+{
+    dataOut = LinkManager::instance()->getEmotionData(index);
+}
+
+void EmotionLinkOut::preCheck()
+{
+    index = indexInput->text();
+
+    if(LinkManager::instance()->getEmotionData(index)){
+        statusLabel->setText("Data Active");
+    }else{
+        statusLabel->setText("Data Slot Empty");
+    }
+    if(this->active && LinkManager::instance()->getEmotionData(index)){
+        LOG_JOHN() << "Thing works";
+        processData();
+        emit dataUpdated(0);
+    }
+
+}
+
+void EmotionLinkOut::ShowContextMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"));
+
+    QAction activateAction("Activate", this);
+    QAction deactivateAction("Deactivate", this);
+
+    connect(&activateAction, SIGNAL(triggered()), this, SLOT(activate()));
+    connect(&deactivateAction, SIGNAL(triggered()), this, SLOT(deactivate()));
+    contextMenu.addAction(&activateAction);
+    contextMenu.addAction(&deactivateAction);
+
+    contextMenu.exec(window->mapToGlobal(pos));
+
+}

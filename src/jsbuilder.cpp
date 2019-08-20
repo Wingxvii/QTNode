@@ -72,6 +72,11 @@ void JSBuilder::saveStringData(const QString index)
 
 }
 
+void JSBuilder::saveEmotionData(const QString index)
+{
+    LinkManager::instance()->saveEmotionData(index);
+}
+
 void JSBuilder::deleteData(const QString index, const int indexType)
 {
     LinkManager::instance()->deleteData(index, indexType);
@@ -133,6 +138,11 @@ void JSBuilder::deleteBoolData(QString name)
 void JSBuilder::deleteDetectionData(QString name)
 {
     LinkManager::instance()->deleteDetectionData(name);
+}
+
+void JSBuilder::deleteEmotionData(QString name)
+{
+    LinkManager::instance()->deleteEmotionData(name);
 }
 void JSBuilder::cloneData(const QString index, const int indexType)
 {
@@ -197,6 +207,11 @@ void JSBuilder::cloneDetectionData(QString name)
     LinkManager::instance()->cloneDetectionData(name);
 }
 
+void JSBuilder::cloneEmotionData(QString name)
+{
+    LinkManager::instance()->cloneEmotionData(name);
+}
+
 void JSBuilder::displayData(const QString index, const int indexType)
 {
     LinkManager::instance()->displayData(index, indexType);
@@ -258,6 +273,11 @@ void JSBuilder::displayBoolData(QString name)
 void JSBuilder::displayDetectionData(QString name)
 {
     LinkManager::instance()->displayDetectionData(name);
+}
+
+void JSBuilder::displayEmotionData(QString name)
+{
+    LinkManager::instance()->displayEmotionData(name);
 }
 
 void JSBuilder::loadImage(QString name)

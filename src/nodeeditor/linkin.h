@@ -15,13 +15,6 @@
 #include <QComboBox>
 #include <QPushButton>
 
-#include "nodeeditor/DataTypes/calibdata.h"
-#include "nodeeditor/DataTypes/imagedata.h"
-#include "nodeeditor/DataTypes/pointdata.h"
-#include "nodeeditor/DataTypes/pointsdata.h"
-#include "nodeeditor/DataTypes/videographdata.h"
-#include "nodeeditor/DataTypes/detectionboxesdata.h"
-
 using QtNodes::PortType;
 using QtNodes::PortIndex;
 using QtNodes::NodeData;
@@ -398,6 +391,69 @@ public slots:
 private: //ports
 
     std::shared_ptr<DetectionBoxesData> dataIn;
+
+private: //locals
+    QString index = "";
+
+private: //UI
+
+    QGridLayout *layout;
+    QLabel *statusLabel;
+    QLabel *indexLabel;
+    QLineEdit* indexInput;
+    QPushButton* send;
+
+};
+
+class EmotionLinkIn : public NodeDataModel{
+Q_OBJECT
+
+public:
+    EmotionLinkIn();
+    virtual ~EmotionLinkIn() {}
+
+    QString caption()const override{
+        return QStringLiteral("Emotion Data Linker Input");
+    }
+
+    bool captionVisible(){
+        return true;
+    }
+    QString name()const override{
+        return QStringLiteral("Emotion Data Linker Input");
+    }
+
+public:
+    unsigned int nPorts(PortType portType) const override;
+    NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+    std::shared_ptr<NodeData> outData(PortIndex port) override{return NULL;}
+    void setInData(std::shared_ptr<NodeData>, int) override;
+
+    NodeValidationState validationState() const override;
+    QString validationMessage() const override;
+    bool resizable() const override {return false;}
+
+private:
+    NodeValidationState modelValidationState = NodeValidationState::Warning;
+    QString modelValidationError = QStringLiteral("Missing or incorrect inputs");
+
+    QJsonObject save() const override;
+    virtual void restore(QJsonObject const &) override;
+
+
+public slots:
+    void processData() override;
+    void preCheck() override;
+
+    void ShowContextMenu(const QPoint &pos) override;
+
+    void activate(){active = true;preCheck();window->setStyleSheet("");}
+    void deactivate(){active = false;window->setStyleSheet("background-color:rgb(200,200,200);");}
+
+
+private: //ports
+
+    std::shared_ptr<EmotionData> dataIn;
 
 private: //locals
     QString index = "";

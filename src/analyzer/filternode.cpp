@@ -110,6 +110,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<PointsLinkOut>("Input");
     final->registerModel<VideoLinkOut>("Input");
     final->registerModel<DetectionLinkOut>("Input");
+    final->registerModel<EmotionLinkIn>("Input");
 
     final->registerModel<VideoDisplay>("Output");
     final->registerModel<ImageDisplay>("Output");
@@ -120,6 +121,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<VideoLinkIn>("Output");
     final->registerModel<DetectionLinkIn>("Output");
     final->registerModel<PointDisplay>("Output");
+    final->registerModel<EmotionLinkOut>("Output");
 
     final->registerModel<GetCorners>("Calibration");
     final->registerModel<Calibrate>("Calibration");

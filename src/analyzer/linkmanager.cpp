@@ -9,6 +9,8 @@ LinkManager::LinkManager()
     pointList = std::map<QString, std::shared_ptr<PointData>>();
     pointsList = std::map<QString, std::shared_ptr<PointsData>>();
     videoGraphList = std::map<QString, std::shared_ptr<VideoGraphData>>();
+    emotionDataList = std::map<QString, std::shared_ptr<EmotionData>>();
+
     intList = std::map<QString, int>();
     floatList = std::map<QString, float>();
     stringList = std::map<QString, QString>();
@@ -85,6 +87,17 @@ void LinkManager::sendData(std::shared_ptr<VideoGraphData> data, QString name)
         videoGraphList[name] = data;
         emit updated(4,name);
     }
+}
+
+void LinkManager::sendData(std::shared_ptr<EmotionData> data, QString name)
+{
+    if(name.contains("PRIVATE")){
+        emotionDataListPrivate[name] = data;
+    }else if(name != ""){
+        emotionDataList[name] = data;
+        emit updated(10,name);
+    }
+
 }
 
 void LinkManager::sendData(int data, QString name)
@@ -205,6 +218,17 @@ std::shared_ptr<VideoGraphData> LinkManager::getVideoData(QString name)
     return videoGraphList[name];
 }
 
+std::shared_ptr<EmotionData> LinkManager::getEmotionData(QString name)
+{
+    if(name.contains("PRIVATE")){
+        return emotionDataListPrivate[name];
+    }
+    if(emotionDataList.find(name) == emotionDataList.end()){
+        return NULL;
+    }
+    return emotionDataList[name];
+}
+
 int LinkManager::getIntData(QString name)
 {
     if(name.contains("PRIVATE")){
@@ -306,6 +330,10 @@ void LinkManager::saveData(QString name, int type)
         //detection boxes
         LOG_JOHN() << "Feature does not exist";
         break;
+    case 10:
+        //emotion boxes
+        LOG_JOHN() << "Feature does not exist";
+        break;
 
     default:
         //no type
@@ -338,6 +366,11 @@ void LinkManager::saveVideoData(QString name)
     }else{
         LOG_JOHN() << "DATA NOT FOUND";
     }
+}
+
+void LinkManager::saveEmotionData(QString name)
+{
+    //in progress
 }
 
 void LinkManager::saveStringData(QString name)
@@ -398,6 +431,8 @@ void LinkManager::deleteData(QString name, int type)
     case 9://detection boxes
         deleteDetectionData(name);
         break;
+    case 10://emotions
+        deleteEmotionData(name);
     default:
         //no type
         LOG_JOHN() << "Type does not exist";
@@ -464,6 +499,17 @@ void LinkManager::deleteVideoData(QString name)
         LOG_JOHN() << "Data Not Found";
     }
 
+}
+
+void LinkManager::deleteEmotionData(QString name)
+{
+    if(emotionDataList[name]){
+        emotionDataList.erase(name);
+        LOG_JOHN() << "Deleted Emotion Data";
+        emit updated(10, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
 }
 
 void LinkManager::deleteIntData(QString name)
@@ -566,6 +612,11 @@ void LinkManager::cloneData(QString name, int type)
         //detection boxes
     cloneDetectionData(name);
         break;
+    case 10:
+        //emotion data
+    cloneEmotionData(name);
+        break;
+
     default:
         //no type
         LOG_JOHN() << "Type does not exist";
@@ -632,6 +683,19 @@ void LinkManager::cloneVideoData(QString name)
         QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
         sendData(videoGraphList[name],newName);
         LOG_JOHN() << "cloned Video Data";
+        emit updated(4, name);
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+
+}
+
+void LinkManager::cloneEmotionData(QString name)
+{
+    if(emotionDataList[name]){
+        QString newName = QInputDialog::getText(Q_NULLPTR, "Input Name Index", "Clone Name Index:");
+        sendData(emotionDataList[name],newName);
+        LOG_JOHN() << "cloned Emotion Data";
         emit updated(4, name);
     }else{
         LOG_JOHN() << "Data Not Found";
@@ -744,6 +808,10 @@ void LinkManager::displayData(QString name, int type)
         //detection boxes
         displayDetectionData(name);
         break;
+    case 10:
+        //emotion
+        displayEmotionData(name);
+        break;
     default:
         //no type
         LOG_JOHN() << "Type does not exist";
@@ -845,6 +913,17 @@ void LinkManager::displayVideoData(QString name)
 
 }
 
+void LinkManager::displayEmotionData(QString name)
+{
+    if(pointList[name]){
+        LOG_JOHN() << "display Point Data";
+        LOG_JOHN() << "Feature does not exist";
+
+    }else{
+        LOG_JOHN() << "Data Not Found";
+    }
+}
+
 void LinkManager::displayIntData(QString name)
 {
     if(intList[name]){
@@ -943,6 +1022,7 @@ void LinkManager::clearAllData()
     stringList.clear();
     boolList.clear();
     detectionBoxesList.clear();
+    emotionDataList.clear();
 }
 
 void LinkManager::privateClear()
@@ -957,6 +1037,7 @@ void LinkManager::privateClear()
     stringListPrivate.clear();
     boolListPrivate.clear();
     detectionBoxesListPrivate.clear();
+    emotionDataListPrivate.clear();
 }
 
 std::map<QString, int> LinkManager::getAllData(int x)
@@ -1030,6 +1111,12 @@ std::map<QString, int> LinkManager::getAllData(int x)
         newString.append(data.first);
         newString.append(":]");
         out.insert(std::pair<QString, int>(newString, 9));
+    }
+    for(auto const& data : emotionDataList){
+        QString newString = "Emotion Data at [:";
+        newString.append(data.first);
+        newString.append(":]");
+        out.insert(std::pair<QString, int>(newString, 10));
     }
 
     return out;
