@@ -20,6 +20,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 
+
 using QtNodes::PortType;
 using QtNodes::PortIndex;
 using QtNodes::NodeData;
@@ -75,6 +76,8 @@ public slots:
     void updateX();
     void updateY();
 
+    void boxChecked(int state);
+    void initLabels();
 private: //ports
     std::shared_ptr<EmotionData> dataIn;
 
@@ -84,6 +87,8 @@ private: //ui
     QLabel *TotalFrames;
 
     std::vector<QLabel*> *indexes = new std::vector<QLabel*>();
+    std::vector<QCheckBox*> *indexBoxes = new std::vector<QCheckBox*>();
+
     QWidget *indexesWidget;
     QGridLayout *indexesLayout;
 
@@ -96,7 +101,7 @@ private: //locals
     int totalFrames;
     bool point;
     std::map<std::string, QwtPlotCurve*> *curves;
-
+    std::vector<bool> visible;
 };
 
 #endif // GRAPHEMOTION_H

@@ -83,7 +83,9 @@ void GraphEmotion::setInData(std::shared_ptr<QtNodes::NodeData> data, int locati
         if(dataIn){
             modelValidationState = NodeValidationState::Valid;
             modelValidationError = QString();
-
+            if(dataIn->isReady && active){
+                initLabels();
+            }
             preCheck();
         }
        else{
@@ -112,30 +114,31 @@ void GraphEmotion::processData()
     //setup var data
     totalFrames = dataIn->_valuePercentages.size();
     LOG_JOHN() <<"Starting";
-    if(!indexes->empty()){
-        LOG_JOHN() << "Try to clear";
-        indexes->clear();
-    }
+    int maxValue = 0;
 
-    for(std::string label : dataIn->_labels){
+    for(int counter = 0; counter < indexBoxes->size(); counter++){
+        std::string label = dataIn->_labels[counter];
+
+        if(!visible[counter]){
+            continue;
+        }
         //curve setup
         QwtPlotCurve *curve = new QwtPlotCurve();
         curve->setRenderHint(QwtPlotItem::RenderAntialiased);
         curve->setBrush(Qt::BrushStyle::NoBrush);
         curve->setStyle(QwtPlotCurve::CurveStyle::Lines);
-        QColor color = (Qt::GlobalColor)(7 + curves->size());
+        QColor color = (Qt::GlobalColor)(7 + counter);
         color.setAlpha(200);
         curve->setPen(color);
 
-        int maxValue = 0;
 
         LOG_JOHN() <<"Set Up a Curve";
 
         //fill curve with data
         QVector<QPointF> samples;
-        for(int counter = 0; counter < dataIn->_valuePercentages.size(); counter++){
-            int num = dataIn->_valuePercentages[counter][curves->size()];
-            QPoint plot = QPoint(counter, num);
+        for(int counter2 = 0; counter2 < dataIn->_valuePercentages.size(); counter2++){
+            int num = dataIn->_valuePercentages[counter2][counter];
+            QPoint plot = QPoint(counter2, num);
             samples.push_front(plot);
             if(maxValue < num){maxValue = num;}
             LOG_JOHN() <<"Added Sample";
@@ -143,25 +146,6 @@ void GraphEmotion::processData()
         curve->setSamples(samples);
         curve->attach(displayPlot);
         curve->setVisible(true);
-
-        //setup ranges
-        displayPlot->setAxisScale(QwtPlot::Axis::yLeft, 0,maxValue);
-        displayPlot->setAxisScale(QwtPlot::Axis::xBottom, 0,totalFrames);
-
-        xRangeControl->setMaximum(totalFrames);
-        yRangeControl->setMaximum(maxValue);
-        xPositionControl->setMaximum(totalFrames);
-        yPositionControl->setMaximum(maxValue);
-
-        //build label
-        QLabel *index = new QLabel();
-
-        QPalette palette = index->palette();
-        palette.setColor(index->foregroundRole(), color);
-        index->setPalette(palette);
-        index->setText(QString::fromStdString(label));
-
-        indexes->push_back(index);
 
         //build pair
         std::pair<std::string, QwtPlotCurve*> labelData;
@@ -171,6 +155,15 @@ void GraphEmotion::processData()
         //send pair into vector
         curves->emplace(labelData);
     }
+
+    //setup ranges
+    displayPlot->setAxisScale(QwtPlot::Axis::yLeft, 0,maxValue);
+    displayPlot->setAxisScale(QwtPlot::Axis::xBottom, 0,totalFrames);
+
+    xRangeControl->setMaximum(totalFrames);
+    yRangeControl->setMaximum(maxValue);
+    xPositionControl->setMaximum(totalFrames);
+    yPositionControl->setMaximum(maxValue);
 
     LOG_JOHN() <<"Done";
 
@@ -192,8 +185,10 @@ void GraphEmotion::updateUI()
     //setup indexes
     indexesLayout = new QGridLayout;
 
-    for(QLabel* label : *indexes){
-        indexesLayout->addWidget(label);
+    for(int counter = 1; counter <= indexes->size(); counter++){
+        indexesLayout->addWidget(indexes->at(counter-1), counter, 1);
+        indexesLayout->addWidget(indexBoxes->at(counter-1), counter, 2);
+
     }
     indexesWidget->setLayout(indexesLayout);
 
@@ -232,5 +227,60 @@ void GraphEmotion::updateY()
     displayPlot->replot();
     LOG_JOHN() <<"Replotted Y";
 
+}
+
+void GraphEmotion::boxChecked(int state)
+{
+    for(int counter = 0; counter < indexBoxes->size(); counter++){
+        if(indexBoxes->at(counter)->isChecked()){
+            LOG_JOHN() << "Checked";
+            visible[counter] = true;
+        }else{
+            visible[counter]= false;
+        }
+    }
+    preCheck();
+}
+
+void GraphEmotion::initLabels()
+{
+    if(!indexes->empty()){
+        LOG_JOHN() << "Try to clear";
+        indexes->clear();
+    }
+    if(!indexBoxes->empty()){
+        LOG_JOHN() << "Try to clear";
+        indexBoxes->clear();
+    }
+    if(!visible.empty()){
+        LOG_JOHN() << "Try to clear";
+        visible.clear();
+    }
+
+
+    //for(std::string label : dataIn->_labels){
+    for(int counter = 0; counter < dataIn->_labels.size(); counter++){
+
+        QColor color = (Qt::GlobalColor)(7 + counter);
+        std::string label = dataIn->_labels[counter];
+
+        //build label
+        QLabel *index = new QLabel();
+        QCheckBox *button = new QCheckBox();
+
+        visible.push_back(true);
+        QPalette palette = index->palette();
+        palette.setColor(index->foregroundRole(), color);
+        index->setPalette(palette);
+        index->setText(QString::fromStdString(label));
+
+        button->setChecked(true);
+
+        connect(button, SIGNAL(stateChanged(int)), this, SLOT(boxChecked(int)));
+
+        indexBoxes->push_back(button);
+
+        indexes->push_back(index);
+    }
 }
 
