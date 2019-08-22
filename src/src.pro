@@ -198,7 +198,8 @@ SOURCES += main.cpp\
     nodeeditor/emotiondetection.cpp \
     nodeeditor/facecrop.cpp \
     nodeeditor/displayemotions.cpp \
-    nodeeditor/graphemotion.cpp
+    nodeeditor/graphemotion.cpp \
+    nodeeditor/emotionkeyframer.cpp
 
 
 
@@ -409,7 +410,8 @@ HEADERS  += mainwindow.h \
     nodeeditor/DataTypes/emotiondata.h \
     nodeeditor/facecrop.h \
     nodeeditor/displayemotions.h \
-    nodeeditor/graphemotion.h
+    nodeeditor/graphemotion.h \
+    nodeeditor/emotionkeyframer.h
 
 
 

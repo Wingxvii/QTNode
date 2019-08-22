@@ -65,6 +65,7 @@
 #include "nodeeditor/facecrop.h"
 #include "nodeeditor/displayemotions.h"
 #include "nodeeditor/graphemotion.h"
+#include "nodeeditor/emotionkeyframer.h"
 
 FilterNode::FilterNode(Events* events, QWidget* parent) :
     QWidget(parent)
@@ -137,6 +138,8 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<PerspectiveRectify>("Editing");
     final->registerModel<ColorThreshold>("Editing");
     final->registerModel<FaceCrop>("Editing");
+    final->registerModel<EmotionKeyframer>("Editing");
+
 
     final->registerModel<FrameIterator>("Type Conversion");
     final->registerModel<AutoFrameIterator>("Type Conversion");
