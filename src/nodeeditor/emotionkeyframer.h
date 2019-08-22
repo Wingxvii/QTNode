@@ -85,7 +85,6 @@ public slots:
 
     void onDelete();
     void onClear();
-    void onOpen();
 
 private:
     NodeValidationState modelValidationState = NodeValidationState::Warning;
@@ -111,7 +110,6 @@ private: //UI
 
     QPushButton *deleteButton;
     QPushButton *clearButton;
-    QPushButton *openButton;
 
     QRegExpValidator* intPos;
 

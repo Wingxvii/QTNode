@@ -19,7 +19,6 @@ EmotionKeyframer::EmotionKeyframer()
 
     deleteButton = new QPushButton("Delete");
     clearButton = new QPushButton("Clear");
-    openButton = new QPushButton("Open");
     progressBar = new QLabel("Inactive");
 
     dataOut = std::make_shared<EmotionData>();
@@ -28,7 +27,6 @@ EmotionKeyframer::EmotionKeyframer()
     connect(applyMethod, SIGNAL(clicked(bool)), this, SLOT(preCheck()));
     connect(deleteButton, SIGNAL(clicked(bool)), this, SLOT(onDelete()));
     connect(clearButton, SIGNAL(clicked(bool)), this, SLOT(onClear()));
-    connect(openButton, SIGNAL(clicked(bool)), this, SLOT(onOpen()));
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
 
     findMethodSelector->addItem("Pass frames over threshold");
@@ -48,8 +46,7 @@ EmotionKeyframer::EmotionKeyframer()
     layout->addWidget(saveData,5,1);
     layout->addWidget(deleteButton,5,2);
     layout->addWidget(clearButton,6,1);
-    layout->addWidget(openButton,6,2);
-    layout->addWidget(progressBar,7,1);
+    layout->addWidget(progressBar,6,2);
 
     window->setLayout(layout);
 
@@ -280,6 +277,7 @@ void EmotionKeyframer::multiThreadedProcess()
 
 void EmotionKeyframer::multiThreadedFinished()
 {
+
     progressBar->setText("Finished");
     dataOut->ready();
     emit dataUpdated(0);
@@ -292,15 +290,12 @@ void EmotionKeyframer::saveToFile()
 
 void EmotionKeyframer::onDelete()
 {
-
+    keyframes->currentRow()
 }
 
 void EmotionKeyframer::onClear()
 {
-
+    keyframes->clear();
+    dataOut = std::make_shared<EmotionData>();
 }
 
-void EmotionKeyframer::onOpen()
-{
-
-}
