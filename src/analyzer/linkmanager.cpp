@@ -370,7 +370,7 @@ void LinkManager::saveVideoData(QString name)
 
 void LinkManager::saveEmotionData(QString name)
 {
-    //in progress
+    LOG_JOHN() << "Feature does not exist";
 }
 
 void LinkManager::saveStringData(QString name)

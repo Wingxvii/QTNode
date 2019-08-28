@@ -175,7 +175,6 @@ void EmotionKeyframer::multiThreadedProcess()
     switch(findMethodSelector->currentIndex()){
     //method of Pass frames over threshold
         case 0:
-        LOG_JOHN() << "2";
         if(Threshold == -1){
             progressBar->setText("Error");
             break;
@@ -184,7 +183,6 @@ void EmotionKeyframer::multiThreadedProcess()
         for(int counter = 0; counter < dataIn->_valuePercentages.size(); counter++){
             std::map<int, double> tempValues = std::map<int, double>();
             //does with all data labels
-            LOG_JOHN() << "3";
             if(labelSelector->currentIndex() == 0){
                 for(std::pair<int, double> values : dataIn->_valuePercentages[counter]){
                     if(values.second > Threshold){
@@ -203,21 +201,18 @@ void EmotionKeyframer::multiThreadedProcess()
                 LOG_JOHN() << "CONTINUED";
                 continue;
             }
-            LOG_JOHN() << "4";
             frameNumbers.push_back(counter);
             tempValuePercentages.push_back(tempValues);
         }
         break;
         //method of Pass frames under threshold
     case 1:
-        LOG_JOHN() << "2b";
         if(Threshold == -1){
             progressBar->setText("Error");
             break;
         }
 
         for(int counter = 0; counter < dataIn->_valuePercentages.size(); counter++){
-            LOG_JOHN() << "3b";
 
             std::map<int, double> tempValues = std::map<int, double>();
             //does with all data labels
@@ -238,10 +233,8 @@ void EmotionKeyframer::multiThreadedProcess()
                     tempValues.emplace(tempPair);
                 }
             }
-            LOG_JOHN() << "4b";
 
             if(tempValues.empty()){
-                LOG_JOHN() << "CONTINUED";
                 continue;
             }
             frameNumbers.push_back(counter);
@@ -250,7 +243,6 @@ void EmotionKeyframer::multiThreadedProcess()
         break;
         //frames where label is found
     case 2:
-        LOG_JOHN() << "2c";
 
         int selectedLabel = labelSelector->currentIndex()-1;
         if(selectedLabel == -1){
@@ -280,11 +272,9 @@ void EmotionKeyframer::multiThreadedProcess()
                 frameNumbers.push_back(counter);
             }
         }
-        LOG_JOHN() << "4c";
         break;
     }
     dataOut->_valuePercentages.insert(dataOut->_valuePercentages.end(), tempValuePercentages.begin(), tempValuePercentages.end());
-    LOG_JOHN() << "5";
 
 
 
@@ -292,7 +282,6 @@ void EmotionKeyframer::multiThreadedProcess()
 
 void EmotionKeyframer::multiThreadedFinished()
 {
-    LOG_JOHN() << "finished1";
 
    keyframes->clear();
     //parse into graph
@@ -300,15 +289,11 @@ void EmotionKeyframer::multiThreadedFinished()
     for(int counter = 0; counter <frameNumbers.size(); counter++ ){
         for(std::pair<int, double> tempPair: dataOut->_valuePercentages[counter]){
             QString keyframeInfo = "Frame Number: " + QString::number(frameNumbers[counter]);
-            LOG_JOHN() << "step1" << QString::number(tempPair.first);
             keyframeInfo = keyframeInfo + ", Emotion: " + QString::fromStdString(dataOut->_labels[tempPair.first]);
-            LOG_JOHN() << "step2";
             keyframeInfo = keyframeInfo + ", Value: " + QString::number(tempPair.second);
-            LOG_JOHN() << "step3";
             keyframes->addItem(keyframeInfo);
         }
     }
-    LOG_JOHN() << "finished2";
     }
     progressBar->setText("Finished");
     dataOut->ready();
@@ -317,6 +302,25 @@ void EmotionKeyframer::multiThreadedFinished()
 
 void EmotionKeyframer::saveToFile()
 {
+    if(!dataOut->_valuePercentages.empty()){
+    QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Text"), QString(), tr("Text (*.txt)"));
+    QFile out(fileName);
+
+    out.open(QIODevice::ReadWrite | QIODevice::Text);
+    QTextStream stream(&out);
+    for(int counter = 0; counter <frameNumbers.size(); counter++ ){
+        for(std::pair<int, double> tempPair: dataOut->_valuePercentages[counter]){
+            QString keyframeInfo = "Frame Number: " + QString::number(frameNumbers[counter]);
+            keyframeInfo = keyframeInfo + ", Emotion: " + QString::fromStdString(dataOut->_labels[tempPair.first]);
+            keyframeInfo = keyframeInfo + ", Value: " + QString::number(tempPair.second);
+            stream << keyframeInfo<< endl;
+        }
+    }
+
+    out.close();
+    }else{
+        LOG_JOHN() << "DATA NOT FOUND";
+    }
 
 }
 
