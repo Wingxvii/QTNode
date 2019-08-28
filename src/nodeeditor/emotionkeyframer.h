@@ -116,6 +116,7 @@ private: //UI
 private: //locals
     int Threshold = -1;
 
+    std::vector<int> frameNumbers;
 
 };
 

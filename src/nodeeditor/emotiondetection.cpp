@@ -155,7 +155,7 @@ void EmotionDetection::getModel()
     fishface = cv::face::FisherFaceRecognizer::load<cv::face::FisherFaceRecognizer>(filename.toStdString());
 
     modelSelection->setText("Model : Found");
-
+    preCheck();
 }
 
 void EmotionDetection::selectClasses()
