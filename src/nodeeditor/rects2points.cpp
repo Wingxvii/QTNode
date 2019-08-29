@@ -133,7 +133,8 @@ void Rects2Points::multiThreadedProcess()
             tempPoint.x = boxesIn->_boxes[x][y].x;
             tempPoint.y = boxesIn->_boxes[x][y].y;
             tempFrame.push_back(tempPoint);
-            tempNames[x].push_back(boxesIn->_names[x][y]);
+            LOG_JOHN() << QString::fromStdString(boxesIn->_names[x][y]);
+            tempName.push_back(std::string(boxesIn->_names[x][y]));
         }
         temp.push_back(tempFrame);
         tempNames.push_back(tempName);

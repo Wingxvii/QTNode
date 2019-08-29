@@ -138,7 +138,6 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
     final->registerModel<PerspectiveRectify>("Editing");
     final->registerModel<ColorThreshold>("Editing");
     final->registerModel<FaceCrop>("Editing");
-    final->registerModel<EmotionKeyframer>("Editing");
 
 
     final->registerModel<FrameIterator>("Type Conversion");
@@ -162,6 +161,7 @@ FilterNode::FilterNode(Events* events, QWidget* parent) :
 
     final->registerModel<TrackingList>("Classifer");
     final->registerModel<DeepImageClassification>("Classifer");
+    final->registerModel<EmotionKeyframer>("Classifer");
 
     final->registerModel<DebugGetCorners>("Debug");
     final->registerModel<TrainEmotionModel>("Debug");
