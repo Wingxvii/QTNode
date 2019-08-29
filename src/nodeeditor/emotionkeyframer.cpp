@@ -181,28 +181,24 @@ void EmotionKeyframer::multiThreadedProcess()
         }
 
         for(int counter = 0; counter < dataIn->_valuePercentages.size(); counter++){
-            std::map<int, double> tempValues = std::map<int, double>();
+            std::map<int, double> tempValues = dataIn->_valuePercentages[counter];
+
             //does with all data labels
             if(labelSelector->currentIndex() == 0){
-                for(std::pair<int, double> values : dataIn->_valuePercentages[counter]){
+                for(std::pair<int, double> values : tempValues){
                     if(values.second > Threshold){
-                        tempValues.emplace(values);
+                        tempValuePercentages.push_back(tempValues);
+                        dataOut->frameNumbers.push_back(counter);
+                        break;
                     }
                 }
             }else{  //does with sepific data label
                 if(dataIn->_valuePercentages[counter][labelSelector->currentIndex()-1] > Threshold){
-                    std::pair<int, double> tempPair = std::pair<int, double>();
-                    tempPair.first = labelSelector->currentIndex()-1;
-                    tempPair.second = (dataIn->_valuePercentages[counter][labelSelector->currentIndex()-1]);
-                    tempValues.emplace(tempPair);
+                    tempValuePercentages.push_back(tempValues);
+                    dataOut->frameNumbers.push_back(counter);
                 }
             }
-            if(tempValues.empty()){
-                LOG_JOHN() << "CONTINUED";
-                continue;
-            }
-            frameNumbers.push_back(counter);
-            tempValuePercentages.push_back(tempValues);
+
         }
         break;
         //method of Pass frames under threshold
@@ -213,32 +209,24 @@ void EmotionKeyframer::multiThreadedProcess()
         }
 
         for(int counter = 0; counter < dataIn->_valuePercentages.size(); counter++){
+            std::map<int, double> tempValues = dataIn->_valuePercentages[counter];
 
-            std::map<int, double> tempValues = std::map<int, double>();
             //does with all data labels
             if(labelSelector->currentIndex() == 0){
-                for(std::pair<int, double> values : dataIn->_valuePercentages[counter]){
+                for(std::pair<int, double> values : tempValues){
                     if(values.second < Threshold){
-                        tempValues.emplace(values);
+                        tempValuePercentages.push_back(tempValues);
+                        dataOut->frameNumbers.push_back(counter);
+                        break;
                     }
                 }
             }else{  //does with sepific data label
                 if(dataIn->_valuePercentages[counter][labelSelector->currentIndex()-1] < Threshold){
-                    std::pair<int, double> tempPair = std::pair<int, double>();
-                    if(labelSelector->currentIndex()-1 < 0){
-                        LOG_JOHN() << "ERROR HAS OCCOURED";
-                    }
-                    tempPair.first = labelSelector->currentIndex()-1;
-                    tempPair.second = (dataIn->_valuePercentages[counter][labelSelector->currentIndex()-1]);
-                    tempValues.emplace(tempPair);
+                    tempValuePercentages.push_back(tempValues);
+                    dataOut->frameNumbers.push_back(counter);
                 }
             }
 
-            if(tempValues.empty()){
-                continue;
-            }
-            frameNumbers.push_back(counter);
-            tempValuePercentages.push_back(tempValues);
         }
         break;
         //frames where label is found
@@ -249,11 +237,10 @@ void EmotionKeyframer::multiThreadedProcess()
             progressBar->setText("Error");
             break;
         }
-        for(int counter = 0; counter < dataIn->_valuePercentages.size(); counter++){
-            std::map<int, double> tempValues = std::map<int, double>();
 
-            LOG_JOHN() << "3c";
-            std::map<int, double> values = dataIn->_valuePercentages[counter];
+        for(int counter = 0; counter < dataIn->_valuePercentages.size(); counter++){
+            std::map<int, double> tempValues = dataIn->_valuePercentages[counter];
+
             double labelValue = dataIn->_valuePercentages[counter].at(selectedLabel);
             bool smallest = true;
 
@@ -263,20 +250,13 @@ void EmotionKeyframer::multiThreadedProcess()
                 }
             }
             if(smallest){
-                std::pair<int, double> tempPair = std::pair<int, double>();
-                tempPair.first = selectedLabel;
-                tempPair.second = values.at(selectedLabel);
-
-                tempValues.emplace(tempPair);
                 tempValuePercentages.push_back(tempValues);
-                frameNumbers.push_back(counter);
+                dataOut->frameNumbers.push_back(counter);
             }
         }
         break;
     }
     dataOut->_valuePercentages.insert(dataOut->_valuePercentages.end(), tempValuePercentages.begin(), tempValuePercentages.end());
-
-
 
 }
 
@@ -286,13 +266,12 @@ void EmotionKeyframer::multiThreadedFinished()
    keyframes->clear();
     //parse into graph
    if(!dataOut->_valuePercentages.empty()){
-    for(int counter = 0; counter <frameNumbers.size(); counter++ ){
-        for(std::pair<int, double> tempPair: dataOut->_valuePercentages[counter]){
-            QString keyframeInfo = "Frame Number: " + QString::number(frameNumbers[counter]);
-            keyframeInfo = keyframeInfo + ", Emotion: " + QString::fromStdString(dataOut->_labels[tempPair.first]);
-            keyframeInfo = keyframeInfo + ", Value: " + QString::number(tempPair.second);
-            keyframes->addItem(keyframeInfo);
+    for(int counter = 0; counter <dataOut->_valuePercentages.size(); counter++ ){
+        QString keyframeInfo = "Frame Number: " + QString::number(dataOut->frameNumbers[counter]) + ", ";
+        for(std::pair<int, float> pairing : dataOut->_valuePercentages[counter]){
+            keyframeInfo = keyframeInfo + QString::number(pairing.first) + ": "  + QString::number(pairing.second) + "; ";
         }
+        keyframes->addItem(keyframeInfo);
     }
     }
     progressBar->setText("Finished");
@@ -303,22 +282,22 @@ void EmotionKeyframer::multiThreadedFinished()
 void EmotionKeyframer::saveToFile()
 {
     if(!dataOut->_valuePercentages.empty()){
-    QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Text"), QString(), tr("Text (*.txt)"));
-    QFile out(fileName);
+        QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Text"), QString(), tr("Text (*.txt)"));
+        QFile out(fileName);
 
-    out.open(QIODevice::ReadWrite | QIODevice::Text);
-    QTextStream stream(&out);
-    for(int counter = 0; counter <frameNumbers.size(); counter++ ){
-        for(std::pair<int, double> tempPair: dataOut->_valuePercentages[counter]){
-            QString keyframeInfo = "Frame Number: " + QString::number(frameNumbers[counter]);
-            keyframeInfo = keyframeInfo + ", Emotion: " + QString::fromStdString(dataOut->_labels[tempPair.first]);
-            keyframeInfo = keyframeInfo + ", Value: " + QString::number(tempPair.second);
+        out.open(QIODevice::ReadWrite | QIODevice::Text);
+        QTextStream stream(&out);
+
+        for(int counter = 0; counter <dataOut->_valuePercentages.size(); counter++ ){
+            QString keyframeInfo = "Frame Number: " + QString::number(dataOut->frameNumbers[counter]) + ", ";
+            for(std::pair<int, float> pairing : dataOut->_valuePercentages[counter]){
+                keyframeInfo = keyframeInfo + QString::number(pairing.first) + ": "  + QString::number(pairing.second) + "; ";
+            }
             stream << keyframeInfo<< endl;
         }
-    }
 
-    out.close();
-    }else{
+        out.close();
+        }else{
         LOG_JOHN() << "DATA NOT FOUND";
     }
 
@@ -328,7 +307,7 @@ void EmotionKeyframer::onDelete()
 {
     dataOut->_valuePercentages.erase(dataOut->_valuePercentages.begin() + keyframes->currentRow());
 
-    frameNumbers.erase(frameNumbers.begin() + keyframes->currentRow());
+    dataOut->frameNumbers.erase(dataOut->frameNumbers.begin() + keyframes->currentRow());
 
     multiThreadedFinished();
 
@@ -338,7 +317,7 @@ void EmotionKeyframer::onClear()
 {
     dataOut->_valuePercentages.clear();
 
-    frameNumbers.clear();
+    dataOut->frameNumbers.clear();
 
     multiThreadedFinished();
 

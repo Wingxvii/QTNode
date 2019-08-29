@@ -56,6 +56,7 @@ public:
 
     std::vector<std::string> _labels;
     std::vector<std::map<int, double>> _valuePercentages;
+    std::vector<int> frameNumbers;
 
 };
 

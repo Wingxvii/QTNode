@@ -370,7 +370,29 @@ void LinkManager::saveVideoData(QString name)
 
 void LinkManager::saveEmotionData(QString name)
 {
-    LOG_JOHN() << "Feature does not exist";
+    if(emotionDataList[name]){
+        if(!emotionDataList[name]->_valuePercentages.empty()){
+            QString fileName = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save Text"), QString(), tr("Text (*.txt)"));
+            QFile out(fileName);
+
+            out.open(QIODevice::ReadWrite | QIODevice::Text);
+            QTextStream stream(&out);
+
+            for(int counter = 0; counter <emotionDataList[name]->_valuePercentages.size(); counter++ ){
+                QString keyframeInfo = "Frame Number: " + QString::number(emotionDataList[name]->frameNumbers[counter]) + ", ";
+                for(std::pair<int, float> pairing : emotionDataList[name]->_valuePercentages[counter]){
+                    keyframeInfo = keyframeInfo + QString::number(pairing.first) + ": "  + QString::number(pairing.second) + "; ";
+                }
+                stream << keyframeInfo<< endl;
+            }
+
+            out.close();
+            }else{
+            LOG_JOHN() << "DATA NOT FOUND";
+        }
+    }else{
+        LOG_JOHN() << "DATA NOT FOUND";
+    }
 }
 
 void LinkManager::saveStringData(QString name)

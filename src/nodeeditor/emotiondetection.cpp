@@ -125,8 +125,9 @@ void EmotionDetection::multiThreadedProcess()
     int predictedLabel = -1;
     double confidence = 0.0;
 
+    int counter = 0;
     for(cv::Mat frame:  videoIn->_video){
-
+        counter++;
         if(frame.empty()){      //send in -1 for unfound faces
             std::map<int, double> temp;
             dataOut->_valuePercentages.push_back(temp);
@@ -136,7 +137,7 @@ void EmotionDetection::multiThreadedProcess()
 
         valuePercentages = fishface->prediction(frame, predictedLabel, confidence);
         dataOut->_valuePercentages.push_back(valuePercentages);
-
+        dataOut->frameNumbers.push_back(counter);
     }
 
 }
