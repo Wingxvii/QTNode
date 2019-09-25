@@ -41,12 +41,14 @@ using QtNodes::NodeValidationState;
 
 
 enum emotions {
-    Neutral,
-    Anger,
-    Disgust,
-    Happy,
-    Surprise,
-
+    None = 0,
+    Surprise = 1,
+    Fear = 2,
+    Disgust = 3,
+    Happiness = 4,
+    Sadness = 5,
+    Anger = 6,
+    Neutral = 7,
 };
 
 class TrainEmotionModel : public NodeDataModel
