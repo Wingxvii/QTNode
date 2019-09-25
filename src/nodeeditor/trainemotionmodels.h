@@ -99,7 +99,6 @@ public: //multithread
 public slots:
     void multiThreadedFinished();
 
-    void testModel();
 
 private: //UI
     QVBoxLayout *layout;
@@ -108,7 +107,6 @@ private: //UI
 
 public:
     Ptr<face::FisherFaceRecognizer> fishface;
-    pair<vector<string>, vector<string>> getFiles(emotions emotion);
     map<int, double> valuePercentages;
     int rateThreshold = 75;
     int coun = 0;
