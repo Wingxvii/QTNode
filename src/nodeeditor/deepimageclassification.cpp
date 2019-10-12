@@ -267,7 +267,7 @@ void DeepImageClassification::multiThreadedProcess()
         dataOut->_boxes.push_back(temp);
         dataOut->_conf.push_back(tempConf);
         dataOut->_names.push_back(tempNames);
-        LOG_JOHN() << "Frame Done";
+        LOG_JOHN() << "Frame Done: " + dataOut->_boxes.size();
 
     }
 }

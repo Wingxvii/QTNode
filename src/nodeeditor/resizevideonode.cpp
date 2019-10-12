@@ -58,7 +58,7 @@ ResizeVideoNode::ResizeVideoNode()
     layout->addWidget(resizeScaleY,4,2);
     layout->addWidget(angleLabel,2,3);
     layout->addWidget(angle,2,4);
-    layout->addWidget(progressBar,4,1);
+    layout->addWidget(progressBar,5,1);
 
     window->setLayout(layout);
     buildContextWindow();
