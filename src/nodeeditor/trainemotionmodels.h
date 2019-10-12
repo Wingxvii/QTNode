@@ -98,7 +98,7 @@ public: //multithread
     QLabel *progressBar;
 public slots:
     void multiThreadedFinished();
-
+    //void testModel();
 
 private: //UI
     QVBoxLayout *layout;
@@ -107,9 +107,17 @@ private: //UI
 
 public:
     Ptr<face::FisherFaceRecognizer> fishface;
+    Ptr<face::EigenFaceRecognizer> eigenface;
+    Ptr<face::LBPHFaceRecognizer> lbphface;
+
     map<int, double> valuePercentages;
     int rateThreshold = 75;
     int coun = 0;
+
+    int iterator = 0;
+    vector<Mat> trainingData, testingData;
+    vector<int> trainingLabels, testingLabels;
+
 };
 
 #endif // TRAINMOTIONMODELS_H

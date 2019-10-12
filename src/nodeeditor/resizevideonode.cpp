@@ -9,8 +9,11 @@ ResizeVideoNode::ResizeVideoNode()
     interpolationMethod = new QComboBox();
     interpolationMethodLabel = new QLabel("Interpolation Method: ");
     progressBar = new QLabel("Inactive");
-    resizeLabel = new QLabel("Resize Scale: ");
-    resizeScale = new QLineEdit();
+    resizeLabelX = new QLabel("Resize Scale X: ");
+    resizeLabelY = new QLabel("Resize Scale Y: ");
+
+    resizeScaleX = new QLineEdit();
+    resizeScaleY = new QLineEdit();
 
     resizeCheckLabel = new QLabel("Resize");
     resize = new QCheckBox();
@@ -32,10 +35,12 @@ ResizeVideoNode::ResizeVideoNode()
 
     doublePos = new QDoubleValidator();
 
-    resizeScale->setValidator(doublePos);
+    resizeScaleX->setValidator(doublePos);
+    resizeScaleY->setValidator(doublePos);
 
     connect(interpolationMethod, SIGNAL(activated(int)), this, SLOT(preCheck()));
-    connect(resizeScale, SIGNAL(editingFinished()), this, SLOT(preCheck()));
+    connect(resizeScaleX, SIGNAL(editingFinished()), this, SLOT(preCheck()));
+    connect(resizeScaleY, SIGNAL(editingFinished()), this, SLOT(preCheck()));
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
     connect(resize, SIGNAL(stateChanged(int)), this , SLOT(preCheck()));
     connect(rotate, SIGNAL(stateChanged(int)), this , SLOT(preCheck()));
@@ -47,8 +52,10 @@ ResizeVideoNode::ResizeVideoNode()
     layout->addWidget(rotate,1,4);
     layout->addWidget(interpolationMethodLabel,2,1);
     layout->addWidget(interpolationMethod,2,2);
-    layout->addWidget(resizeLabel,3,1);
-    layout->addWidget(resizeScale,3,2);
+    layout->addWidget(resizeLabelX,3,1);
+    layout->addWidget(resizeLabelY,4,1);
+    layout->addWidget(resizeScaleX,3,2);
+    layout->addWidget(resizeScaleY,4,2);
     layout->addWidget(angleLabel,2,3);
     layout->addWidget(angle,2,4);
     layout->addWidget(progressBar,4,1);
@@ -123,7 +130,8 @@ QJsonObject ResizeVideoNode::save() const
     dataJson["name"] = name();
     dataJson["isReady"] = isReady;
     dataJson["interpIndex"] = interpIndex;
-    dataJson["ResizeScale"] = ResizeScale;
+    dataJson["ResizeScaleX"] = ResizeScaleX;
+    dataJson["ResizeScaleY"] = ResizeScaleY;
     dataJson["resizeCheck"] = resize->isChecked();
     dataJson["rotateCheck"] = rotate->isChecked();
     dataJson["Angle"] = Angle;
@@ -139,8 +147,11 @@ void ResizeVideoNode::restore(const QJsonObject & json)
         interpolationMethod->setCurrentIndex(json["interpIndex"].toInt());
         interpIndex = json["interpIndex"].toInt();
     }
-    if(json.contains("ResizeScale")){
-        resizeScale->setText(QString::number(json["ResizeScale"].toDouble()));
+    if(json.contains("ResizeScaleX")){
+        resizeScaleX->setText(QString::number(json["ResizeScaleX"].toDouble()));
+    }
+    if(json.contains("ResizeScaleY")){
+        resizeScaleY->setText(QString::number(json["ResizeScaleY"].toDouble()));
     }
     if(json.contains("resizeCheck")){
         resize->setChecked(json["resizeCheck"].toBool());
@@ -174,15 +185,18 @@ void ResizeVideoNode::preCheck(){
     if(!angle->text().isEmpty()){
         Angle = angle->text().toDouble();
     }
-    if(!resizeScale->text().isEmpty()){
-        ResizeScale = resizeScale->text().toDouble();
+    if(!resizeScaleX->text().isEmpty()){
+        ResizeScaleX = resizeScaleX->text().toDouble();
+    }
+    if(!resizeScaleY->text().isEmpty()){
+        ResizeScaleY = resizeScaleY->text().toDouble();
     }
     if(interpolationMethod->currentIndex() != -1){
         interpIndex = interpolationMethod->currentIndex();
     }
 
     //use this to check if ports are ready
-    if(ResizeScale != -1.0 && interpIndex != -1 && Resize){
+    if(ResizeScaleX != -1.0 &&ResizeScaleY != -1.0 &&  interpIndex != -1 && Resize){
         isReady = true;
     }else if(Angle != -1 && Rotate){
         isReady = true;
@@ -220,8 +234,8 @@ void ResizeVideoNode::multiThreadedProcess()
     std::vector<cv::Mat> temp2;
 
     if(Resize){
-        double sizex = videoIn->_video[1].cols * ResizeScale;
-        double sizey = videoIn->_video[1].rows * ResizeScale;
+        double sizex = videoIn->_video[1].cols * ResizeScaleX;
+        double sizey = videoIn->_video[1].rows * ResizeScaleY;
 
         //iterate
         for(cv::Mat tempFrame : videoIn->_video){
@@ -233,6 +247,7 @@ void ResizeVideoNode::multiThreadedProcess()
     }else{
         temp = videoIn->_video;
     }
+
     if(Rotate){
         for(cv::Mat tempFrame : temp){
             cv::Point2f center((tempFrame.cols-1)/2.0, (tempFrame.rows-1)/2.0);

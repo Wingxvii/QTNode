@@ -84,7 +84,8 @@ private: //ports
 
 private: //locals
     bool isReady;
-    double ResizeScale = -1;
+    double ResizeScaleX = -1;
+    double ResizeScaleY = -1;
     int interpIndex = -1;
     double Angle = -1;
     bool Rotate;
@@ -101,8 +102,11 @@ private: //UI
     QLabel *interpolationMethodLabel;
     QComboBox *interpolationMethod;
 
-    QLabel *resizeLabel;
-    QLineEdit *resizeScale;
+    QLabel *resizeLabelX;
+    QLineEdit *resizeScaleX;
+    QLabel *resizeLabelY;
+    QLineEdit *resizeScaleY;
+
     QLabel* angleLabel;
     QLineEdit* angle;
 

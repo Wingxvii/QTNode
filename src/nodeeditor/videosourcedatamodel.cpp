@@ -99,6 +99,8 @@ void VideoSourceDataModel::multiThreadedProcess(cv::VideoCapture capture)
 
     while (!temp.empty())
     {
+        LOG_JOHN() << "id: " + QString::number(start);
+
         frames.push_back(temp.clone());
         capture >> temp;
         start++;
