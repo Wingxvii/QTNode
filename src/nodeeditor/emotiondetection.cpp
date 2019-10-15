@@ -133,7 +133,7 @@ void EmotionDetection::multiThreadedProcess()
             dataOut->_valuePercentages.push_back(temp);
             continue;
         }
-        cv::resize(frame, frame, cv::Size(350,350));
+        cv::resize(frame, frame, cv::Size(100,100));
 
         valuePercentages = fishface->prediction(frame, predictedLabel, confidence);
         dataOut->_valuePercentages.push_back(valuePercentages);
