@@ -30,10 +30,12 @@ PerspectiveRectify::PerspectiveRectify()
     corner4X = new QLineEdit();
     corner4Y = new QLineEdit();
 
-    progressBar = new QLabel("Inactive");
+    progressText = new QLabel("Inactive");
+    progressBar = new QProgressBar();
 
     //init out port
     videoOut = std::make_shared<VideoGraphData>();
+    transformData = std::make_shared<ImageData>();
 
     //input regulation unsigned int
     QRegExpValidator* intPos = new QRegExpValidator(QRegExp("\\d*"), this);
@@ -57,6 +59,7 @@ PerspectiveRectify::PerspectiveRectify()
     connect(corner4X , SIGNAL(editingFinished()), this, SLOT(preCheck()));
     connect(corner4Y , SIGNAL(editingFinished()), this, SLOT(preCheck()));
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
+    connect(&functWatcher, SIGNAL(progressValueChanged(int)), this, SLOT(multiThreadedUpdate()));
 
     //build layout
     layout->addWidget(coords1 ,1,1);
@@ -77,6 +80,7 @@ PerspectiveRectify::PerspectiveRectify()
     layout->addWidget(corner4Y ,4,4);
 
     layout->addWidget(progressBar,5,1,1,4);
+    layout->addWidget(progressText,6,1,1,4);
     window->setLayout(layout);
 
     buildContextWindow();
@@ -193,14 +197,58 @@ void PerspectiveRectify::restore(const QJsonObject & json)
     preCheck();
 }
 
+cv::Mat multiThreadedPerspective(const cv::Mat &in){
+    cv::Mat output;
+
+    cv::Mat transform = LinkManager::instance()->getImageData("PRIVATEtransform")->_image;
+    cv::warpPerspective(in,output,transform,in.size());
+
+    return output;
+}
+
+
 void PerspectiveRectify::processData()
 {
-    //setup progress bar parameters
-    progressBar->setText("Processing...");
+    progressText->setText("Processing...");
+    videoOut->data().clear();
 
-    funct = QtConcurrent::run(this, &PerspectiveRectify::multiThreadedProcess);
+    float srcQ[4][2], dstQ[4][2];
+
+    srcQ[0][0] = Corner1x;
+    srcQ[0][1] = Corner1y;
+    srcQ[1][0] = Corner2x;
+    srcQ[1][1] = Corner2y;
+    srcQ[2][0] = Corner3x;
+    srcQ[2][1] = Corner3y;
+    srcQ[3][0] = Corner4x;
+    srcQ[3][1] = Corner4y;
+
+    dstQ[0][0] = 0;
+    dstQ[0][1] = 0;
+    dstQ[1][0] = videoIn->_video[1].cols - 1;
+    dstQ[1][1] = 0;
+    dstQ[2][0] = videoIn->_video[1].cols - 1;
+    dstQ[2][1] = videoIn->_video[1].rows - 1;
+    dstQ[3][0] = 0;
+    dstQ[3][1] = videoIn->_video[1].rows - 1;
+
+    cv::Mat src = cv::Mat(4,2,CV_32FC1, srcQ);
+    cv::Mat dst = cv::Mat(4,2,CV_32FC1, dstQ);
+
+    transformData->_image = cv::getPerspectiveTransform(src,dst);
+
+    LinkManager::instance()->sendData(transformData, "PRIVATEtransform");
+
+    //setup progress bar parameters
+
+    QList<cv::Mat> images = QList<cv::Mat>::fromVector(QVector<cv::Mat>::fromStdVector(videoIn->_video));
+
+    funct = QtConcurrent::mapped(images, multiThreadedPerspective);
+
     functWatcher.setFuture(funct);
 
+    progressBar->setMaximum(functWatcher.progressMaximum());
+    progressBar->setValue(0);
 
 }
 
@@ -297,50 +345,38 @@ void PerspectiveRectify::ShowContextMenu(const QPoint &pos)
     contextMenu.exec(window->mapToGlobal(pos));
 }
 
-void PerspectiveRectify::multiThreadedProcess()
+void PerspectiveRectify::multiThreadedUpdate()
 {
-    std::vector<cv::Mat> temp;
+    progressText->setText(QString::number(functWatcher.progressValue()) + " Of " + QString::number(functWatcher.progressMaximum()) + " Processing...");
+    progressBar->setValue(functWatcher.progressValue());
 
-    float srcQ[4][2], dstQ[4][2];
-
-    srcQ[0][0] = Corner1x;
-    srcQ[0][1] = Corner1y;
-    srcQ[1][0] = Corner2x;
-    srcQ[1][1] = Corner2y;
-    srcQ[2][0] = Corner3x;
-    srcQ[2][1] = Corner3y;
-    srcQ[3][0] = Corner4x;
-    srcQ[3][1] = Corner4y;
-
-    dstQ[0][0] = 0;
-    dstQ[0][1] = 0;
-    dstQ[1][0] = videoIn->_video[1].cols - 1;
-    dstQ[1][1] = 0;
-    dstQ[2][0] = videoIn->_video[1].cols - 1;
-    dstQ[2][1] = videoIn->_video[1].rows - 1;
-    dstQ[3][0] = 0;
-    dstQ[3][1] = videoIn->_video[1].rows - 1;
-
-    cv::Mat src = cv::Mat(4,2,CV_32FC1, srcQ);
-    cv::Mat dst = cv::Mat(4,2,CV_32FC1, dstQ);
-
-    cv::Mat transform = cv::getPerspectiveTransform(src,dst);
-
-    //src.inv();
-
-    //iterate
-    for(cv::Mat tempFrame : videoIn->_video){
-        cv::Mat result;
-        cv::warpPerspective(tempFrame,result,transform,tempFrame.size());
-
-        temp.push_back(result);
-    }
-    videoOut->_video = temp;
 }
 
 void PerspectiveRectify::multiThreadedFinished()
 {
-    progressBar->setText("Finished");
+    QFutureIterator<cv::Mat> i(funct);
+    std::vector<cv::Mat> imageBuffer;
+
+    while(i.hasNext()){
+        imageBuffer.push_back(i.next());
+
+        //makes sure there are only good in our list
+        if(imageBuffer.back().empty()){
+            imageBuffer.pop_back();
+        }
+    }
+
+    videoOut->_video = imageBuffer;
+
+    //make sure it's filled
+    if(imageBuffer.size() >= 1){
+        videoOut->ready();
+    }
+
+
+    progressText->setText("Finished");
+    progressBar->setValue(functWatcher.progressMaximum());
     videoOut->ready();
     emit dataUpdated(0);
 }
+

@@ -8,20 +8,13 @@ ResizeVideoNode::ResizeVideoNode()
 
     interpolationMethod = new QComboBox();
     interpolationMethodLabel = new QLabel("Interpolation Method: ");
-    progressBar = new QLabel("Inactive");
+    progressText = new QLabel("Inactive");
+    progressBar = new QProgressBar();
     resizeLabelX = new QLabel("Resize Scale X: ");
     resizeLabelY = new QLabel("Resize Scale Y: ");
 
     resizeScaleX = new QLineEdit();
     resizeScaleY = new QLineEdit();
-
-    resizeCheckLabel = new QLabel("Resize");
-    resize = new QCheckBox();
-    rotateCheckLabel = new QLabel("Rotate");
-    rotate = new QCheckBox();
-
-    angleLabel = new QLabel("Angle: ");
-    angle = new QLineEdit();
 
     interpolationMethod->addItem("Nearest Neighbor");
     interpolationMethod->addItem("Bilinear");
@@ -41,24 +34,18 @@ ResizeVideoNode::ResizeVideoNode()
     connect(interpolationMethod, SIGNAL(activated(int)), this, SLOT(preCheck()));
     connect(resizeScaleX, SIGNAL(editingFinished()), this, SLOT(preCheck()));
     connect(resizeScaleY, SIGNAL(editingFinished()), this, SLOT(preCheck()));
+
     connect(&functWatcher, SIGNAL(finished()), this, SLOT(multiThreadedFinished()));
-    connect(resize, SIGNAL(stateChanged(int)), this , SLOT(preCheck()));
-    connect(rotate, SIGNAL(stateChanged(int)), this , SLOT(preCheck()));
+    connect(&functWatcher, SIGNAL(progressValueChanged(int)), this, SLOT(multiThreadedUpdate()));
 
-
-    layout->addWidget(resizeCheckLabel,1,1);
-    layout->addWidget(resize,1,2);
-    layout->addWidget(rotateCheckLabel,1,3);
-    layout->addWidget(rotate,1,4);
     layout->addWidget(interpolationMethodLabel,2,1);
     layout->addWidget(interpolationMethod,2,2);
     layout->addWidget(resizeLabelX,3,1);
     layout->addWidget(resizeLabelY,4,1);
     layout->addWidget(resizeScaleX,3,2);
     layout->addWidget(resizeScaleY,4,2);
-    layout->addWidget(angleLabel,2,3);
-    layout->addWidget(angle,2,4);
-    layout->addWidget(progressBar,5,1);
+    layout->addWidget(progressBar,5,1,1,2);
+    layout->addWidget(progressText,6,1,1,2);
 
     window->setLayout(layout);
     buildContextWindow();
@@ -132,9 +119,6 @@ QJsonObject ResizeVideoNode::save() const
     dataJson["interpIndex"] = interpIndex;
     dataJson["ResizeScaleX"] = ResizeScaleX;
     dataJson["ResizeScaleY"] = ResizeScaleY;
-    dataJson["resizeCheck"] = resize->isChecked();
-    dataJson["rotateCheck"] = rotate->isChecked();
-    dataJson["Angle"] = Angle;
     return dataJson;
 }
 
@@ -153,38 +137,39 @@ void ResizeVideoNode::restore(const QJsonObject & json)
     if(json.contains("ResizeScaleY")){
         resizeScaleY->setText(QString::number(json["ResizeScaleY"].toDouble()));
     }
-    if(json.contains("resizeCheck")){
-        resize->setChecked(json["resizeCheck"].toBool());
-    }
-    if(json.contains("rotateCheck")){
-        rotate->setChecked(json["rotateCheck"].toBool());
-    }
-    if(json.contains("Angle")){
-        angle->setText(QString::number(json["Angle"].toDouble()));
-    }
-
 
     preCheck();
 }
 
+cv::Mat multiThreadedResize(const cv::Mat &in){
+    cv::Mat output;
+
+    cv::resize(in, output, cv::Size(LinkManager::instance()->getFloatData("PRIVATEsizex"), LinkManager::instance()->getFloatData("PRIVATEsizey")));
+
+    return output;
+}
+
+
 void ResizeVideoNode::processData()
 {
-        progressBar->setText("Processing...");
+    double sizex = videoIn->_video[1].cols * ResizeScaleX;
+    double sizey = videoIn->_video[1].rows * ResizeScaleY;
 
-        funct = QtConcurrent::run(this, &ResizeVideoNode::multiThreadedProcess);
-        functWatcher.setFuture(funct);
+    LinkManager::instance()->sendData((float)sizex, "PRIVATEsizex");
+    LinkManager::instance()->sendData((float)sizey, "PRIVATEsizey");
 
+    QList<cv::Mat> images = QList<cv::Mat>::fromVector(QVector<cv::Mat>::fromStdVector(videoIn->_video));
+    funct = QtConcurrent::mapped(images, multiThreadedResize);
+
+    functWatcher.setFuture(funct);
+
+    progressBar->setMaximum(functWatcher.progressMaximum());
+    progressBar->setValue(0);
 }
 
 
 void ResizeVideoNode::preCheck(){
 
-    Rotate = rotate->isChecked();
-    Resize = resize->isChecked();
-
-    if(!angle->text().isEmpty()){
-        Angle = angle->text().toDouble();
-    }
     if(!resizeScaleX->text().isEmpty()){
         ResizeScaleX = resizeScaleX->text().toDouble();
     }
@@ -196,16 +181,13 @@ void ResizeVideoNode::preCheck(){
     }
 
     //use this to check if ports are ready
-    if(ResizeScaleX != -1.0 &&ResizeScaleY != -1.0 &&  interpIndex != -1 && Resize){
-        isReady = true;
-    }else if(Angle != -1 && Rotate){
+    if(ResizeScaleX != -1.0 &&ResizeScaleY != -1.0 &&  interpIndex != -1){
         isReady = true;
     }else{
         isReady = false;
     }
 
-
-    if(videoIn && videoIn->isReady && isReady && active && isReady){
+    if(videoIn && videoIn->isReady && isReady && active){
         processData();
     }else{
         if(videoOut){videoOut->unready();}
@@ -228,52 +210,36 @@ void ResizeVideoNode::ShowContextMenu(const QPoint &pos)
     contextMenu.exec(window->mapToGlobal(pos));
 }
 
-void ResizeVideoNode::multiThreadedProcess()
+void ResizeVideoNode::multiThreadedUpdate()
 {
-    std::vector<cv::Mat> temp;
-    std::vector<cv::Mat> temp2;
+    progressText->setText(QString::number(functWatcher.progressValue()) + " Of " + QString::number(functWatcher.progressMaximum()) + " Processing...");
+    progressBar->setValue(functWatcher.progressValue());
 
-    if(Resize){
-        double sizex = videoIn->_video[1].cols * ResizeScaleX;
-        double sizey = videoIn->_video[1].rows * ResizeScaleY;
-
-        //iterate
-        for(cv::Mat tempFrame : videoIn->_video){
-            cv::Mat resized;
-            cv::resize(tempFrame, resized, cv::Size(sizex, sizey));
-
-            temp.push_back(resized);
-        }
-    }else{
-        temp = videoIn->_video;
-    }
-
-    if(Rotate){
-        for(cv::Mat tempFrame : temp){
-            cv::Point2f center((tempFrame.cols-1)/2.0, (tempFrame.rows-1)/2.0);
-            cv::Mat rot = cv::getRotationMatrix2D(center, Angle, 1.0);
-            cv::Rect2f bbox = cv::RotatedRect(cv::Point2f(), tempFrame.size(), Angle).boundingRect2f();
-
-            rot.at<double>(0,2) += bbox.width/2.0 - tempFrame.cols/2.0;
-            rot.at<double>(1,2) += bbox.height/2.0 - tempFrame.rows/2.0;
-
-            cv::Mat dst;
-            cv::warpAffine(tempFrame, dst, rot, bbox.size());
-
-            temp2.push_back(dst);
-        }
-    }
-
-    if(!Rotate){
-        videoOut->_video = temp;
-    }else{
-        videoOut->_video = temp2;
-    }
 }
 
 void ResizeVideoNode::multiThreadedFinished()
 {
-    progressBar->setText("Finished");
+    QFutureIterator<cv::Mat> i(funct);
+    std::vector<cv::Mat> imageBuffer;
+
+    while(i.hasNext()){
+        imageBuffer.push_back(i.next());
+
+        //makes sure there are only good in our list
+        if(imageBuffer.back().empty()){
+            imageBuffer.pop_back();
+        }
+    }
+
+    videoOut->_video = imageBuffer;
+
+    //make sure it's filled
+    if(imageBuffer.size() >= 1){
+        videoOut->ready();
+    }
+
+    progressText->setText("Finished");
+    progressBar->setValue(functWatcher.progressMaximum());
     videoOut->ready();
     emit dataUpdated(0);
 }

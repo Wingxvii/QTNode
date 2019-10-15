@@ -8,6 +8,7 @@
 
 //data types
 #include "DataTypes/videographdata.h"
+#include "analyzer/linkmanager.h"
 
 //QT widgets
 #include <QLabel>
@@ -15,6 +16,7 @@
 #include <QGridLayout>
 #include <QRegExpValidator>
 #include <QCheckBox>
+#include <QProgressBar>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -68,13 +70,17 @@ public slots:
 
 public: //multithread
 
-    void multiThreadedProcess();
 
-    QFuture<void> funct;
+    QFuture<cv::Mat> funct;
     QFutureWatcher<void> functWatcher;
-    QLabel *progressBar;
+    QLabel *progressText;
+    QProgressBar *progressBar;
+
+    std::shared_ptr<ImageData> transformData;
+
 public slots:
     void multiThreadedFinished();
+    void multiThreadedUpdate();
 
 private: //ports
     std::shared_ptr<VideoGraphData> videoIn;
@@ -122,6 +128,9 @@ private: //UI
     QLineEdit* corner4Y;
 
     QRegExpValidator* intPos;
+
+    float srcQ[4][2], dstQ[4][2];
+
 
 };
 

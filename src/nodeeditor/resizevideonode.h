@@ -8,6 +8,7 @@
 
 //data types
 #include "DataTypes/videographdata.h"
+#include "analyzer/linkmanager.h"
 
 //QT widgets
 #include <QLabel>
@@ -16,6 +17,7 @@
 #include <QRegExpValidator>
 #include <QComboBox>
 #include <QCheckBox>
+#include <QProgressBar>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -31,14 +33,14 @@ public:
     virtual ~ResizeVideoNode(){}
 
     QString caption() const override{
-        return QStringLiteral("Resize and Rotate Video");
+        return QStringLiteral("Resize Video");
     }
     bool captionVisible(){
         return false;
     }
     QString name()const override
     {
-        return QStringLiteral("Resize and Rotate Video");
+        return QStringLiteral("Resize Video");
     }
 
 public:
@@ -69,13 +71,16 @@ public slots:
 
 public: //multithread
 
-    void multiThreadedProcess();
-
-    QFuture<void> funct;
+    QFuture<cv::Mat> funct;
     QFutureWatcher<void> functWatcher;
-    QLabel *progressBar;
+    QLabel *progressText;
+    QProgressBar *progressBar;
+
+    std::shared_ptr<ImageData> transformData;
+
 public slots:
     void multiThreadedFinished();
+    void multiThreadedUpdate();
 
 
 private: //ports
@@ -87,17 +92,9 @@ private: //locals
     double ResizeScaleX = -1;
     double ResizeScaleY = -1;
     int interpIndex = -1;
-    double Angle = -1;
-    bool Rotate;
-    bool Resize;
 
 private: //UI
     QGridLayout *layout;
-
-    QLabel *resizeCheckLabel;
-    QCheckBox* resize;
-    QLabel *rotateCheckLabel;
-    QCheckBox* rotate;
 
     QLabel *interpolationMethodLabel;
     QComboBox *interpolationMethod;
@@ -106,9 +103,6 @@ private: //UI
     QLineEdit *resizeScaleX;
     QLabel *resizeLabelY;
     QLineEdit *resizeScaleY;
-
-    QLabel* angleLabel;
-    QLineEdit* angle;
 
     QDoubleValidator* doublePos;
 
