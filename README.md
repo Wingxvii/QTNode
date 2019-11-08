@@ -21,6 +21,7 @@ Features:
 
 
 This was developed using:
+
 https://shotcut.org/                      - Shotcut
 https://github.com/paceholder/nodeeditor  - QTNodes
 https://opencv.org/                       - OpenCV
